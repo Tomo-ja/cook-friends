@@ -1,4 +1,6 @@
 import type { NextPage } from 'next'
+import connectMongo from '../utils/connectMongo'
+import Test from '../models/testModel'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -70,3 +72,22 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+export const getServerSideProps = async() => {
+  try{
+    await connectMongo()
+    const tests = await Test.find()
+
+    return {
+      props: {
+        tests
+      }
+    }
+
+  } catch (error) {
+    console.log(error)
+    return {
+      notFound: true
+    }
+  }
+}
