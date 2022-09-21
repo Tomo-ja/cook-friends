@@ -13,7 +13,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
 			if (!isUserMatch) return res.json("password is wrong");
 			return res.json({ user });
 	} catch (error) {
-		res.json({ error });
+			res.json({ error });
 	}
 	}
 }
