@@ -9,7 +9,7 @@ import Fridge from '../../../models/fridgeModel'
 		name: string
 		category: [string],
 		amount: number,
-		stored_at: Date(),
+		unit: string,
 	}
 */
 
@@ -25,7 +25,8 @@ export default async function addToFridge(
 			name: req.body.name,
 			category: req.body.category,
 			amount: req.body.amount,
-			created_at: Date.now(),
+			unit: req.body.unit,
+			stored_at: req.body.stored_at || Date.now(),
 		})
 		await fridge.save()
 		res.json({ fridge })

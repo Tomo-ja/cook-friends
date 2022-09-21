@@ -31,12 +31,18 @@ const fridgeSchema = new Schema({
 					type: Number,
 					min: 0,
 					required: true
+				},
+				unit: {
+					type: String,
 				}
 			}
 		],
 		default: []
 	}
 })
+
+// TODO: create method return amount
+// TODO: create method return oldest date
 
 const Fridge = models.Fridge || model('Fridge', fridgeSchema)
 

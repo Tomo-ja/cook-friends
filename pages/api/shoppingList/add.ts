@@ -9,6 +9,7 @@ import ShoppingList from '../../../models/shoppingListModel'
 		name: string,
 		category: [string],
 		amount: number,
+		unit: string,
 		memo: string
 	}
 */
@@ -37,6 +38,7 @@ export default async function addToShoppingList(
 				created_at: Date.now(),
 				category: req.body.category,
 				amount: req.body.amount,
+				unit: req.body.unit,
 				memo: req.body.memo
 			})
 		}

@@ -32,6 +32,9 @@ const shoppingListSchema = new Schema({
 					required: true,
 					min: 0
 				},
+				unit: {
+					type: String,
+				},
 				memo: {
 					type: String
 				}
