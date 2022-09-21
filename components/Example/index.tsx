@@ -1,8 +1,8 @@
-import Example from "./example.styles"
+import Example from "./example.styled"
 
 
 export default function Index () {
 	return (
-		<h1>example of component</h1>
+		<Example>example of component</Example>
 	)
 }
