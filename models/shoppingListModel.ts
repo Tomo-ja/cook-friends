@@ -14,6 +14,14 @@ const shoppingListSchema = new Schema({
 					immutable: true,
 					required: true
 				},
+				name: {
+					type: String,
+					immutable: true,
+					required: true
+				},
+				category: {
+					type: [String],
+				},
 				created_at: {
 					type: Date,
 					immutable: true,
@@ -23,6 +31,9 @@ const shoppingListSchema = new Schema({
 					type: Number,
 					required: true,
 					min: 0
+				},
+				unit: {
+					type: String,
 				},
 				memo: {
 					type: String

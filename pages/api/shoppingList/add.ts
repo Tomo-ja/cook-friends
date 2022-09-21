@@ -6,7 +6,10 @@ import ShoppingList from '../../../models/shoppingListModel'
 	expecting body{
 		user_id: 632a4e972852e67132cc00dd,
 		ingredient_api_id: string,
+		name: string,
+		category: [string],
 		amount: number,
+		unit: string,
 		memo: string
 	}
 */
@@ -31,8 +34,11 @@ export default async function addToShoppingList(
 		if (newItem){
 			shoppingList.list.push({
 				ingredient_api_id: req.body.ingredient_api_id,
+				name: req.body.name,
 				created_at: Date.now(),
+				category: req.body.category,
 				amount: req.body.amount,
+				unit: req.body.unit,
 				memo: req.body.memo
 			})
 		}
