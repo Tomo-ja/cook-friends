@@ -5,7 +5,7 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100vw;
-  padding-inline: 36px;
+  padding-inline: 44px;
 	padding-block: 8px;
 	box-shadow: 0px 2.5px 10px 3px rgba(0,0,0,0.5);
 	position: fixed;

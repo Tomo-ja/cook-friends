@@ -1,10 +1,19 @@
 import styled from 'styled-components'
 
-const Link = styled.a`
+interface ILink {
+	animeBorder?: boolean
+}
+
+const Link = styled.a<ILink>`
+	padding-block: 5px;
 	color: inherit;
   cursor: pointer;
-	&: hover{
+  border-bottom: 1px solid transparent;
+	transition: all 0.25s ease;
+
+	:hover{
 		opacity: 0.6;
+		border-bottom-color: ${props => props.animeBorder ? 'black' : 'transparent'};
 	}
 `
 
