@@ -18,9 +18,6 @@ export default async function removeFromFridge(
 	try{
 		await connectMongo()
 		const fridge = await Fridge.findOne({user_id: req.body.user_id})
-		fridge.stock.sort(function(x: { stored_at: Date }, y: { stored_at: Date }){
-			return x.stored_at > y.stored_at ? 1 : -1
-		})
 		let usedAmount = parseFloat(req.body.amount)
 
 		for(let i=0; i<fridge.stock.length; i++){
@@ -41,7 +38,7 @@ export default async function removeFromFridge(
 		fridge.stock = fridge.stock.filter((food: { amount: number }) => food.amount > 0)
 
 		await fridge.save()
-		res.json({ fridge })
+		res.json( fridge.summary )
 
 	} catch (error) {
 		console.log(error)

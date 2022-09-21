@@ -41,8 +41,41 @@ const fridgeSchema = new Schema({
 	}
 })
 
-// TODO: create method return amount
-// TODO: create method return oldest date
+fridgeSchema.virtual('summary').get(function(){
+	let summary: 
+		{ [id: string] : {
+				name: string, 
+				category: string[], 
+				stored_at: Date, 
+				amount: number, 
+				unit: string
+			}
+		} 
+		= {}
+
+		this.stock.forEach(food => {
+			if(summary[food.ingredient_api_id]) {
+				summary[food.ingredient_api_id].amount += food.amount
+			} else {
+				summary[food.ingredient_api_id] = {
+					name: food.name,
+					category: food.category,
+					stored_at: food.stored_at,
+					amount: food.amount,
+					unit: food.unit ? food.unit : ""
+				}
+			}
+		})
+		return summary
+})
+
+fridgeSchema.post('save', function(doc, next) {
+	doc.stock.sort(function (x, y) {
+		return x.stored_at > y.stored_at ? 1 : -1
+	})
+	next()
+})
+
 
 const Fridge = models.Fridge || model('Fridge', fridgeSchema)
 
