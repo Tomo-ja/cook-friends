@@ -1,12 +1,12 @@
 import mongoose, { Schema, model, models} from "mongoose";
 
-const shoppingListSchema = new Schema({
+const fridgeSchema = new Schema({
 	user_id: {
 		type: mongoose.SchemaTypes.ObjectId,
 		unique: true,
 		required: true
 	},
-	list: {
+	stock: {
 		type: [
 			{
 				ingredient_api_id: {
@@ -22,18 +22,15 @@ const shoppingListSchema = new Schema({
 				category: {
 					type: [String],
 				},
-				created_at: {
+				stored_at: {
 					type: Date,
 					immutable: true,
 					required: true
 				},
 				amount: {
 					type: Number,
-					required: true,
-					min: 0
-				},
-				memo: {
-					type: String
+					min: 0,
+					required: true
 				}
 			}
 		],
@@ -41,6 +38,6 @@ const shoppingListSchema = new Schema({
 	}
 })
 
-const ShoppingList = models.ShoppingList || model('ShoppingList', shoppingListSchema)
+const Fridge = models.Fridge || model('Fridge', fridgeSchema)
 
-export default ShoppingList
+export default Fridge
