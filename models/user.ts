@@ -10,6 +10,7 @@ const UserSchema = new Schema({
 	},
 	email: {
 		type: String,
+		required: true,
 		max: 50,
 		unique: true,
 	},
@@ -21,14 +22,12 @@ const UserSchema = new Schema({
 	},
 	favoriterecipe: {
 		type: Array,
-		required: true,
 		default: [],
 	},
 	historyrecipe: {
 		type: Array,
-		required: true,
 		default: [],
 	},
 });
 const User = models.User || model("User", UserSchema);
-export default User
+export default User;
