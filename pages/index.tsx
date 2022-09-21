@@ -73,21 +73,21 @@ const Home: NextPage = () => {
 
 export default Home
 
-export const getServerSideProps = async() => {
-  try{
-    await connectMongo()
-    const tests = await Test.find()
+// export const getServerSideProps = async() => {
+//   try{
+//     await connectMongo()
+//     const tests = await Test.find()
 
-    return {
-      props: {
-        tests
-      }
-    }
+//     return {
+//       props: {
+//         tests
+//       }
+//     }
 
-  } catch (error) {
-    console.log(error)
-    return {
-      notFound: true
-    }
-  }
-}
+//   } catch (error) {
+//     console.log(error)
+//     return {
+//       notFound: true
+//     }
+//   }
+// }
