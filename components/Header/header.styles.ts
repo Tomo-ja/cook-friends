@@ -21,7 +21,7 @@ const Header = styled.header`
 
 	h1{
 		margin: 0;
-		margin-right: 32px;
+		margin-right: 16px;
 		font-size: 17px;
 		font-weight: bold;
 		color: #151413;
@@ -38,6 +38,21 @@ const Header = styled.header`
 		font-weight: bold;
 		list-style: none;
 	}
+
+	@media only screen and (max-width: 768px)  {
+      padding-inline: min(44px, 5%);
+			
+			li{
+				margin-left: 16px;
+				font-size: 14px;
+			}
+  }
+
+	@media only screen and (max-width: 375px) {
+		li{
+			font-size: 11px;
+		}
+}
 `
 
 export default Header
