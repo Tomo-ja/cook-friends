@@ -14,6 +14,9 @@ export default async function login(req: NextApiRequest, res: NextApiResponse<an
 		await connectMongo();
 		const user = await User.findOne({ user_id: req.body.user_id })
 		user.historyrecipe.push(req.body.recipe_id);
+		if (user.historyrecipe.length > 50) {
+			user.historyrecipe.shift()
+		}
 		await user.save()
 		res.json({user})
 	} catch (error) {
