@@ -1,6 +1,6 @@
 import Index from "../components/Example"
 
-export default function signIn() {
+export default function SignIn() {
 	return (
 		<Index />
 	)
