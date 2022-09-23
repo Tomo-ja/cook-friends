@@ -10,12 +10,12 @@ import SearchBar from "../components/CommonUse/searchBar.styles";
 import IconButton from "../components/CommonUse/iconButton.styles";
 import MainContent from "../components/CommonUse/mainContent.styles";
 import SubContent from "../components/CommonUse/subContent.styles";
-import Filter from "../components/CommonUse/filter.styles";
+import Filter from "../components/Filter/filter.styles";
 import { useState } from "react";
-import Form from "../components/CommonUse/form.styles";
-import ItemFridge from "../components/CommonUse/itemInFridge.styles";
-import ItemToBuy from "../components/CommonUse/itemToBuy.styles";
-import Recipe from "../components/CommonUse/recipe.styles";
+import Form from "../components/Form/form.styles";
+import ItemFridge from "../components/ItemInFridge/itemInFridge.styles";
+import ItemToBuy from "../components/ItemToBuy/itemToBuy.styles";
+import Recipe from "../components/Recipe/recipe.styles";
 
 export default function StyledList() {
 	const [filter, setFilter] = useState<boolean>(false);
