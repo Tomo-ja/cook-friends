@@ -4,7 +4,7 @@ interface ILink {
 	animeBorder?: boolean
 }
 
-const Link = styled.a<ILink>`
+const CustomLink = styled.a<ILink>`
 	padding-block: 5px;
 	color: inherit;
   cursor: pointer;
@@ -17,4 +17,4 @@ const Link = styled.a<ILink>`
 	}
 `
 
-export default Link
+export default CustomLink
