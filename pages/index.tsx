@@ -15,7 +15,7 @@ type Props = {
 }
 
 const Home: NextPage<Props> = ({ data }: Props) => {
-  console.log(JSON.parse(data.user))
+  console.log(data.user)
   return (
     <div className={styles.container}>
       <Head>
