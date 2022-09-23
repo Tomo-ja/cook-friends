@@ -2,12 +2,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import Header from "../components/Header/header.styles"
-import Container from "../components/CommonUse/container.styles"
+import Container from "../styles/container.styles"
 import CustomLink from "../components/CommonUse/link.styles"
-import Input from "../components/CommonUse/input.styles"
-import Button from "../components/CommonUse/button.styles"
-import SearchBar from "../components/CommonUse/searchBar.styles"
-import IconButton from '../components/CommonUse/iconButton.styles'
+import Input from "../components/Input/input.styles"
+import Button from "../components/Button/button.styles"
+import SearchBar from "../components/SearchBar/searchBar.styles"
+import IconButton from '../components/IconButton/iconButton.styles'
 import MainContent from '../components/CommonUse/mainContent.styles'
 import SubContent from '../components/CommonUse/subContent.styles'
 
