@@ -1,11 +1,21 @@
 import type { NextPage } from 'next'
+import { AppProps } from 'next/app'
 import connectMongo from '../utils/connectMongo'
 import Test from '../models/testModel'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import parseCookies from '../helpers'
 
-const Home: NextPage = () => {
+
+type Props = {
+  data: {
+    user: string
+  }
+}
+
+const Home: NextPage<Props> = ({ data }: Props) => {
+  console.log(JSON.parse(data.user))
   return (
     <div className={styles.container}>
       <Head>
@@ -73,21 +83,17 @@ const Home: NextPage = () => {
 
 export default Home
 
-// export const getServerSideProps = async() => {
-//   try{
-//     await connectMongo()
-//     const tests = await Test.find()
+Home.getInitialProps = async ({ req, res }): Promise<Props> => {
+  const data = parseCookies(req)
 
-//     return {
-//       props: {
-//         tests
-//       }
-//     }
+  if(res){
+    if (Object.keys(data).length === 0 && data.constructor === Object) {
+      res.writeHead(301, { Location: '/'})
+      res.end()
+    }
+  }
 
-//   } catch (error) {
-//     console.log(error)
-//     return {
-//       notFound: true
-//     }
-//   }
-// }
+  return {
+    data: data && data
+  } as Props
+}
