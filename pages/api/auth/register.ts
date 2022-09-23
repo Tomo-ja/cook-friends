@@ -3,9 +3,9 @@ import connectMongo from "../../../utils/connectMongo";
 import User from "../../../models/user";
 import { parseCookies } from "nookies";
 const bcrypt = require("bcrypt");
-export default async function regsiter(
+export default async function register(
 	req: NextApiRequest,
-	res: NextApiResponse
+	res: NextApiResponse<any>
 ) {
 	console.log("working");
 	try {
