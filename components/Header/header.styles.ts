@@ -7,6 +7,7 @@ const Header = styled.header`
   width: 100vw;
   padding-inline: 44px;
 	padding-block: 8px;
+	background-color: white;
 	box-shadow: 0px 2.5px 10px 3px rgba(0,0,0,0.5);
 	position: fixed;
   top: 0;
@@ -16,18 +17,23 @@ const Header = styled.header`
 		margin-right: 16px;
 		height: 32px;
 		object-fit: cover;
-
+		cursor: pointer;
+	}
+	
+	div{
+		display: flex;
+		align-items: center
 	}
 
 	h1{
 		margin: 0;
-		margin-right: 16px;
+		margin-inline: 16px;
 		font-size: 17px;
 		font-weight: bold;
 		color: #151413;
 	}
 
-	nav{
+	ul{
 		display: flex;
 	}
 
@@ -44,13 +50,13 @@ const Header = styled.header`
 			
 			li{
 				margin-left: 16px;
-				font-size: 14px;
+				font-size: 11px;
 			}
   }
 
 	@media only screen and (max-width: 375px) {
 		li{
-			font-size: 11px;
+			font-size: 8px;
 		}
 }
 `
