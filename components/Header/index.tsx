@@ -9,10 +9,11 @@ import logo from "../../public/logoSample.png"
 import { User } from '../../helpers/typesLibrary';
 
 const getPageName = (url: string): string => {
-	const title = url.slice(1, url.length)
-	if (title.length === 0 ){
+	const urlX = url.slice(1, url.length)
+	if (urlX.length === 0 ){
 		return "Home"
 	}
+	const title: string = urlX.split('?')[0]
 	return title.charAt(0).toUpperCase() + title.slice(1)
 }
 

@@ -14,7 +14,6 @@ const Header = styled.header`
 
 	img{
 		margin-right: 16px;
-		height: 32px;
 		cursor: pointer;
 	}
 	
