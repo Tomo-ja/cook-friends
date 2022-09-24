@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getCookie, deleteCookie } from 'cookies-next'
 import Link from 'next/link';
-import Image from 'next/image'
 import CustomLink from '../../styles/link.styles';
 import StyledHeader from "./header.styles";
+import StyledImage from '../../styles/image.styles';
 import logo from "../../public/logoSample.png"
 import { User } from '../../helpers/typesLibrary';
 
@@ -36,13 +36,13 @@ const Header = () => {
 		<StyledHeader>
 			<div>
 				<Link href="/">
-					<Image 
-						src={ logo } 
-						alt="application logo"
-						width={150}
-						height={32}
-						objectFit="cover"
-					/>
+					<StyledImage
+						src={ logo }
+						alt='application logo'
+						width='150px'
+						height='32px'
+					>
+					</StyledImage>
 				</Link>
 				<h1>{getPageName(router.asPath)}</h1>
 			</div>

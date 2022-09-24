@@ -13,10 +13,8 @@ const Header = styled.header`
   top: 0;
 
 	img{
-		display: block;
 		margin-right: 16px;
 		height: 32px;
-		object-fit: cover;
 		cursor: pointer;
 	}
 	
