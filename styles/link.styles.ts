@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 interface ILink {
 	animeBorder?: boolean
+	hoverColor?: string
 }
 
 const CustomLink = styled.a<ILink>`
@@ -12,7 +13,8 @@ const CustomLink = styled.a<ILink>`
 	transition: all 0.25s ease;
 
 	:hover{
-		opacity: 0.6;
+		color: ${props => props.hoverColor ? props.hoverColor : 'inherit'};
+		opacity: ${props => props.hoverColor ? 1 : 0.6};
 		border-bottom-color: ${props => props.animeBorder ? 'black' : 'transparent'};
 	}
 `

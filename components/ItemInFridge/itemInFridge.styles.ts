@@ -36,8 +36,6 @@ const ItemInFridge = styled.div<IItemInFridge>`
 	}
 
 	.ItemFridgeRight{
-		display: flex;
-		align-items: center;
 		color: #93918F;
 		position: relative;
 
@@ -55,8 +53,6 @@ const ItemInFridge = styled.div<IItemInFridge>`
 			position: absolute;
 			right: 10%;
 			top: -9px;
-
-			display: ${props => props.useAsFilter ? 'none' : 'block'};
 
 			:hover{
 				cursor: pointer;
@@ -76,8 +72,6 @@ const ItemInFridge = styled.div<IItemInFridge>`
 			position: absolute;
 			right: 10%;
 			bottom: -9px;
-
-			display: ${props => props.useAsFilter ? 'none' : 'block'};
 
 			:hover{
 				cursor: pointer;

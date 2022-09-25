@@ -1,39 +1,83 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
+import Link from 'next/link';
+import Amount from "./amount";
 import ItemInFridge, {classNames} from "./itemInFridge.styles";
+import StyledLink from "../../styles/link.styles";
+import { defineExpireDate } from "../../helpers";
 import { Fridge } from "../../helpers/typesLibrary";
 
+// FIXME: if you want to pass any additional props, you can pass but optional like example?: number
 type Props = {
 	fridge: Fridge
 	useAsFilter: boolean
 }
 
+// TODO: for atsu, you will want to create new function here to update database and may want to pass it as props to Amount component
 
 const FridgeSection = ({ fridge, useAsFilter }: Props) => {
 
-	const [selectedAsFilter, setSelectedAsFilter] = useState(false)
+	const router = useRouter()
+	const [selectedAsFilter, setSelectedAsFilter] = useState<boolean[]>(()=> {
+		const init: boolean[] = []
+		for(let i=0; i<fridge.length; i++) {
+			init.push(false)
+		}
+		return init
+	})
+
+	const handleClickFilter = (idx: number) => {
+		if(useAsFilter){
+			setSelectedAsFilter(prev => {
+				const changing = [...prev]
+				changing[idx] = !prev[idx]
+				return changing
+			})
+		}
+	}
+
+	const handleClickLink = (ingredient: string) => {
+		if(useAsFilter){return}
+		router.push({
+			pathname: '/explore',
+			query: {keyword: ingredient}
+		})
+	}
 	
 	return(
 		<div>
-			{fridge.map(item => (
+			{fridge.map((item, idx) => (
 				<ItemInFridge 
-					useAsFilter={useAsFilter} 
+					useAsFilter={useAsFilter}
 					key={item.ingredient_api_id} 
-					className={selectedAsFilter ? classNames.selected : ""}
+					className={selectedAsFilter[idx] ? classNames.selected : ""}
+					onClick={() => handleClickFilter(idx)}
 				>
 					<div className={classNames.itemFridgeLeft}>
-						<p className={classNames.foodName}>
+						{useAsFilter ?
+							<p className={classNames.foodName}>
+								{item.name}
+							</p>
+						:
+						<StyledLink 
+							hoverColor="#ffaa4e"
+							onClick={() => handleClickLink(item.name)}
+						>
 							{item.name}
-						</p>
+						</StyledLink>
+						}
 						<p className={classNames.expireDate}>
-						{item.stored_at.toString()}
+							Bought in {defineExpireDate(item.stored_at) === 0 ? 'Today' : `${defineExpireDate(item.stored_at)} days ago`}
 						</p>
 					</div>
 					<div className={classNames.itemFridgeRight}>
-						<div className={classNames.arrowTop}></div>
-						<div className={classNames.amount}>
-							{useAsFilter ? "" : "Amount: "}{item.amount}{item.unit}
-						</div>
-						<div className={classNames.arrowBottom}></div>
+						{useAsFilter ? 
+							<p className={classNames.amount}>{item.amount}{item.unit}</p>
+						:
+							<>
+								<Amount amount={item.amount} unit={item.unit}/>
+							</>
+						}
 					</div>
 				</ItemInFridge>
 			))}

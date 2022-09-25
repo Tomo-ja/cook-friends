@@ -13,4 +13,10 @@ export const stringToDate = (dateish: string): Date => {
 	)
 }
 
+// FIXME: need to return when expire instead of when user bought
+export const defineExpireDate = (dayBought: Date): number => {
+	const diffInSeconds = (new Date()).getTime() - dayBought.getTime()
+	return Math.floor(diffInSeconds / (1000 * 3600 * 24))
+}
+
 export default parseCookies
