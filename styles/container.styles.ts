@@ -6,7 +6,7 @@ const Container = styled.div`
   justify-content: space-between;
   max-width: 1024px;
   margin-inline: auto;
-  margin-top: 48px;
+  margin-top: 66px;
   padding-top: 36px;
 
   main{
