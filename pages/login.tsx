@@ -1,12 +1,29 @@
 import React from 'react'
 import { useCookies } from 'react-cookie'
+import { Form } from '../components/Form/Form'
 import appAxios from '../constants/axiosBase'
+import Container from '../styles/container.styles'
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type Inputs = {
+	example: string;
+	exampleRequired: string;
+};
 
 export default function Login() {
 	const [cookie, setCookie] = useCookies(['user'])
+	  const {
+			register,
+			handleSubmit,
+			watch,
+			formState: { errors },
+		} = useForm<Inputs>();
+		const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
-	const handleSubmit = async (e: React.SyntheticEvent) => {
+	const CookieSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault()
+		console.log("working");
+		
 		try{
 			const response = await appAxios.post('/api/auth/login', {
 					username: 'testUser1',
@@ -25,12 +42,14 @@ export default function Login() {
 		}
 	}
 	return (
-		<>
-			<h1>login page</h1>
-			<form onSubmit={handleSubmit}>
+		<div>
+			<Container>
+				<Form btn="Login" signUp={false} />
+			</Container>
+			{/* <form onSubmit={cookieSubmit}>
 				<button >login</button>
-			</form>
-		</>
-	)
+			</form> */}
+		</div>
+	);
 }
 
