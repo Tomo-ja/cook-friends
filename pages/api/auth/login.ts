@@ -12,8 +12,14 @@ export default async function login(req: NextApiRequest, res: NextApiResponse<an
 			if (!user) return res.json("We can't find the user");
 			const isUserMatch = await bcrypt.compare(req.body.password, user.password);
 			if (!isUserMatch) return res.json("password is wrong");
-			console.log(user)
-			return res.json({ user });
+			return res.json({ 
+				id: user._id.toString(),
+				username: user.username,
+				email: user.email,
+				password: user.password,
+				favoriterecipe: user.favoriterecipe,
+				historyrecipe: user.historyrecipe
+			});
 	} catch (error) {
 		console.log(error)
 			res.json({ error });

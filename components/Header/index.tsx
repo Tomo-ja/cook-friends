@@ -29,7 +29,7 @@ const Header = () => {
 	useEffect (() => {
 		const cookie = getCookie('user')
 		if (cookie) {
-			setUser(JSON.parse(cookie as string).user)
+			setUser(JSON.parse(cookie as string))
 		}
 	}, [router.asPath])
 
