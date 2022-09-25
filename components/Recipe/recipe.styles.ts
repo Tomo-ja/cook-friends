@@ -5,10 +5,10 @@ const Recipe = styled.div`
 		font-size: 28px;
 		font-weight: bold;
 	}
-  .Img{
-    width: 680px;
-    object-fit: contain;
-  }
+	.Img {
+		width: 680px;
+		object-fit: contain;
+	}
 	.IngredientConatiner {
 		.Ingredients {
 			font-size: 20px;
@@ -22,7 +22,7 @@ const Recipe = styled.div`
 		.EachIngredients {
 			display: flex;
 			justify-content: space-between;
-      margin: 16px 0;
+			margin: 16px 0;
 			.EachIngredientsRight {
 				display: flex;
 				align-items: center;
@@ -39,4 +39,16 @@ const Recipe = styled.div`
 		}
 	}
 `;
+export const className = {
+	DishName: "DishName",
+	Img: "Img",
+	IngredientConatiner: "IngredientConatiner",
+	Ingredients: "Ingredients",
+	People: "People",
+	EachIngredients: "EachIngredients",
+	EachIngredientsRight: "EachIngredientsRight",
+	Amount: "Amount",
+	InstructionContainer: "InstructionContainer",
+	Instruction: "Instruction",
+};
 export default Recipe;
