@@ -5,7 +5,7 @@ import Link from 'next/link';
 import CustomLink from '../../styles/link.styles';
 import StyledHeader from "./header.styles";
 import StyledImage from '../../styles/image.styles';
-import logo from "../../public/logoSample.png"
+import logo from "../../public/logo.png"
 import { User } from '../../helpers/typesLibrary';
 
 const getPageName = (url: string): string => {
@@ -40,8 +40,8 @@ const Header = () => {
 					<StyledImage
 						src={ logo }
 						alt='application logo'
-						width='150px'
-						height='32px'
+						width='132px' //2.64 times height
+						height='50px'
 					>
 					</StyledImage>
 				</Link>

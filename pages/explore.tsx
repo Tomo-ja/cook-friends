@@ -24,7 +24,7 @@ const Explore: NextPage<Props> = ({ data }: Props) => {
 	return (
 		<StyledExplore>
       <Head>
-        <title>Recipes | CF</title>
+        <title>Recipes | Cookit</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <StyledSEarchSection />
