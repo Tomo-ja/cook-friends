@@ -8,6 +8,7 @@ const MainContent = styled.main`
 	h2{
 		margin: 0;
 
+		width: 100%;
 		margin-bottom: 36px;
 		font-size: 28px;
 		font-weight: bold;
@@ -26,6 +27,9 @@ const MainContent = styled.main`
 		text-decoration-thickness: 1px;
 		text-underline-offset: 5px;
 	}
+	 & > div{
+		width: 100%;
+	 }
 
   @media only screen and (max-width: 768px)  {
       h2{

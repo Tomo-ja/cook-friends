@@ -1,28 +1,44 @@
-import ItemFridge, {classNames} from "./itemInFridge.style";
+import { useState } from "react";
+import ItemInFridge, {classNames} from "./itemInFridge.styles";
+import { Fridge } from "../../helpers/typesLibrary";
+
+type Props = {
+	fridge: Fridge
+	useAsFilter: boolean
+}
 
 
-// have to pass fridge object
+const FridgeSection = ({ fridge, useAsFilter }: Props) => {
 
-const ItemInFridge = () => {
-
-
+	const [selectedAsFilter, setSelectedAsFilter] = useState(false)
+	
 	return(
-		<ItemFridge useAsFilter={true}>
-			<div className={classNames.itemFridgeLeft}>
-				<p className={classNames.foodName}>
-					food name
-				</p>
-				<p className={classNames.expireDate}>
-					3 days
-				</p>
-			</div>
-			<div className={classNames.itemFridgeRight}>
-				<div className={classNames.arrowTop}></div>
-				<div className={classNames.amount}>amount: 400g</div>
-				<div className={classNames.arrowBottom}></div>
-			</div>
-		</ItemFridge>
+		<div>
+			{fridge.map(item => (
+				<ItemInFridge 
+					useAsFilter={useAsFilter} 
+					key={item.ingredient_api_id} 
+					className={selectedAsFilter ? classNames.selected : ""}
+				>
+					<div className={classNames.itemFridgeLeft}>
+						<p className={classNames.foodName}>
+							{item.name}
+						</p>
+						<p className={classNames.expireDate}>
+						{item.stored_at.toString()}
+						</p>
+					</div>
+					<div className={classNames.itemFridgeRight}>
+						<div className={classNames.arrowTop}></div>
+						<div className={classNames.amount}>
+							{useAsFilter ? "" : "Amount: "}{item.amount}{item.unit}
+						</div>
+						<div className={classNames.arrowBottom}></div>
+					</div>
+				</ItemInFridge>
+			))}
+		</div>
 	)
 }
 
-export default ItemInFridge
+export default FridgeSection

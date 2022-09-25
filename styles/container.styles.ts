@@ -32,6 +32,7 @@ const Container = styled.div`
 
       aside{
         width: 0;
+        height: 0;
       }
       
       aside.open{

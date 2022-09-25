@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Head from 'next/head'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +9,6 @@ import { User, Fridge } from '../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../constants/axiosBase';
 
 import SearchSection from '../components/SearchBarSection/index'
-import ItemInFridge from '../components/ItemInFridge/index'
 
 import StyledExplore from '../components/Explore/explore.styles'
 import StyledMainContent from '../styles/mainContent.styles'
@@ -20,6 +20,9 @@ type Props = {
   user: User | null,
   fridge: Fridge
 }
+
+const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/index'),
+{ssr: false})
 
 const Explore: NextPage<Props> = ({ user, fridge }: Props) => {
   const router = useRouter()
@@ -35,12 +38,12 @@ const Explore: NextPage<Props> = ({ user, fridge }: Props) => {
       <SearchSection />
       <StyledMainContent>
         <h2>Result of &quot;{router.query.keyword}&quot;</h2>
+        <DynamicFridgeSection fridge={fridge} useAsFilter={false}/>
       </StyledMainContent>
       <StyledSubContent>
         <h3>Use Food in Your Fridge?</h3>
-        <ItemInFridge />
+        <DynamicFridgeSection fridge={fridge} useAsFilter={true}/>
       </StyledSubContent>
-
     </StyledExplore>
 	)
 }
@@ -85,7 +88,7 @@ Explore.getInitialProps = async ({ req, res }): Promise<Props> => {
   }
 
   return {
-    user: cookieData ? JSON.parse(cookieData.user) as User : null,
+    user,
     fridge
   } as Props
 }
