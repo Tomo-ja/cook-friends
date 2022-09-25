@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 const ItemFridge = styled.div`
 	width: 680px;
 	height: 55px;
@@ -10,7 +10,7 @@ const ItemFridge = styled.div`
 	.ItemFridgeLeft {
 		margin-left: 20px;
 		.FoodName {
-			padding-top: 4px;
+			padding-top: 4px; // 6.5
 			margin: 0;
 			font-size: 17px;
 		}
@@ -72,4 +72,15 @@ const ItemFridge = styled.div`
 		border-radius: 5px;
 	}
 `;
+
+export const classNames = {
+	itemFridgeLeft: 'ItemFridgeLeft',
+	itemFridgeRight: 'ItemFridgeRight',
+	foodName: 'FoodName',
+	expireDate: 'ExpireDate',
+	arrowTop: 'Arrow-Top',
+	arrowBottom: 'Arrow-Bottom',
+	amount: 'Amount'
+}
+
 export default ItemFridge;
