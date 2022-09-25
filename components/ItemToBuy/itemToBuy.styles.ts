@@ -57,4 +57,12 @@ const ItemToBuy = styled.div`
 		}
 	}
 `;
+export const className = {
+	NameAmount: "NameAmount",
+	FoodName: "FoodName",
+	Amount: "Amount",
+	txt: "txt",
+	btnContainer: "btnContainer",
+	
+};
 export default ItemToBuy;
