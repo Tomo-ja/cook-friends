@@ -14,8 +14,8 @@ export const stringToDate = (dateish: string): Date => {
 }
 
 // FIXME: need to return when expire instead of when user bought
-export const defineExpireDate = (dayBought: Date): number => {
-	const diffInSeconds = (new Date()).getTime() - dayBought.getTime()
+export const defineExpireDate = (dayBought: string): number => {
+	const diffInSeconds = (new Date()).getTime() - (new Date(dayBought)).getTime()
 	return Math.floor(diffInSeconds / (1000 * 3600 * 24))
 }
 

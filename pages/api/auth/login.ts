@@ -7,7 +7,6 @@ export default async function login(req: NextApiRequest, res: NextApiResponse<an
 	if (req.method === "POST") {
 		try {
 			await connectMongo();
-			console.log(req.body.username)
 			const user = await User.findOne({ username: req.body.username })
 			if (!user) return res.json("We can't find the user");
 			const isUserMatch = await bcrypt.compare(req.body.password, user.password);

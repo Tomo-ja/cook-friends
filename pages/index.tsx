@@ -16,7 +16,6 @@ type Props = {
 }
 
 const Home: NextPage<Props> = ({ data }: Props) => {
-  console.log(data.user)
   return (
     <StyledHome>
       <Head>

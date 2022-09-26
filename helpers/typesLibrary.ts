@@ -13,5 +13,5 @@ export type Fridge = {
 	amount: number,
 	unit: string,
 	category: string[],
-	stored_at: Date
+	stored_at: string
 }[]
