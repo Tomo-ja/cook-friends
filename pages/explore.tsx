@@ -5,7 +5,7 @@ import Head from 'next/head'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import parseCookies, { stringToDate } from '../helpers'
-import { User, Fridge } from '../helpers/typesLibrary'
+import { User, Fridge, RecipeSummary, RecipeSearchResult } from '../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../constants/axiosBase';
 
 import SearchSection from '../components/SearchBarSection/index'
@@ -18,16 +18,20 @@ import StyledSubContent from '../styles/subContent.styles'
 
 type Props = {
   user: User | null,
-  fridge: Fridge
+  fridge: Fridge,
+  recipeSearchResult: RecipeSearchResult
 }
 
 const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/index'),
 {ssr: false})
 
-const Explore: NextPage<Props> = ({ user, fridge }: Props) => {
+const DynamicRecipeSection = dynamic(() => import('../components/RecipesSection/index'), 
+{ssr: false})
+
+const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult }: Props) => {
   const router = useRouter()
-  console.log(router.query.keyword)
   console.log('user data', user)
+  console.log(recipeSearchResult)
 	return (
 		<StyledExplore>
       <Head>
@@ -36,8 +40,8 @@ const Explore: NextPage<Props> = ({ user, fridge }: Props) => {
       </Head>
       <SearchSection />
       <StyledMainContent>
-        <h2>Result of &quot;{router.query.keyword}&quot;</h2>
-        <DynamicFridgeSection fridge={fridge} useAsFilter={false}/>
+        <h2>Found {recipeSearchResult.totalResults} Recipes by &quot;{router.query.keyword}&quot;</h2>
+        <DynamicRecipeSection recipesSearchResult={recipeSearchResult}/>
       </StyledMainContent>
       <StyledSubContent>
         <h3>Use Food in Your Fridge?</h3>
@@ -50,10 +54,32 @@ const Explore: NextPage<Props> = ({ user, fridge }: Props) => {
 export default Explore
 
 
-Explore.getInitialProps = async ({ req, res }): Promise<Props> => {
+Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   const cookieData = parseCookies(req)
   const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
   const fridge: Fridge = []
+  let recipeSearchResult: RecipeSearchResult
+
+  if(query.keyword) {
+    console.log('inside if statement', query.keyword)
+    const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: {
+      query: query.keyword,
+      number: 2,
+      offset: 0,
+      sort: 'popularity',
+      addRecipeInformation: true,
+    }})
+    recipeSearchResult = response.data as RecipeSearchResult
+  } else {
+    console.error('ERROR: coming explore page without keyword')
+    recipeSearchResult = {
+      result: [],
+      offset: 0,
+      number: 0,
+      totalResults: 0
+    }
+  }
+
 
   if (user) {
     const fridgeData = await appAxios.post('/api/fridge/show', {
@@ -73,18 +99,6 @@ Explore.getInitialProps = async ({ req, res }): Promise<Props> => {
     })
   }
 
-  console.log(req?.url)
-
-  // const result = await spoonacularApiAxios.get('/recipes/complexSearch', {params: {
-
-  // }})
-
-  // const d = await spoonacularApiAxios.get('/recipes/random', {params : {
-  //   number: 1
-  // }})
-  // console.log(d.data)
-  // console.log('this is req',req?.headers)
-
   if(res){
     if (Object.keys(cookieData).length === 0 && cookieData.constructor === Object) {
       res.writeHead(301, { Location: '/'})
@@ -94,8 +108,9 @@ Explore.getInitialProps = async ({ req, res }): Promise<Props> => {
 
   return {
     user,
-    fridge
-  } as Props
+    fridge,
+    recipeSearchResult
+  }
 }
 
 // for recipe page

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getCookie, deleteCookie } from 'cookies-next'
 import Link from 'next/link';
+import Image from 'next/image';
 import CustomLink from '../../styles/link.styles';
 import StyledHeader from "./header.styles";
 import StyledImage from '../../styles/image.styles';
@@ -37,12 +38,13 @@ const Header = () => {
 		<StyledHeader>
 			<div>
 				<Link href="/">
-					<StyledImage
-						src={ logo }
-						alt='application logo'
-						width='132px' //2.64 times height
-						height='50px'
-					>
+					<StyledImage width='132px' ratio={2.64} scale={0.7}>
+						<Image
+							src={ logo }
+							alt='application logo'
+							layout='fill'
+							objectFit='contain'
+						/>
 					</StyledImage>
 				</Link>
 				<h1>{getPageName(router.asPath)}</h1>

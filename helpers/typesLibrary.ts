@@ -15,3 +15,25 @@ export type Fridge = {
 	category: string[],
 	stored_at: string
 }[]
+
+export type RecipeSummary = {
+	vegetarian: boolean,
+	veryHealthy: boolean,
+	veryPopular: boolean,
+	aggregateLikes: number,
+	id: number,
+	title: string,
+	readyInMinutes: number,
+	servings: number,
+	image: string,
+	summary: string,
+	cuisines: string[],
+	dishTypes: string[],
+}
+
+export type RecipeSearchResult = {
+	results: RecipeSummary[],
+	offset: number,
+	number: number,
+	totalResults: number
+}
