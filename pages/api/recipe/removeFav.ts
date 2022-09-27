@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectMongo from "../../../utils/connectMongo";
 import User from "../../../models/user";
+import mongoose from "mongoose";
 
 /*
 	expecting body{
@@ -12,7 +13,7 @@ import User from "../../../models/user";
 export default async function login(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
 		await connectMongo();
-		const user = await User.findOne({ user_id: req.body.user_id })
+		const user = await User.findOne({ _id: new mongoose.Types.ObjectId(req.body.user_id) })
 		user.favoriterecipe = user.favoriterecipe.filter((id: string) => id !== req.body.recipe_id);
 		await user.save()
 		res.json({user})
