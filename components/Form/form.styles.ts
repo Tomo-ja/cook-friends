@@ -5,11 +5,14 @@ const FormStyled = styled.form`
 	flex-direction: column;
 	align-items: center;
 	width: 300px;
-	margin: 0 auto;
+	margin: 100px auto;
 	.ErrMesg {
 		margin-bottom: 8px;
-		color: #E01111;
+		color: #e01111;
 		text-align: center;
+		p {
+			margin: 8px 0;
+		}
 	}
 	label {
 		text-align: left;
@@ -18,9 +21,13 @@ const FormStyled = styled.form`
 	div {
 		width: 100%;
 	}
-	button{
+	button {
 		margin-top: 10px;
 	}
+		 a{
+			padding-top: 8px;
+			color: #ffaa4e;
+		}
 `;
 
 export default FormStyled;
