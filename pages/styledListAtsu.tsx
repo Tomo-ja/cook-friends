@@ -6,7 +6,7 @@ import Container from "../styles/container.styles";
 import Link from "../styles/link.styles";
 import Input from "../components/Input/input.styles";
 import Button from "../components/Button/button.styles";
-import SearchBar from "../components/SearchBar/searchBar.styles";
+import SearchBar from "../components/SearchBarSection/searchBar.styles";
 import IconButton from "../components/IconButton/iconButton.styles";
 import MainContent from "../styles/mainContent.styles";
 import SubContent from "../styles/subContent.styles";

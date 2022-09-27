@@ -48,7 +48,8 @@ fridgeSchema.virtual('summary').get(function(){
 				category: string[], 
 				stored_at: Date, 
 				amount: number, 
-				unit: string
+				unit: string,
+				ingredient_api_id: string
 			}
 		} 
 		= {}
@@ -62,7 +63,8 @@ fridgeSchema.virtual('summary').get(function(){
 					category: food.category,
 					stored_at: food.stored_at,
 					amount: food.amount,
-					unit: food.unit ? food.unit : ""
+					unit: food.unit ? food.unit : "",
+					ingredient_api_id: food.ingredient_api_id
 				}
 			}
 		})

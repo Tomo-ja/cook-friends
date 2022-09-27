@@ -32,11 +32,12 @@ const Container = styled.div`
 
       aside{
         width: 0;
+        height: 0;
       }
       
       aside.open{
         position: absolute;
-        top: 36px;
+        top: 60px;
         right: 0;
         width: min(100vw, 460px);
         height: 100vh;

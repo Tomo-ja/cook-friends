@@ -2,17 +2,18 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getCookie, deleteCookie } from 'cookies-next'
 import Link from 'next/link';
-import Image from 'next/image'
 import CustomLink from '../../styles/link.styles';
 import StyledHeader from "./header.styles";
-import logo from "../../public/logoSample.png"
+import StyledImage from '../../styles/image.styles';
+import logo from "../../public/logo.png"
 import { User } from '../../helpers/typesLibrary';
 
 const getPageName = (url: string): string => {
-	const title = url.slice(1, url.length)
-	if (title.length === 0 ){
+	const urlX = url.slice(1, url.length)
+	if (urlX.length === 0 ){
 		return "Home"
 	}
+	const title: string = urlX.split('?')[0]
 	return title.charAt(0).toUpperCase() + title.slice(1)
 }
 
@@ -28,7 +29,7 @@ const Header = () => {
 	useEffect (() => {
 		const cookie = getCookie('user')
 		if (cookie) {
-			setUser(JSON.parse(cookie as string).user)
+			setUser(JSON.parse(cookie as string))
 		}
 	}, [router.asPath])
 
@@ -36,13 +37,13 @@ const Header = () => {
 		<StyledHeader>
 			<div>
 				<Link href="/">
-					<Image 
-						src={ logo } 
-						alt="application logo"
-						width={150}
-						height={32}
-						objectFit="cover"
-					/>
+					<StyledImage
+						src={ logo }
+						alt='application logo'
+						width='132px' //2.64 times height
+						height='50px'
+					>
+					</StyledImage>
 				</Link>
 				<h1>{getPageName(router.asPath)}</h1>
 			</div>

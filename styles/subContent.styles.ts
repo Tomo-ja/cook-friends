@@ -8,8 +8,8 @@ const SubContent = styled.aside`
 	h3{
 		margin: 0;
 
-		margin-bottom: 36px;
-		font-size: 20px;
+		margin-bottom: 1.25em;
+		font-size: 17px;
 		font-weight: bold;
 		text-decoration: underline;
 		text-decoration-thickness: 1px;
@@ -22,7 +22,6 @@ const SubContent = styled.aside`
 
 			h3{
 				font-size: 17px;
-				margin-bottom: 16px;
 				text-underline-offset: 3px;
 
 			}
