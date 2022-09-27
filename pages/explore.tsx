@@ -1,11 +1,12 @@
 import type { NextPage } from 'next'
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Head from 'next/head'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import parseCookies, { stringToDate } from '../helpers'
-import { User, Fridge, RecipeSummary, RecipeSearchResult } from '../helpers/typesLibrary'
+import { User, Fridge, RecipeSearchResult, RecipeSearchParams } from '../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../constants/axiosBase';
 
 import SearchSection from '../components/SearchBarSection/index'
@@ -19,7 +20,8 @@ import StyledSubContent from '../styles/subContent.styles'
 type Props = {
   user: User | null,
   fridge: Fridge,
-  recipeSearchResult: RecipeSearchResult
+  recipeSearchResult: RecipeSearchResult,
+  searchParams: RecipeSearchParams
 }
 
 const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/index'),
@@ -28,10 +30,21 @@ const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/in
 const DynamicRecipeSection = dynamic(() => import('../components/RecipesSection/index'), 
 {ssr: false})
 
-const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult }: Props) => {
+const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchParams }: Props) => {
   const router = useRouter()
-  console.log('user data', user)
-  console.log(recipeSearchResult)
+
+  const [stateRecipesResult, setStateResult] = useState(recipeSearchResult)
+  const [mustIncludeIngredients, setMustIncludeIngredients] = useState<string[]>([])
+
+  useEffect(() => {
+    const fetchSearchResult = async () => {
+      searchParams.includeIngredients = mustIncludeIngredients.join()
+      const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
+      setStateResult(response.data as RecipeSearchResult)
+    }
+    fetchSearchResult().catch(()=> console.log('fetch recipe with fridge item failed'))
+  }, [mustIncludeIngredients])
+
 	return (
 		<StyledExplore>
       <Head>
@@ -41,11 +54,11 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult }: Props) =
       <SearchSection />
       <StyledMainContent>
         <h2>Found {recipeSearchResult.totalResults} Recipes by &quot;{router.query.keyword}&quot;</h2>
-        <DynamicRecipeSection recipesSearchResult={recipeSearchResult} user={user}/>
+        <DynamicRecipeSection recipesSearchResult={stateRecipesResult} user={user}/>
       </StyledMainContent>
       <StyledSubContent>
         <h3>Use Food in Your Fridge?</h3>
-        <DynamicFridgeSection fridge={fridge} useAsFilter={true}/>
+        <DynamicFridgeSection fridge={fridge} useAsFilter={true} setMustIncludeIngredients={setMustIncludeIngredients}/>
       </StyledSubContent>
     </StyledExplore>
 	)
@@ -59,16 +72,18 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
   const fridge: Fridge = []
   let recipeSearchResult: RecipeSearchResult
+  let params: RecipeSearchParams
 
   if(query.keyword) {
-    console.log('inside if statement', query.keyword)
-    const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: {
+    params = {
       query: query.keyword,
       number: 2,
       offset: 0,
       sort: 'popularity',
       addRecipeInformation: true,
-    }})
+      includeIngredients: ''
+    }
+    const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: params})
     recipeSearchResult = response.data as RecipeSearchResult
   } else {
     console.error('ERROR: coming explore page without keyword')
@@ -78,8 +93,15 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
       number: 0,
       totalResults: 0
     }
+    params = {
+      query: "",
+      number: 2,
+      offset: 0,
+      sort: 'popularity',
+      addRecipeInformation: true,
+      includeIngredients: ''
+    }
   }
-
 
   if (user) {
     const fridgeData = await appAxios.post('/api/fridge/show', {
@@ -109,7 +131,8 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   return {
     user,
     fridge,
-    recipeSearchResult
+    recipeSearchResult,
+    searchParams: params
   }
 }
 

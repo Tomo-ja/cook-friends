@@ -77,7 +77,7 @@ const RecipeSection = ({ recipesSearchResult, user }: Props) => {
 				<StyledRecipeItem key={recipe.id}>
 					{user && 
 						<IconButton backgroundColor={isFavRecipe[idx] ? 'white': '#c4c4c4'} onClick={() => handleFavButton(recipe.id, idx)}>
-							<FontAwesomeIcon icon={faStar} color={isFavRecipe[idx] ? '#ffaa4e': 'white'}/>
+							<FontAwesomeIcon icon={faStar} color={isFavRecipe[idx] ? '#ffaa4e': 'white'} style={{width: '16px', height: '16px'}}/>
 						</IconButton>
 					}
 					<StyledImage width="100%" ratio={1} radius={"5px"} shadow={true}>
@@ -89,7 +89,7 @@ const RecipeSection = ({ recipesSearchResult, user }: Props) => {
 						/>
 					</StyledImage>
 					<h3>{recipe.title}</h3>
-					<FontAwesomeIcon icon={faHourglassHalf} />
+					<FontAwesomeIcon icon={faHourglassHalf} style={{width: '12px', height: '16px'}}/>
 					<span>{recipe.readyInMinutes} mins</span>
 				</StyledRecipeItem>
 			))}

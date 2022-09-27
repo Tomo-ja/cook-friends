@@ -37,3 +37,12 @@ export type RecipeSearchResult = {
 	number: number,
 	totalResults: number
 }
+
+export type RecipeSearchParams = {
+	query: string | string[],
+	number: number,
+	offset: number,
+	sort: string,
+	addRecipeInformation: boolean,
+	includeIngredients: string
+}
