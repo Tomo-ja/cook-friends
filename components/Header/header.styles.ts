@@ -11,6 +11,7 @@ const Header = styled.header`
 	box-shadow: 0px 2.5px 10px 3px rgba(0,0,0,0.5);
 	position: fixed;
   top: 0;
+	z-index: 100;
 
 	img{
 		margin-right: 16px;

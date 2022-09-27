@@ -19,13 +19,10 @@ const MainContent = styled.main`
 
 	h3{
 		margin: 0;
-
-		margin-bottom: 36px;
+		margin-bottom: 0.25em;
 		font-size: 20px;
 		font-weight: bold;
-		text-decoration: underline;
-		text-decoration-thickness: 1px;
-		text-underline-offset: 5px;
+
 	}
 	 & > div{
 		width: 100%;
@@ -34,15 +31,12 @@ const MainContent = styled.main`
   @media only screen and (max-width: 768px)  {
       h2{
 				font-size: 20px;
-				margin-bottom: 16px;
+				margin-bottom: 24px;
 				text-underline-offset: 3px;
 			}
 
 			h3{
 				font-size: 17px;
-				margin-bottom: 16px;
-				text-underline-offset: 3px;
-
 			}
   }
 

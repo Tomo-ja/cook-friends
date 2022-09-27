@@ -41,7 +41,7 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult }: Props) =
       <SearchSection />
       <StyledMainContent>
         <h2>Found {recipeSearchResult.totalResults} Recipes by &quot;{router.query.keyword}&quot;</h2>
-        <DynamicRecipeSection recipesSearchResult={recipeSearchResult}/>
+        <DynamicRecipeSection recipesSearchResult={recipeSearchResult} user={user}/>
       </StyledMainContent>
       <StyledSubContent>
         <h3>Use Food in Your Fridge?</h3>
@@ -73,7 +73,7 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   } else {
     console.error('ERROR: coming explore page without keyword')
     recipeSearchResult = {
-      result: [],
+      results: [],
       offset: 0,
       number: 0,
       totalResults: 0
