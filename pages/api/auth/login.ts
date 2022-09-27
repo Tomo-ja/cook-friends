@@ -18,7 +18,14 @@ export default async function login(
 		);
 		if (!isUserMatch) return res.json("worngPassword");
 		// const user3 = await User.findOne({ _id: new ObjectId(user._id) });
-		return res.json({ user });
+		return res.json({
+			id: user._id.toString(),
+			username: user.username,
+			email: user.email,
+			password: user.password,
+			favoriterecipe: user.favoriterecipe,
+			historyrecipe: user.historyrecipe,
+		});
 	} catch (error) {
 		// console.log(error)
 		res.json({ error });

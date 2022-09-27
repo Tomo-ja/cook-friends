@@ -66,6 +66,8 @@ export const Form = ({ btn, signUp }: props) => {
 						account: false,
 					});
 				} else {
+					appAxios.post("api/fridge/create", { user_id: res.data._id }).then(res=>console.log(res))
+					appAxios.post("api/shoppingList/create", { user_id: res.data._id }).then(res=>console.log(res))
 					router.push("/login");
 				}
 			});
@@ -93,6 +95,7 @@ export const Form = ({ btn, signUp }: props) => {
 					});
 				} else {
 					const cookies = parseCookies();
+					console.log("user cookie",res.data);
 					setCookie(null, "user", JSON.stringify(res.data), {
 						maxAge: 30 * 24 * 60 * 60,
 						path: "/",
@@ -103,7 +106,7 @@ export const Form = ({ btn, signUp }: props) => {
 					// 	maxAge: 3600, // expires 1hr
 					// 	sameSite: true,
 					// });
-					router.push("/explore");
+					router.push("/");
 				}
 			});
 		}

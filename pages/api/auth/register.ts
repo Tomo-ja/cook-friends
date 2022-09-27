@@ -25,6 +25,8 @@ export default async function register(
 		const checkEmail = await User.findOne({ email: req.body.data.email });
 		if (checkEmail) return res.json("exsist");
 		const auth = await User.create(newUser);
+		console.log(auth);
+		
 		res.json(auth);
 	} catch (error) {
 		res.json({ error });
