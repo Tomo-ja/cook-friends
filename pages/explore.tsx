@@ -14,6 +14,7 @@ import SearchSection from '../components/SearchBarSection/index'
 import StyledExplore from '../components/Explore/explore.styles'
 import StyledMainContent from '../styles/mainContent.styles'
 import StyledSubContent from '../styles/subContent.styles'
+import StyledPagination from '../components/Explore/pagination.styles';
 
 import { complexSearchData } from '../sampleApiData'
 
@@ -39,6 +40,7 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
   router.query
   const [stateRecipesResult, setStateResult] = useState(recipeSearchResult)
   const [mustIncludeIngredients, setMustIncludeIngredients] = useState<string[]>([])
+  const [page, setPage] = useState(0)
 
   useEffect(() => {
     const fetchSearchResult = async () => {
@@ -46,7 +48,6 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
       // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
       console.log(searchParams.includeIngredients)
       const response = complexSearchData
-      console.count('api call-----------------------------')
       setStateResult(response.data as RecipeSearchResult)
     }
 
@@ -78,7 +79,10 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
       <StyledMainContent>
         <h2>Found {recipeSearchResult.totalResults} Recipes by &quot;{router.query.keyword}&quot;</h2>
         <DynamicRecipeSection recipesSearchResult={stateRecipesResult} user={user}/>
-
+        <StyledPagination>
+          <button>Previous</button>
+          <button>Next</button>
+        </StyledPagination>
       </StyledMainContent>
       <StyledSubContent>
         <h3>Use Food in Your Fridge?</h3>
@@ -116,7 +120,6 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
 
     // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: params})
     const response = complexSearchData
-    console.count('recipe api called in back--------------------------------------------------------------')
     recipeSearchResult = response.data as RecipeSearchResult
   } else {
     console.error('ERROR: coming explore page without keyword')
