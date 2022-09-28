@@ -6,17 +6,19 @@ import ItemInFridge, {classNames} from "./itemInFridge.styles";
 import StyledLink from "../../styles/link.styles";
 import { defineExpireDate } from "../../helpers";
 import { Fridge } from "../../helpers/typesLibrary";
+import { ParsedUrlQuery } from "querystring";
 
 // FIXME: if you want to pass any additional props, you can pass but optional like example?: number
 type Props = {
 	fridge: Fridge,
 	useAsFilter: boolean,
-	setMustIncludeIngredients?: Dispatch<SetStateAction<string[]>>
+	urlQuery?: ParsedUrlQuery,
+	setMustIncludeIngredients?: Dispatch<SetStateAction<string[]>>,
 }
 
 // TODO: for atsu, you will want to create new function here to update database and may want to pass it as props to Amount component
 
-const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients}: Props) => {
+const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQuery}: Props) => {
 
 	const router = useRouter()
 	const [selectedAsFilter, setSelectedAsFilter] = useState<boolean[]>(()=> {
@@ -53,6 +55,15 @@ const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients}: Props)
 		})
 	}
 
+	useEffect(()=> {
+		setSelectedAsFilter(()=> {
+			const init: boolean[] = []
+			for(let i=0; i<fridge.length; i++) {
+				init.push(false)
+			}
+			return init
+		})
+	}, [urlQuery])
 	return(
 		<div>
 			{fridge.map((item, idx) => (

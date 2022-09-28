@@ -31,9 +31,12 @@ const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/in
 const DynamicRecipeSection = dynamic(() => import('../components/RecipesSection/index'), 
 {ssr: true})
 
+let isInitialRender = true
+
 const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchParams }: Props) => {
   const router = useRouter()
 
+  router.query
   const [stateRecipesResult, setStateResult] = useState(recipeSearchResult)
   const [mustIncludeIngredients, setMustIncludeIngredients] = useState<string[]>([])
 
@@ -41,17 +44,29 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
     const fetchSearchResult = async () => {
       searchParams.includeIngredients = mustIncludeIngredients.join()
       // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
+      console.log(searchParams.includeIngredients)
       const response = complexSearchData
-      console.log('recipe api called--------------------------------------------------------------')
+      console.count('api call-----------------------------')
       setStateResult(response.data as RecipeSearchResult)
     }
-    fetchSearchResult().catch(()=> console.log('fetch recipe with fridge item failed'))
+
+    if (isInitialRender){
+      isInitialRender = false
+    } else {
+      fetchSearchResult().catch(()=> console.log('fetch recipe with fridge item failed'))
+    }
   }, [mustIncludeIngredients])
 
   useEffect(() => {
+    setMustIncludeIngredients([])
     setStateResult(recipeSearchResult)
   }, [recipeSearchResult])
 
+  useEffect(()=> {
+    return () => {
+      isInitialRender = true
+    }
+  }, [])
 
 	return (
 		<StyledExplore>
@@ -67,7 +82,12 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
       </StyledMainContent>
       <StyledSubContent>
         <h3>Use Food in Your Fridge?</h3>
-        <DynamicFridgeSection fridge={fridge} useAsFilter={true} setMustIncludeIngredients={setMustIncludeIngredients}/>
+        <DynamicFridgeSection 
+          fridge={fridge} 
+          useAsFilter={true} 
+          setMustIncludeIngredients={setMustIncludeIngredients}
+          urlQuery={router.query}
+        />
       </StyledSubContent>
     </StyledExplore>
 	)
@@ -82,6 +102,7 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   const fridge: Fridge = []
   let recipeSearchResult: RecipeSearchResult
   let params: RecipeSearchParams
+  isInitialRender = true
 
   if(query.keyword) {
     params = {
@@ -95,7 +116,7 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
 
     // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: params})
     const response = complexSearchData
-    console.log('recipe api called--------------------------------------------------------------')
+    console.count('recipe api called in back--------------------------------------------------------------')
     recipeSearchResult = response.data as RecipeSearchResult
   } else {
     console.error('ERROR: coming explore page without keyword')
