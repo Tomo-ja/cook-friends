@@ -44,7 +44,7 @@ const Item = styled.div`
 	}
 	}
 
-	button{
+	> button{
 		position: absolute;
 		top: 0;
 		right: 0;

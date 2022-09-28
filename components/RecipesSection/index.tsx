@@ -24,8 +24,6 @@ const RecipeSection = ({ recipesSearchResult, user }: Props) => {
 		if(user){
 			recipesSearchResult.results.forEach((recipe, idx) => {
 				user.favoriterecipe.forEach(fav => {
-					console.log('recipe id', recipe.id)
-					console.log('fav id', Number(fav))
 					if (Number(fav) === recipe.id) {
 						state[idx] = true
 					}

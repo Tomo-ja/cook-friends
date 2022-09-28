@@ -36,7 +36,6 @@ const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients}: Props)
 				return changing
 			})
 			if(setMustIncludeIngredients){
-				console.log('call set state from child')
 				if (isFilterOut) {
 					setMustIncludeIngredients(prev => [...prev].filter(food => food !== fridge[idx].name))
 				} else {
