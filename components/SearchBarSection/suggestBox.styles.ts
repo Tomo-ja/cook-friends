@@ -11,6 +11,7 @@ const SuggestBox = styled.ul`
 	position: absolute;
 	top: 44px;
 	left: 40px;
+	z-index: 10;
 
 	li{
 		display: block;

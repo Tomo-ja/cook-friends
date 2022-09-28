@@ -45,6 +45,11 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
     fetchSearchResult().catch(()=> console.log('fetch recipe with fridge item failed'))
   }, [mustIncludeIngredients])
 
+  useEffect(() => {
+    setStateResult(recipeSearchResult)
+  }, [recipeSearchResult])
+
+
 	return (
 		<StyledExplore>
       <Head>
@@ -77,7 +82,7 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   if(query.keyword) {
     params = {
       query: query.keyword,
-      number: 2,
+      number: 12,
       offset: 0,
       sort: 'popularity',
       addRecipeInformation: true,
@@ -95,7 +100,7 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
     }
     params = {
       query: "",
-      number: 2,
+      number: 0,
       offset: 0,
       sort: 'popularity',
       addRecipeInformation: true,

@@ -1,9 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/router";
 import { spoonacularApiAxios } from "../../constants/axiosBase";
 import SearchBarSection from "./searchBarSection.styled";
 import SearchBar from "./searchBar.styles";
 import SuggestBox from "./suggestBox.styles";
+import { RecipeSearchResult } from "../../helpers/typesLibrary";
+
 
 const SearchSection = () => {
 
@@ -37,6 +39,7 @@ const SearchSection = () => {
 		}
 	}
 
+	// FIXME: if it call on explore page, need to setState result
 	const handleSubmit = (ingredient: string) => {
 		setPrediction([])
 		inputRef.current!.value = ""
