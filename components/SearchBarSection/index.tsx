@@ -39,7 +39,6 @@ const SearchSection = () => {
 		}
 	}
 
-	// FIXME: if it call on explore page, need to setState result
 	const handleSubmit = (ingredient: string) => {
 		setPrediction([])
 		inputRef.current!.value = ""

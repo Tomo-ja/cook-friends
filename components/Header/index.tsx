@@ -14,7 +14,8 @@ const getPageName = (url: string): string => {
 	if (urlX.length === 0 ){
 		return "Home"
 	}
-	const title: string = urlX.split('?')[0]
+	let title: string = urlX.split('?')[0]
+	title = title.split('/')[0]
 	return title.charAt(0).toUpperCase() + title.slice(1)
 }
 

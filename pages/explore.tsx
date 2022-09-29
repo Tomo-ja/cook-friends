@@ -62,7 +62,9 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
   }
 
   const handleClickRecipe = (id: number) => {
-
+    router.push({
+      pathname: `/recipe/${id}`
+    })
   }
 
   useEffect(() => {
@@ -126,6 +128,7 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
         <DynamicRecipeSection 
           recipesSearchResult={pickDisplayItems(page, stateRecipesResult.totalResults)} 
           user={user}
+          handleClickRecipe={handleClickRecipe}
         />
         <StyledPagination>
           {page > 1 &&

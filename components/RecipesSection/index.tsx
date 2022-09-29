@@ -12,10 +12,11 @@ import appAxios from "../../constants/axiosBase";
 
 type Props = {
 	recipesSearchResult: RecipeSearchResult,
-	user: User | null
+	user: User | null,
+	handleClickRecipe: (id: number) => void
 }
 
-const RecipeSection = ({ recipesSearchResult, user }: Props) => {
+const RecipeSection = ({ recipesSearchResult, user, handleClickRecipe }: Props) => {
 
 	const [cookie, setCookie] = useCookies(['user'])
 
@@ -80,13 +81,14 @@ const RecipeSection = ({ recipesSearchResult, user }: Props) => {
 					}
 					<StyledImage width="100%" ratio={1} radius={"5px"} shadow={true}>
 						<Image 
+							onClick={()=> handleClickRecipe(recipe.id)}
 							src={recipe.image}
 							alt={'picture of dish'}
 							layout='fill'
 							objectFit="cover"
 						/>
 					</StyledImage>
-					<h3>{recipe.title}</h3>
+					<h3 onClick={()=> handleClickRecipe(recipe.id)}>{recipe.title}</h3>
 				</StyledRecipeItem>
 			))}
 		</StyledRecipesSection>
