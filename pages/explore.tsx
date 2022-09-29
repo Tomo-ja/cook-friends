@@ -18,6 +18,8 @@ import StyledPagination from '../components/Explore/pagination.styles';
 
 import { complexSearchData } from '../sampleApiData'
 
+const NUMBER_ITEMS_AT_ONE_FETCH = 6
+
 
 type Props = {
   user: User | null,
@@ -40,13 +42,58 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
   router.query
   const [stateRecipesResult, setStateResult] = useState(recipeSearchResult)
   const [mustIncludeIngredients, setMustIncludeIngredients] = useState<string[]>([])
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(1)
+
+  const handlePagination = (nextPage: number) => {
+    setPage(prev => prev + nextPage)
+  }
+
+  const pickDisplayItems = (propPage: number, totalResults: number): RecipeSearchResult => {
+    console.count('display picker')
+    const allRecipes = [...stateRecipesResult.results]
+    const start = Math.max(((propPage - 1 ) * NUMBER_ITEMS_AT_ONE_FETCH), 0)
+    let end = propPage * NUMBER_ITEMS_AT_ONE_FETCH
+    if (end > totalResults) {
+      end = totalResults
+      console.log(end)
+    } 
+    console.log('start', start, 'end', end)
+    console.log(stateRecipesResult)
+    const displayRecipe = allRecipes.slice(start, end)
+    console.log(displayRecipe)
+    return {
+      ...stateRecipesResult,
+      results: displayRecipe
+    }
+  }
+
+  useEffect(() => {
+    const fetchSearchResult = async (offset: number) => {
+      searchParams.offset = offset
+      // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
+      const response = complexSearchData
+      console.count('api called page changed')
+      setStateResult(prev => {
+        const newState = {...prev}
+        newState.offset = offset
+        newState.results.push(...response.data.results)
+        newState.number = response.data.number
+        return newState
+      })
+    }
+
+    if ((page * NUMBER_ITEMS_AT_ONE_FETCH) > stateRecipesResult.results.length) {
+      fetchSearchResult((stateRecipesResult.offset + NUMBER_ITEMS_AT_ONE_FETCH))
+    } else {
+      console.log('should appier when page back')
+    }
+  }, [page])
 
   useEffect(() => {
     const fetchSearchResult = async () => {
+      console.count('api called fridge item filter')
       searchParams.includeIngredients = mustIncludeIngredients.join()
       // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
-      console.log(searchParams.includeIngredients)
       const response = complexSearchData
       setStateResult(response.data as RecipeSearchResult)
     }
@@ -78,10 +125,17 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
       <SearchSection />
       <StyledMainContent>
         <h2>Found {recipeSearchResult.totalResults} Recipes by &quot;{router.query.keyword}&quot;</h2>
-        <DynamicRecipeSection recipesSearchResult={stateRecipesResult} user={user}/>
+        <DynamicRecipeSection 
+          recipesSearchResult={pickDisplayItems(page, stateRecipesResult.totalResults)} 
+          user={user}
+        />
         <StyledPagination>
-          <button>Previous</button>
-          <button>Next</button>
+          {page > 1 &&
+            <button onClick={() => handlePagination(-1)}>Previous</button>
+          }
+          {page * NUMBER_ITEMS_AT_ONE_FETCH < recipeSearchResult.totalResults && 
+            <button onClick={() => handlePagination(1)}>Next</button>
+          }
         </StyledPagination>
       </StyledMainContent>
       <StyledSubContent>
@@ -111,7 +165,7 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   if(query.keyword) {
     params = {
       query: query.keyword,
-      number: 12,
+      number: NUMBER_ITEMS_AT_ONE_FETCH,
       offset: 0,
       sort: 'popularity',
       addRecipeInformation: true,
