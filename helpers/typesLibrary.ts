@@ -16,6 +16,7 @@ export type Fridge = {
 	stored_at: string
 }[]
 
+// FIXME: change return so that reduce response data amount2
 export type RecipeSummary = {
 	vegetarian: boolean,
 	veryHealthy: boolean,

@@ -87,8 +87,6 @@ const RecipeSection = ({ recipesSearchResult, user }: Props) => {
 						/>
 					</StyledImage>
 					<h3>{recipe.title}</h3>
-					<FontAwesomeIcon icon={faHourglassHalf} style={{width: '12px', height: '16px'}}/>
-					<span>{recipe.readyInMinutes} mins</span>
 				</StyledRecipeItem>
 			))}
 		</StyledRecipesSection>

@@ -11,11 +11,12 @@ const Item = styled.div`
 	h3{
 		width: 100%;
 		font-size: 17px;
+		height: 44px;
 		font-weight: bold;
 		text-overflow: ellipsis;
-		overflow: hidden;
-		white-space: nowrap;
+		overflow: scroll;
 		transition: opacity 0.3s ;
+		cursor: pointer;
 
 
 		:hover{
@@ -25,24 +26,13 @@ const Item = styled.div`
 
 	img{
 		transition: opacity 0.3s ;
+		cursor: pointer;
 
 		:hover{
 		opacity: 0.6;
 	}
 	}
 
-	span{
-		display: inline-block;
-		font-size: 13px;
-		vertical-align: 2px;
-		margin-left: 7.5px;
-		color: #93918F;
-		transition: opacity 0.3s ;
-
-		:hover{
-		opacity: 0.6;
-	}
-	}
 
 	> button{
 		position: absolute;
