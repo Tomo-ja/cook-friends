@@ -18,18 +18,9 @@ export type Fridge = {
 
 // FIXME: change return so that reduce response data amount2
 export type RecipeSummary = {
-	vegetarian: boolean,
-	veryHealthy: boolean,
-	veryPopular: boolean,
-	aggregateLikes: number,
 	id: number,
 	title: string,
-	readyInMinutes: number,
-	servings: number,
 	image: string,
-	summary: string,
-	cuisines: string[],
-	dishTypes: string[],
 }
 
 export type RecipeSearchResult = {
@@ -44,6 +35,5 @@ export type RecipeSearchParams = {
 	number: number,
 	offset: number,
 	sort: string,
-	addRecipeInformation: boolean,
 	includeIngredients: string
 }
