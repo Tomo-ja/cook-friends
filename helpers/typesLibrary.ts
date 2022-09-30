@@ -16,7 +16,6 @@ export type Fridge = {
 	stored_at: string
 }[]
 
-// FIXME: change return so that reduce response data amount2
 export type RecipeSummary = {
 	id: number,
 	title: string,
@@ -36,4 +35,39 @@ export type RecipeSearchParams = {
 	offset: number,
 	sort: string,
 	includeIngredients: string
+}
+
+export type Ingredient = {
+	"id": number,
+	"name": string,
+	"amount": number,
+	"unit": string,
+}
+
+export type RecipeInstruction = {
+	number: number,
+	step: string,
+}
+
+export type RecipeInfo = {
+	"id": number,
+	"title": string,
+	"readyInMinutes": number,
+	"servings": number,
+	"image": "https://spoonacular.com/recipeImages/715449-556x370.jpg",
+
+	"analyzedInstructions":{
+				"name": "",
+				"steps": RecipeInstruction[]
+	}[],
+
+	"extendedIngredients": Ingredient[],
+	
+	"vegetarian": boolean,
+	"vegan": boolean,
+	"veryHealthy": boolean,
+	"veryPopular": boolean,
+	"cuisines": string[],
+	"dishTypes": string[],
+
 }
