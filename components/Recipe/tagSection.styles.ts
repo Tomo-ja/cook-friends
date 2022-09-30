@@ -4,7 +4,8 @@ const TagSection = styled.div`
 
 	display: flex;
 	align-items: center;
-	margin-bottom: 16px;
+	margin-top: 14px;
+	margin-bottom: 36px;
 
 	p{
 		margin-right: 16px;

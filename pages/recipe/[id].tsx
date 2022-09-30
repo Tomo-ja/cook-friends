@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglassHalf, faStar } from "@fortawesome/free-solid-svg-icons";
 
 import IngredientSection from '../../components/Recipe/ingredientSection';
+import HowToSection from '../../components/Recipe/howtoSection';
 
 import StyledRecipe, {RecipeContainer} from '../../components/Recipe/recipe.styles'
 import StyledImage from '../../styles/image.styles'
@@ -42,7 +43,7 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 					<FontAwesomeIcon icon={faHourglassHalf} size='sm' style={{display: 'block', marginRight: '8px'}}/>
 					<p>{recipeInfo.readyInMinutes} min</p>
 				</StyledTagSection>
-				<StyledImage width='100%' ratio={2}>
+				<StyledImage width='100%' ratio={2} radius='10px'>
 					<Image 
 						src={recipeInfo.image}
 						alt={recipeInfo.title}
@@ -50,8 +51,8 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 						objectFit='cover'
 					/>
 				</StyledImage>
-				
-				<IngredientSection />
+				<IngredientSection ingredients={recipeInfo.extendedIngredients} fridge={fridge}/>
+				<HowToSection instruction={recipeInfo.analyzedInstructions[0].steps} />
 			</StyledRecipe>
 		</RecipeContainer>
 	)
