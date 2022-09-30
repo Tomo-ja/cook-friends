@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from 'react-cookie'
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,7 +20,9 @@ const RecipeSection = ({ recipesSearchResult, user, handleClickRecipe }: Props) 
 
 	const [cookie, setCookie] = useCookies(['user'])
 
-	const [isFavRecipe, setIsFavRecipe] = useState<boolean[]>(()=>{
+	const [isFavRecipe, setIsFavRecipe] = useState<boolean[]>([])
+
+	const initFavRecipeState = (): boolean[] => {
 		const state: boolean[] = []
 		if(user){
 			recipesSearchResult.results.forEach((recipe, idx) => {
@@ -32,7 +34,11 @@ const RecipeSection = ({ recipesSearchResult, user, handleClickRecipe }: Props) 
 			})
 		}
 		return state
-	})
+	}
+
+	useEffect(() => {
+		setIsFavRecipe(initFavRecipeState())
+	}, [recipesSearchResult])
 
 	const updateDatabase = async (recipeId: number, url: string) => {
 		try {

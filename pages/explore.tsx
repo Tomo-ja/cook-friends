@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Head from 'next/head'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import parseCookies, { stringToDate } from '../helpers'
 import { User, Fridge, RecipeSearchResult, RecipeSearchParams } from '../helpers/typesLibrary'
@@ -174,7 +173,6 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
 
     // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: params})
     const response = complexSearchData
-    console.log(response.data)
     recipeSearchResult = response.data as RecipeSearchResult
   } else {
     console.error('ERROR: coming explore page without keyword')
