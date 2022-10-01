@@ -3,16 +3,37 @@ import Input from "./input"
 
 import StyledModal, {classNames} from "./modal.styles"
 import StyledButton from './button.styles'
-import { Ingredient } from "../../helpers/typesLibrary"
+import { Ingredient, User } from "../../helpers/typesLibrary"
+
+import  appAxios  from '../../constants/axiosBase'
 
 type Props = {
 	handleModalClose: (isAddList: boolean) => void,
-	addItem: Ingredient | null
+	addItem: Ingredient | null,
+	user: User,
+	title: string
 }
 
-const AddListModal = ({ handleModalClose, addItem }: Props) => {
+const AddListModal = ({ handleModalClose, addItem, user, title }: Props) => {
 
 	if (addItem === null ) {return <></>}
+
+	const handleClickAdd = async () => {
+		try{
+			await appAxios.post('api/shoppingList/add', {
+				user_id: user.id,
+				ingredient_api_id: addItem.id.toString(),
+				name: addItem.name,
+				amount: addItem.amount,
+				unit: addItem.unit,
+				memo: `Use for ${title}`
+			})
+			handleModalClose(true)
+		}catch{
+			console.log('adding item to shopping list fail')
+		}
+
+	}
 
 	return(
 		<StyledModal>
@@ -27,7 +48,7 @@ const AddListModal = ({ handleModalClose, addItem }: Props) => {
 				</form>
 
 				<div className={classNames.buttonGroup}>
-					<StyledButton>Add</StyledButton>
+					<StyledButton onClick={() => handleClickAdd()}>Add</StyledButton>
 					<StyledButton onClick={() => handleModalClose(true)}>Cancel</StyledButton>
 				</div>
 			</div>

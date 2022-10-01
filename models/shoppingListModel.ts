@@ -19,9 +19,6 @@ const shoppingListSchema = new Schema({
 					immutable: true,
 					required: true
 				},
-				category: {
-					type: [String],
-				},
 				created_at: {
 					type: Date,
 					immutable: true,

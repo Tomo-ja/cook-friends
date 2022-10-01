@@ -43,7 +43,6 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 
 	const handleClickReduce = () => {
 		setShowReduceFridgeModal(true)
-
 	}
 
 	const handleModalClose = (isAddList: boolean) => {
@@ -58,10 +57,10 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 		<RecipeContainer>
 			<StyledRecipe>
 
-				{showAddListModal && 
-					<AddListModal handleModalClose={handleModalClose} addItem={addIngredient}/>
+				{user && showAddListModal && 
+					<AddListModal handleModalClose={handleModalClose} addItem={addIngredient} user={user} title={recipeInfo.title}/>
 				}
-				{showReduceFridgeModal && 
+				{user && showReduceFridgeModal && 
 					<ReduceFridgeModal 
 						handleModalClose={handleModalClose} 
 						reduceItems={recipeInfo.extendedIngredients}
@@ -92,7 +91,7 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 				<IngredientSection ingredients={recipeInfo.extendedIngredients} fridge={fridge} handleClick={handleClickAdd}/>
 				<HowToSection instruction={recipeInfo.analyzedInstructions[0].steps} />
 
-				<FeedbackSection handleReduceModalOpen={handleClickReduce}/>
+				<FeedbackSection handleReduceModalOpen={handleClickReduce} user={user} />
 
 			</StyledRecipe>
 		</RecipeContainer>

@@ -2,15 +2,17 @@ import { useRouter } from "next/router";
 
 import StyledFeedbackSection from "./feedbackSection.styles";
 import StyledButton from "../Button/button.styles";
+import { User } from "../../helpers/typesLibrary";
 
 
 type Props = {
 	handleReduceModalOpen: () => void,
+	user: User | null
 
 }
 
 
-const FeedbackSection = ({ handleReduceModalOpen,  }: Props) => {
+const FeedbackSection = ({ handleReduceModalOpen, user  }: Props) => {
 
 	const router = useRouter()
 
@@ -23,8 +25,13 @@ const FeedbackSection = ({ handleReduceModalOpen,  }: Props) => {
 		<StyledFeedbackSection>
 			<h3>Did you cook this today?</h3>
 			<div>
-				<StyledButton>Add to Favorite recipe</StyledButton>
-				<StyledButton onClick={() => handleReduceModalOpen()}>Reduce Ingredients from Your Fridge</StyledButton>
+				{user && 
+					<StyledButton>Add to Favorite recipe</StyledButton>
+				}
+				{user && 
+					<StyledButton onClick={() => handleReduceModalOpen()}>Reduce Ingredients from Your Fridge</StyledButton>
+
+				}
 				<StyledButton backgroundColor="black" onClick={() => handleClickBackToHome()}>Back to Home</StyledButton>
 			</div>
 		</StyledFeedbackSection>
