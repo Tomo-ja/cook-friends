@@ -1,4 +1,4 @@
-
+import { useState } from "react"
 import Input from "./input"
 
 import StyledModal, {classNames} from "./modal.styles"
@@ -9,14 +9,18 @@ import  appAxios  from '../../constants/axiosBase'
 
 type Props = {
 	handleModalClose: (isAddList: boolean) => void,
-	addItem: Ingredient | null,
+	addItem: Ingredient,
 	user: User,
 	title: string
 }
 
 const AddListModal = ({ handleModalClose, addItem, user, title }: Props) => {
 
+	const [amounts, setAmounts] = useState<number[]>([addItem.amount])
+
+
 	if (addItem === null ) {return <></>}
+
 
 	const handleClickAdd = async () => {
 		try{
@@ -24,7 +28,7 @@ const AddListModal = ({ handleModalClose, addItem, user, title }: Props) => {
 				user_id: user.id,
 				ingredient_api_id: addItem.id.toString(),
 				name: addItem.name,
-				amount: addItem.amount,
+				amount: amounts[0],
 				unit: addItem.unit,
 				memo: `Use for ${title}`
 			})
@@ -32,7 +36,6 @@ const AddListModal = ({ handleModalClose, addItem, user, title }: Props) => {
 		}catch{
 			console.log('adding item to shopping list fail')
 		}
-
 	}
 
 	return(
@@ -43,7 +46,7 @@ const AddListModal = ({ handleModalClose, addItem, user, title }: Props) => {
 				<form>
 					<div>
 						<p>{addItem.name} {addItem.unit === "" ? "" : `(${addItem.unit})`}</p>
-						<Input amount={addItem.amount} />
+						<Input amount={amounts[0]} index={0} setAmounts={setAmounts}/>
 					</div>
 				</form>
 

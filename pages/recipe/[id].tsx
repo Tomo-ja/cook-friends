@@ -14,7 +14,6 @@ import FeedbackSection from '../../components/Recipe/feedbackSection';
 
 import StyledRecipe, {RecipeContainer} from '../../components/Recipe/recipe.styles'
 import StyledImage from '../../styles/image.styles'
-import StyledIconButton from '../../components/IconButton/iconButton.styles';
 import StyledTagSection from '../../components/Recipe/tagSection.styles';
 
 import parseCookies, { stringToDate } from '../../helpers/index'
@@ -28,17 +27,20 @@ type Props = {
 	recipeInfo: RecipeInfo | null
 }
 
+const emptyIngredient: Ingredient = {id:0, name: '', amount: 0, unit: ""}
+
 const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 
 	const [showAddListModal, setShowAddListModal] = useState(false)
 	const [showReduceFridgeModal, setShowReduceFridgeModal] = useState(false)
-	const [addIngredient, setAddIngredient] = useState<Ingredient | null>(null)
+	const [addIngredient, setAddIngredient] = useState<Ingredient>(emptyIngredient)
+
 
 	if(recipeInfo === null) { return <></>}
 
 	const handleClickAdd = (item: Ingredient) => {
-		setShowAddListModal(true)
 		setAddIngredient(item)
+		setShowAddListModal(true)
 	}
 
 	const handleClickReduce = () => {
@@ -52,6 +54,8 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 			setShowReduceFridgeModal(false)
 		}
 	}
+
+
 
 	return (
 		<RecipeContainer>
@@ -69,12 +73,6 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 
 				<h2>{recipeInfo.title}</h2>
 				<StyledTagSection>
-					{user && 
-						//TODO: need to change the color depends on user favorite data
-						<StyledIconButton backgroundColor='#ffaa4e'>
-							<FontAwesomeIcon icon={faStar} color='white' style={{width: '16px', height: '16px'}}/>
-						</StyledIconButton>
-					}
 					<FontAwesomeIcon icon={faHourglassHalf} size='sm' style={{display: 'block', marginRight: '8px'}}/>
 					<p>{recipeInfo.readyInMinutes} min</p>
 				</StyledTagSection>

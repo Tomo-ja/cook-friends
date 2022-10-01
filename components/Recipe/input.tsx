@@ -1,24 +1,29 @@
-import React, { useState } from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import StyledInput from "./input.styles"
 
 type Props = {
-	amount: number
+	amount: number,
+	setAmounts: Dispatch<SetStateAction<number[]>>,
+	index: number
 }
 
-const Input = ({ amount }: Props) => {
-
-	const [stateAmount, setStateAmount] = useState<string>(amount.toString())
+const Input = ({ amount, index, setAmounts }: Props) => {
 
 	const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
 		const newValue = e.currentTarget.value
-		setStateAmount(newValue)
+		setAmounts(prev => {
+			const next = [...prev]
+			next[index] = parseInt(newValue, 10) || 0
+			return next
+		})
 	}
 
 	return (
 		<StyledInput 
-			type='number'
+			type='text'
+			pattern="^[0-9]*$"
 			min={0}
-			value={stateAmount}
+			value={amount}
 			onChange={handleOnChange}
 		/>
 	)
