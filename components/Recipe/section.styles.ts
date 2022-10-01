@@ -25,7 +25,7 @@ export const Section = styled.section<ISection>`
 
 	ul{
 		padding: 0;
-		padding-left: ${props => props.needListNumber ? '1em' : '0px'};
+		padding-left: ${props => props.needListNumber ? '1.2em' : '0px'};
 	}
 
 	li{

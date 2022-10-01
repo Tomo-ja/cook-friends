@@ -10,14 +10,15 @@ import { Fridge, Ingredient } from "../../helpers/typesLibrary"
 
 type Props = {
 	ingredients: Ingredient[],
-	fridge: Fridge | null
+	fridge: Fridge | null,
+	handleClick: (item: Ingredient) => void
 }
 
 const capitalize = (string: string): string => {
 	return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-const IngredientSection = ({ ingredients, fridge }: Props) => {
+const IngredientSection = ({ ingredients, fridge, handleClick }: Props) => {
 
 	const userHasIngredient: boolean[] = []
 
@@ -31,7 +32,6 @@ const IngredientSection = ({ ingredients, fridge }: Props) => {
 		})
 	}
 
-	console.log(userHasIngredient)
 
 	return(
 		<StyledIngredientSection>
@@ -40,7 +40,7 @@ const IngredientSection = ({ ingredients, fridge }: Props) => {
 			<ul>
 				{ingredients.map((ingredient, idx) => (
 				<li className={classNames.complexList} key={ingredient.id}>
-					<StyledIconButton backgroundColor='#000' square={true}>
+					<StyledIconButton backgroundColor='#000' square={true} onClick={() => handleClick(ingredient)}>
 						<FontAwesomeIcon icon={faCartPlus} color = 'white' size='sm' style={{display: 'block'}}/>
 					</StyledIconButton>
 					<div className={classNames.inOneLine}>

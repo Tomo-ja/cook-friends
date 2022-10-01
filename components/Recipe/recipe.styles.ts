@@ -9,7 +9,7 @@ export const RecipeContainer = styled(Container)`
 
 const Recipe = styled(MainContent)`
 
-
+	position: relative;
 
 
 	h2{

@@ -3,7 +3,8 @@ import styled from 'styled-components'
 interface IButton {
 	width?: string,
 	fontSize?: string,
-	fontThin?: boolean
+	fontThin?: boolean,
+	backgroundColor?: string
 }
 
 const Button = styled.button<IButton>`
@@ -11,7 +12,7 @@ const Button = styled.button<IButton>`
 	display: block;
 	width: ${props => props.width ? props.width : '100%'};
 	padding-block: 1em;
-	background-color: #FFAA4E;
+	background-color: ${props => props.backgroundColor ? props.backgroundColor : '#FFAA4E'};
 	border-radius: 999px;
 	color: #fff;
 	font-size: ${props => props.fontSize ? props.fontSize : '17px'};

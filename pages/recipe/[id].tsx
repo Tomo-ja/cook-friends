@@ -1,11 +1,16 @@
 import { NextPage } from 'next'
 import Image from 'next/image'
 
+import { useState } from 'react';
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglassHalf, faStar } from "@fortawesome/free-solid-svg-icons";
 
 import IngredientSection from '../../components/Recipe/ingredientSection';
 import HowToSection from '../../components/Recipe/howtoSection';
+import AddListModal from '../../components/Recipe/addListModal';
+import ReduceFridgeModal from '../../components/Recipe/reduceFridgeModal';
+import FeedbackSection from '../../components/Recipe/feedbackSection';
 
 import StyledRecipe, {RecipeContainer} from '../../components/Recipe/recipe.styles'
 import StyledImage from '../../styles/image.styles'
@@ -13,10 +18,8 @@ import StyledIconButton from '../../components/IconButton/iconButton.styles';
 import StyledTagSection from '../../components/Recipe/tagSection.styles';
 
 import parseCookies, { stringToDate } from '../../helpers/index'
-import { User, RecipeInfo, Fridge } from '../../helpers/typesLibrary'
+import { User, RecipeInfo, Fridge, Ingredient } from '../../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../../constants/axiosBase'
-
-
 
 
 type Props = {
@@ -26,12 +29,45 @@ type Props = {
 }
 
 const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
+
+	const [showAddListModal, setShowAddListModal] = useState(false)
+	const [showReduceFridgeModal, setShowReduceFridgeModal] = useState(false)
+	const [addIngredient, setAddIngredient] = useState<Ingredient | null>(null)
+
 	if(recipeInfo === null) { return <></>}
 
+	const handleClickAdd = (item: Ingredient) => {
+		setShowAddListModal(true)
+		setAddIngredient(item)
+	}
+
+	const handleClickReduce = () => {
+		setShowReduceFridgeModal(true)
+
+	}
+
+	const handleModalClose = (isAddList: boolean) => {
+		if (isAddList) {
+			setShowAddListModal(false)
+		} else {
+			setShowReduceFridgeModal(false)
+		}
+	}
 
 	return (
 		<RecipeContainer>
 			<StyledRecipe>
+
+				{showAddListModal && 
+					<AddListModal handleModalClose={handleModalClose} addItem={addIngredient}/>
+				}
+				{showReduceFridgeModal && 
+					<ReduceFridgeModal 
+						handleModalClose={handleModalClose} 
+						reduceItems={recipeInfo.extendedIngredients}
+					/>
+				}
+
 				<h2>{recipeInfo.title}</h2>
 				<StyledTagSection>
 					{user && 
@@ -43,6 +79,7 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 					<FontAwesomeIcon icon={faHourglassHalf} size='sm' style={{display: 'block', marginRight: '8px'}}/>
 					<p>{recipeInfo.readyInMinutes} min</p>
 				</StyledTagSection>
+
 				<StyledImage width='100%' ratio={2} radius='10px'>
 					<Image 
 						src={recipeInfo.image}
@@ -51,8 +88,12 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 						objectFit='cover'
 					/>
 				</StyledImage>
-				<IngredientSection ingredients={recipeInfo.extendedIngredients} fridge={fridge}/>
+
+				<IngredientSection ingredients={recipeInfo.extendedIngredients} fridge={fridge} handleClick={handleClickAdd}/>
 				<HowToSection instruction={recipeInfo.analyzedInstructions[0].steps} />
+
+				<FeedbackSection handleReduceModalOpen={handleClickReduce}/>
+
 			</StyledRecipe>
 		</RecipeContainer>
 	)
