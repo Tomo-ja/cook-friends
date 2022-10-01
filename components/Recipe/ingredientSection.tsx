@@ -41,7 +41,7 @@ const IngredientSection = ({ ingredients, fridge, handleClick }: Props) => {
 				{ingredients.map((ingredient, idx) => (
 				<li className={classNames.complexList} key={ingredient.id}>
 					<StyledIconButton backgroundColor='#000' square={true} onClick={() => handleClick(ingredient)}>
-						<FontAwesomeIcon icon={faCartPlus} color = 'white' size='sm' style={{display: 'block'}}/>
+						<FontAwesomeIcon icon={faCartPlus} color = 'white' style={{display: 'block', width: '16px', height: '16px'}}/>
 					</StyledIconButton>
 					<div className={classNames.inOneLine}>
 						<p className={userHasIngredient[idx] ? '' : classNames.textRed}>{capitalize(ingredient.name)}</p>

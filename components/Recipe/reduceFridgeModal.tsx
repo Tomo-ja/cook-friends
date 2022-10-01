@@ -3,15 +3,18 @@ import Input from "./input"
 
 import StyledModal, {classNames} from "./modal.styles"
 import StyledButton from './button.styles'
-import { Ingredient } from "../../helpers/typesLibrary"
+import { Ingredient, User } from "../../helpers/typesLibrary"
+
+import  appAxios  from '../../constants/axiosBase'
 
 
 type Props = {
 	handleModalClose: (isAddList: boolean) => void,
-	reduceItems: Ingredient[]
+	reduceItems: Ingredient[],
+	user: User
 }
 
-const ReduceFridgeModal = ({ handleModalClose, reduceItems }: Props) => {
+const ReduceFridgeModal = ({ handleModalClose, reduceItems, user }: Props) => {
 
 	const init: number[] = []
 	reduceItems.forEach(item => {
@@ -22,7 +25,18 @@ const ReduceFridgeModal = ({ handleModalClose, reduceItems }: Props) => {
 
 
 	const handleClickReduce = async () => {
-		console.log(amounts)
+		try {
+			await Promise.all(reduceItems.map((item, idx) => {
+				appAxios.post('api/fridge/remove', {
+					user_id: user.id,
+					ingredient_api_id: item.id.toString(),
+					amount: amounts[idx],
+				})
+			}))
+			handleModalClose(false)
+		}catch{
+			console.log('reducing items from fridge fails')
+		}
 	}
 	
 

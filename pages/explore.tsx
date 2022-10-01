@@ -62,9 +62,7 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
   }
 
   const handleClickRecipe = (id: number) => {
-    router.push({
-      pathname: `/recipe/${id}`
-    })
+    router.push(`/recipe/${id}`)
   }
 
   useEffect(() => {
@@ -163,6 +161,8 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   let params: RecipeSearchParams
   isInitialRender = true
 
+  console.log('explore getInitialProps called')
+
   if(query.keyword) {
     params = {
       query: query.keyword,
@@ -174,7 +174,6 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
 
     // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: params})
     const response = complexSearchData
-    console.log(response.data)
     recipeSearchResult = response.data as RecipeSearchResult
   } else {
     console.error('ERROR: coming explore page without keyword')

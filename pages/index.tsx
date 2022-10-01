@@ -54,6 +54,8 @@ Home.getInitialProps = async ({ req, res }): Promise<Props> => {
   const expireFoods: string[] = []
   const keywords = popupKeywords()
 
+  console.log('home getinitial props called')
+
   if(user) {
     const fridgeData = await appAxios.post('api/fridge/show', {
       user_id: user.id

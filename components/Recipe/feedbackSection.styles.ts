@@ -15,7 +15,7 @@ const FeedbackSection = styled.div`
 		button{
 			width: 40%;
 			margin-inline: 16px;
-			margin-bottom: 16px;
+			margin-bottom: 24px;
 
 			:active{
 					transform: translateY(5px)
@@ -29,6 +29,7 @@ const FeedbackSection = styled.div`
 			button{
 				width: 60%;
 				font-size: 13px;
+				margin-bottom: 16px;
 			}
 		}
 

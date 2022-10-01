@@ -24,6 +24,7 @@ const AddListModal = ({ handleModalClose, addItem, user, title }: Props) => {
 
 	const handleClickAdd = async () => {
 		try{
+			console.log(addItem.id.toString(), addItem.name)
 			await appAxios.post('api/shoppingList/add', {
 				user_id: user.id,
 				ingredient_api_id: addItem.id.toString(),
