@@ -10,12 +10,11 @@ import SearchBar from "../components/SearchBarSection/searchBar.styles";
 import IconButton from "../components/IconButton/iconButton.styles";
 import MainContent from "../styles/mainContent.styles";
 import SubContent from "../styles/subContent.styles";
-import Filter from "../components/Filter/filter.styles";
 import { useState } from "react";
 import Form from "../components/Form/form.styles";
 import ItemFridge from "../components/ItemInFridge/itemInFridge.styles";
 import ItemToBuy from "../components/ItemToBuy/itemToBuy.styles";
-import Recipe from "../components/Recipe/recipe.styles";
+import Recipe from "../components/Recipe/recipe";
 
 export default function StyledList() {
 	const [filter, setFilter] = useState<boolean>(false);
@@ -33,12 +32,6 @@ export default function StyledList() {
 				</nav>
 			</Header>
 			<Container>
-				<Filter
-					backgroundColor={filter ? "#FFAA4E" : "#D9D9D9"}
-					onClick={() => setFilter(!filter)}
-				>
-					food{" "}
-				</Filter>
 				<Button width='300px' fontSize='14px' fontThin={true}>
 					add
 				</Button>
@@ -47,7 +40,7 @@ export default function StyledList() {
 
 				<MainContent>
 					<h2>favo</h2>
-					<ItemFridge>
+					{/* <ItemFridge>
 						<div className='ItemFridgeLeft'>
 							<p className='FoodName'>Name of food</p>
 							<p className='ExpireDate'>Expire date in 3days</p>
@@ -60,7 +53,7 @@ export default function StyledList() {
 								<FontAwesomeIcon icon={faTrash} style={{ color: "#000" }} />
 							</IconButton>
 						</div>
-					</ItemFridge>
+					</ItemFridge> */}
 					<ItemToBuy>
 						<div className='NameAmount'>
 							<p className='FoodName'>Name of Food</p>

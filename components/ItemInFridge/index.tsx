@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from 'next/link';
 import Amount from "./amount";
@@ -6,16 +6,19 @@ import ItemInFridge, {classNames} from "./itemInFridge.styles";
 import StyledLink from "../../styles/link.styles";
 import { defineExpireDate } from "../../helpers";
 import { Fridge } from "../../helpers/typesLibrary";
+import { ParsedUrlQuery } from "querystring";
 
 // FIXME: if you want to pass any additional props, you can pass but optional like example?: number
 type Props = {
-	fridge: Fridge
-	useAsFilter: boolean
+	fridge: Fridge,
+	useAsFilter: boolean,
+	urlQuery?: ParsedUrlQuery,
+	setMustIncludeIngredients?: Dispatch<SetStateAction<string[]>>,
 }
 
 // TODO: for atsu, you will want to create new function here to update database and may want to pass it as props to Amount component
 
-const FridgeSection = ({ fridge, useAsFilter }: Props) => {
+const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQuery}: Props) => {
 
 	const router = useRouter()
 	const [selectedAsFilter, setSelectedAsFilter] = useState<boolean[]>(()=> {
@@ -28,11 +31,19 @@ const FridgeSection = ({ fridge, useAsFilter }: Props) => {
 
 	const handleClickFilter = (idx: number) => {
 		if(useAsFilter){
+			const isFilterOut = selectedAsFilter[idx]
 			setSelectedAsFilter(prev => {
 				const changing = [...prev]
 				changing[idx] = !prev[idx]
 				return changing
 			})
+			if(setMustIncludeIngredients){
+				if (isFilterOut) {
+					setMustIncludeIngredients(prev => [...prev].filter(food => food !== fridge[idx].name))
+				} else {
+					setMustIncludeIngredients(prev => [...prev, fridge[idx].name])
+				}
+			}
 		}
 	}
 
@@ -43,7 +54,16 @@ const FridgeSection = ({ fridge, useAsFilter }: Props) => {
 			query: {keyword: ingredient}
 		})
 	}
-	
+
+	useEffect(()=> {
+		setSelectedAsFilter(()=> {
+			const init: boolean[] = []
+			for(let i=0; i<fridge.length; i++) {
+				init.push(false)
+			}
+			return init
+		})
+	}, [urlQuery])
 	return(
 		<div>
 			{fridge.map((item, idx) => (

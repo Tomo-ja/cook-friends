@@ -1,21 +1,26 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import parseCookies from '../helpers'
+import parseCookies, { stringToDate, popupKeywords } from '../helpers'
+
+import FilterSection from '../components/Home/SearchKeywordSection'
 
 import StyledSEarchSection from '../components/SearchBarSection/index'
 import StyledMainContent from '../styles/mainContent.styles'
 import StyledSubContent from '../styles/subContent.styles'
 import StyledHome from '../components/Home/home.styles'
+import { Fridge, User } from '../helpers/typesLibrary'
+import appAxios from '../constants/axiosBase'
 
 
 type Props = {
-  data: {
-    user: string
-  }
+  user: User | null,
+  expireFoods: string[],
+  keywords: string[]
+
 }
 
-const Home: NextPage<Props> = ({ data }: Props) => {
+const Home: NextPage<Props> = ({ user, expireFoods, keywords }: Props) => {
   return (
     <StyledHome>
       <Head>
@@ -28,10 +33,15 @@ const Home: NextPage<Props> = ({ data }: Props) => {
 
       </StyledMainContent>
       <StyledSubContent>
-
+        {expireFoods.length > 0 && 
+        <>
+          <h3>Expiring Ingredients</h3>
+          <FilterSection keywords={expireFoods}/>
+        </>
+        }
+        <h3>What Is In Your Mind</h3>
+          <FilterSection keywords={keywords}/>
       </StyledSubContent>
-
-
     </StyledHome>
   )
 }
@@ -39,16 +49,35 @@ const Home: NextPage<Props> = ({ data }: Props) => {
 export default Home
 
 Home.getInitialProps = async ({ req, res }): Promise<Props> => {
-  const data = parseCookies(req)
+  const cookieData = parseCookies(req)
+  const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
+  const expireFoods: string[] = []
+  const keywords = popupKeywords()
 
+  console.log('home getinitial props called')
+
+  if(user) {
+    const fridgeData = await appAxios.post('api/fridge/show', {
+      user_id: user.id
+    })
+    Object.values(fridgeData.data).forEach((value: any) => {
+      // TODO: define condition of expire
+      if(true) {
+        expireFoods.push(value.name)
+      }
+    })
+  }
+  
   if(res){
-    if (Object.keys(data).length === 0 && data.constructor === Object) {
+    if (Object.keys(cookieData).length === 0 && cookieData.constructor === Object) {
       res.writeHead(301, { Location: '/'})
       res.end()
     }
   }
 
   return {
-    data: data && data
-  } as Props
+    user,
+    expireFoods,
+    keywords
+  } 
 }

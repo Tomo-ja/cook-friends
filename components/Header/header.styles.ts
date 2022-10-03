@@ -11,6 +11,7 @@ const Header = styled.header`
 	box-shadow: 0px 2.5px 10px 3px rgba(0,0,0,0.5);
 	position: fixed;
   top: 0;
+	z-index: 100;
 
 	img{
 		margin-right: 16px;
@@ -19,7 +20,7 @@ const Header = styled.header`
 	
 	div{
 		display: flex;
-		align-items: center
+		align-items: center;
 	}
 
 	h1{
@@ -44,10 +45,26 @@ const Header = styled.header`
 
 	@media only screen and (max-width: 768px)  {
       padding-inline: min(44px, 5%);
+
+			div{
+				:first-child{
+					translate: -10px 0;
+				}
+			}
+
+			h1{
+				font-size: 13px;
+				margin-left: -20px;
+				margin-right: 0;
+			}
 			
 			li{
 				margin-left: 16px;
 				font-size: 11px;
+
+				:first-child{
+					margin-left: 8px;
+				}
 			}
   }
 

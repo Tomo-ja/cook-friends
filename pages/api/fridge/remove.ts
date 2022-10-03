@@ -7,9 +7,9 @@ import Fridge from '../../../models/fridgeModel'
 		user_id: 632a4e972852e67132cc00dd,
 		ingredient_api_id: string,
 		amount: number,
-		stored_at: Date(),
 	}
 */
+
 
 export default async function removeFromFridge(
 	req: NextApiRequest,
