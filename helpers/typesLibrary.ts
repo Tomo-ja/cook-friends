@@ -12,6 +12,5 @@ export type Fridge = {
 	name: string,
 	amount: number,
 	unit: string,
-	category: string[],
 	stored_at: string
 }[]
