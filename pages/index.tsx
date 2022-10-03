@@ -4,23 +4,27 @@ import Image from 'next/image'
 import parseCookies, { stringToDate, popupKeywords } from '../helpers'
 
 import FilterSection from '../components/Home/SearchKeywordSection'
+import HeroSection from '../components/Home/heroSection'
 
 import StyledSEarchSection from '../components/SearchBarSection/index'
 import StyledMainContent from '../styles/mainContent.styles'
 import StyledSubContent from '../styles/subContent.styles'
 import StyledHome from '../components/Home/home.styles'
-import { Fridge, User } from '../helpers/typesLibrary'
-import appAxios from '../constants/axiosBase'
+import { Fridge, User, RandomRecipes, RecipeInfo } from '../helpers/typesLibrary'
+import appAxios, { spoonacularApiAxios } from '../constants/axiosBase'
 
 
 type Props = {
   user: User | null,
   expireFoods: string[],
-  keywords: string[]
-
+  keywords: string[],
+  randomRecipes: RecipeInfo[],
 }
 
-const Home: NextPage<Props> = ({ user, expireFoods, keywords }: Props) => {
+const randomRecipeTags = ['main course', 'side dish', 'appetizer']
+// const randomRecipeTags = ['main course']
+
+const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: Props) => {
   return (
     <StyledHome>
       <Head>
@@ -30,6 +34,8 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords }: Props) => {
       </Head>
       <StyledSEarchSection />
       <StyledMainContent>
+
+        <HeroSection randomRecipes={ randomRecipes } />
 
       </StyledMainContent>
       <StyledSubContent>
@@ -53,8 +59,21 @@ Home.getInitialProps = async ({ req, res }): Promise<Props> => {
   const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
   const expireFoods: string[] = []
   const keywords = popupKeywords()
+  const randomRecipes: RecipeInfo[] = []
 
-  console.log('home getinitial props called')
+  const allRes = await Promise.all(randomRecipeTags.map(async tag => {
+    const response = await spoonacularApiAxios.get('/recipes/random', {
+      params: {
+        number: 1,
+        tags: tag
+      }
+    })
+    return response.data as RandomRecipes
+  }))
+  
+  allRes.forEach(recipe => {
+    randomRecipes.push(recipe.recipes[0])
+  })
 
   if(user) {
     const fridgeData = await appAxios.post('api/fridge/show', {
@@ -78,6 +97,7 @@ Home.getInitialProps = async ({ req, res }): Promise<Props> => {
   return {
     user,
     expireFoods,
-    keywords
+    keywords,
+    randomRecipes
   } 
 }

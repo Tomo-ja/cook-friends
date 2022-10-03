@@ -71,3 +71,7 @@ export type RecipeInfo = {
 	"dishTypes": string[],
 
 }
+
+export type RandomRecipes = {
+	recipes: RecipeInfo[]
+}
