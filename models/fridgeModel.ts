@@ -19,9 +19,6 @@ const fridgeSchema = new Schema({
 					immutable: true,
 					required: true
 				},
-				category: {
-					type: [String],
-				},
 				stored_at: {
 					type: Date,
 					immutable: true,
@@ -45,7 +42,6 @@ fridgeSchema.virtual('summary').get(function(){
 	let summary: 
 		{ [id: string] : {
 				name: string, 
-				category: string[], 
 				stored_at: Date, 
 				amount: number, 
 				unit: string,
@@ -60,7 +56,6 @@ fridgeSchema.virtual('summary').get(function(){
 			} else {
 				summary[food.ingredient_api_id] = {
 					name: food.name,
-					category: food.category,
 					stored_at: food.stored_at,
 					amount: food.amount,
 					unit: food.unit ? food.unit : "",
