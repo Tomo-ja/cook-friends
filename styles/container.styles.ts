@@ -9,6 +9,7 @@ const Container = styled.div`
   margin-top: 66px;
   padding-top: 36px;
 
+
   main{
     width: max(66%, 400px);
     transition: width 0.5s ease;

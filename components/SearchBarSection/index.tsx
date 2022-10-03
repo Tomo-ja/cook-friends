@@ -1,25 +1,27 @@
-import { useState, useRef } from "react";
+import { useState, useRef, Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/router";
 import { spoonacularApiAxios } from "../../constants/axiosBase";
 import SearchBarSection from "./searchBarSection.styled";
 import SearchBar from "./searchBar.styles";
 import SuggestBox from "./suggestBox.styles";
+import { RecipeSearchResult } from "../../helpers/typesLibrary";
+
 
 const SearchSection = () => {
 
 	const router = useRouter()
 	const inputRef = useRef<HTMLInputElement>(null)
-	const [prediction, setPrediction] = useState<{id: number, title: string}[]>([])
+	const [prediction, setPrediction] = useState<{id: number, name: string}[]>([])
 
 
 	const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
-		spoonacularApiAxios.get('/recipes/autocomplete', { 
+		spoonacularApiAxios.get('/food/ingredients/autocomplete', { 
 			params: {
 				number: 10,
 				query: e.currentTarget.value,
 			}
 		}).then(data => {
-			const words: {id: number, title: string}[] = data.data
+			const words: {id: number, name: string}[] = data.data
 			setPrediction(words)
 		}).catch(error => {
 			console.log(error)
@@ -59,8 +61,8 @@ return(
 			{prediction.map(word => (
 				<li 
 					key={word.id}
-					onClick={() => handleSubmit(word.title)}
-				>{word.title}</li>
+					onClick={() => handleSubmit(word.name)}
+				>{word.name}</li>
 			))}
 			</SuggestBox>
 

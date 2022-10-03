@@ -4,6 +4,7 @@ const RecipeItem = styled.div`
 
 	width: min(30%, 215px);
 	color: #151413;
+	position: relative;
 
 	h3{
 		font-size: 17px;
