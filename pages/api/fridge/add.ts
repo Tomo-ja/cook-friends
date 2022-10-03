@@ -7,7 +7,6 @@ import Fridge from '../../../models/fridgeModel'
 		user_id: 632a4e972852e67132cc00dd,
 		ingredient_api_id: string,
 		name: string
-		category: [string],
 		amount: number,
 		unit: string,
 	}
@@ -24,7 +23,6 @@ export default async function addToFridge(
 		fridge.stock.push({
 			ingredient_api_id: req.body.ingredient_api_id,
 			name: req.body.name,
-			category: req.body.category,
 			amount: req.body.amount,
 			unit: req.body.unit,
 			stored_at: req.body.stored_at || Date.now(),
