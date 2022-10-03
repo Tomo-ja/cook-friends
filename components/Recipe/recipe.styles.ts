@@ -1,54 +1,25 @@
 import styled from "styled-components";
-const Recipe = styled.div`
-	width: 100%;
-	.DishName {
-		font-size: 28px;
-		font-weight: bold;
+import MainContent from "../../styles/mainContent.styles";
+import Container from "../../styles/container.styles";
+
+export const RecipeContainer = styled(Container)`
+	justify-content: center;
+`
+
+
+const Recipe = styled(MainContent)`
+
+	position: relative;
+
+
+	h2{
+		margin-bottom: 8px;
 	}
-	.Img {
-		width: 680px;
-		object-fit: contain;
+
+	p{
+		margin: 0;
 	}
-	.IngredientConatiner {
-		.Ingredients {
-			font-size: 20px;
-			margin: 0;
-		}
-		.People {
-			margin: 8px 0;
-			font-size: 14px;
-			color: #93918f;
-		}
-		.EachIngredients {
-			display: flex;
-			justify-content: space-between;
-			margin: 16px 0;
-			.EachIngredientsRight {
-				display: flex;
-				align-items: center;
-			}
-			.Amount {
-				margin: 0;
-			}
-		}
-	}
-	.InstructionContainer {
-		.Instruction {
-			font-size: 20px;
-			margin: 0;
-		}
-	}
-`;
-export const className = {
-	DishName: "DishName",
-	Img: "Img",
-	IngredientConatiner: "IngredientConatiner",
-	Ingredients: "Ingredients",
-	People: "People",
-	EachIngredients: "EachIngredients",
-	EachIngredientsRight: "EachIngredientsRight",
-	Amount: "Amount",
-	InstructionContainer: "InstructionContainer",
-	Instruction: "Instruction",
-};
-export default Recipe;
+
+`
+
+export default Recipe

@@ -14,7 +14,7 @@ import { useState } from "react";
 import Form from "../components/Form/form.styles";
 import ItemFridge from "../components/ItemInFridge/itemInFridge.styles";
 import ItemToBuy from "../components/ItemToBuy/itemToBuy.styles";
-import Recipe from "../components/Recipe/recipe.styles";
+import Recipe from "../components/Recipe/recipe";
 
 export default function StyledList() {
 	const [filter, setFilter] = useState<boolean>(false);

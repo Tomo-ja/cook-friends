@@ -12,7 +12,7 @@ export const complexSearchData = {
 		totalResults: 20,
 		results: [
 			{
-				aggregateLikes: 32767,
+				aggregateLikes: 715560,
 				cuisines: [],
 				dishTypes:['lunch', 'main course', 'main dish', 'dinner'],
 				id: 7765051,

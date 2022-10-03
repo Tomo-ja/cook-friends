@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from 'react-cookie'
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHourglassHalf, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import StyledRecipesSection from "./recipesSection.styles";
 import StyledRecipeItem from "./item.styles";
 import StyledImage from "../../styles/image.styles";

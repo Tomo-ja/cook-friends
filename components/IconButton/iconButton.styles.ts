@@ -3,6 +3,7 @@ import styled from 'styled-components'
 interface IIconButton {
 	width?: string,
 	backgroundColor: string,
+	square?: boolean
 }
 
 const IconButton = styled.button<IIconButton>`
@@ -12,7 +13,7 @@ const IconButton = styled.button<IIconButton>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-radius: 50%;
+	border-radius: ${props => props.square ? '0' : '50%'};
 	background-color: ${props => props.backgroundColor };
 	transition: all 0.25s ease;
 	position: relative;

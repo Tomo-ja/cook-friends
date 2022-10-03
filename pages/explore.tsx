@@ -61,9 +61,7 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
   }
 
   const handleClickRecipe = (id: number) => {
-    router.push({
-      pathname: `/recipe/${id}`
-    })
+    router.push(`/recipe/${id}`)
   }
 
   useEffect(() => {
@@ -161,6 +159,8 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   let recipeSearchResult: RecipeSearchResult
   let params: RecipeSearchParams
   isInitialRender = true
+
+  console.log('explore getInitialProps called')
 
   if(query.keyword) {
     params = {
