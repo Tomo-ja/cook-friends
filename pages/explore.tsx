@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Head from 'next/head'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import parseCookies, { stringToDate } from '../helpers'
 import { User, Fridge, RecipeSearchResult, RecipeSearchParams } from '../helpers/typesLibrary'
@@ -25,7 +24,8 @@ type Props = {
   user: User | null,
   fridge: Fridge,
   recipeSearchResult: RecipeSearchResult,
-  searchParams: RecipeSearchParams
+  searchParams: RecipeSearchParams,
+  recipeIds?: number[]
 }
 
 const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/index'),
@@ -36,7 +36,7 @@ const DynamicRecipeSection = dynamic(() => import('../components/RecipesSection/
 
 let isInitialRender = true
 
-const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchParams }: Props) => {
+const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchParams, recipeIds }: Props) => {
   const router = useRouter()
 
   const [stateRecipesResult, setStateResult] = useState(recipeSearchResult)
@@ -175,7 +175,16 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
     // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: params})
     const response = complexSearchData
     recipeSearchResult = response.data as RecipeSearchResult
-  } else {
+  } 
+  // else if (query.favorite) {
+  //   const ids = user!.favoriterecipe
+
+  // } else if (query.history) {
+  //   const ids = user!.historyrecipe
+
+
+  // } 
+  else {
     console.error('ERROR: coming explore page without keyword')
     recipeSearchResult = {
       results: [],
@@ -224,6 +233,3 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
     searchParams: params
   }
 }
-
-// for recipe page
-//GET https://api.spoonacular.com/recipes/324694/analyzedInstructions

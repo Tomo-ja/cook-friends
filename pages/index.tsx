@@ -36,9 +36,6 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: P
   const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeInfo[]>([])
   const [recipeHistory, setRecipeHistory] = useState<RecipeInfo[]>([])
 
-  const handleClickRecipe = (id: number) => {
-
-  }
 
   useEffect(() => {
     if(user === null) { return }
@@ -85,6 +82,7 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: P
           <RecipesSectionHome
             title='Favorite Recipes'
             displayRecipes={favoriteRecipes}
+            isFavorite={true}
           />
         }
 
@@ -92,6 +90,7 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: P
           <RecipesSectionHome
             title='Recipes You Checked'
             displayRecipes={recipeHistory}
+            isFavorite={false}
           />
         }
 
