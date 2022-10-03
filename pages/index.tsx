@@ -1,15 +1,21 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
+
+import { useState ,useEffect } from 'react'
+
 import parseCookies, { stringToDate, popupKeywords } from '../helpers'
 
 import FilterSection from '../components/Home/SearchKeywordSection'
 import HeroSection from '../components/Home/heroSection'
+import RecipesSectionHome from '../components/Home/recipeSection'
 
 import StyledSEarchSection from '../components/SearchBarSection/index'
 import StyledMainContent from '../styles/mainContent.styles'
 import StyledSubContent from '../styles/subContent.styles'
 import StyledHome from '../components/Home/home.styles'
+
+
+
 import { Fridge, User, RandomRecipes, RecipeInfo } from '../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../constants/axiosBase'
 
@@ -24,7 +30,45 @@ type Props = {
 const randomRecipeTags = ['main course', 'side dish', 'appetizer']
 // const randomRecipeTags = ['main course']
 
+
 const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: Props) => {
+
+  const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeInfo[]>([])
+  const [recipeHistory, setRecipeHistory] = useState<RecipeInfo[]>([])
+
+  const handleClickRecipe = (id: number) => {
+
+  }
+
+  useEffect(() => {
+    if(user === null) { return }
+
+    const fetchRecipes = async(ids: string[]) => {
+      const allRes = await Promise.all(ids.map(async id => {
+        const response = await spoonacularApiAxios.get(`/recipes/${Number(id)}/information`, 
+          {params: {
+            includeNutrition: false
+          }}
+        )
+        return response.data as RecipeInfo
+      }))
+      return allRes
+    }
+
+    console.log('history of user', user.historyrecipe)
+
+    fetchRecipes(user.historyrecipe.length > 3 ? [...user.historyrecipe].slice(-3) : user.historyrecipe)
+      .then(recipes => {
+        setRecipeHistory(recipes)
+    }).catch(() => { console.error('recipe history fail')})
+
+    fetchRecipes(user.favoriterecipe.length > 3 ? [...user.favoriterecipe].slice(-3) : user.favoriterecipe)
+      .then(recipes => {
+        setFavoriteRecipes(recipes)
+      }).catch(() => { console.error('favorite recipe fail')})
+  }, [])
+
+
   return (
     <StyledHome>
       <Head>
@@ -36,6 +80,20 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: P
       <StyledMainContent>
 
         <HeroSection randomRecipes={ randomRecipes } />
+
+        {favoriteRecipes.length > 0 && 
+          <RecipesSectionHome
+            title='Favorite Recipes'
+            displayRecipes={favoriteRecipes}
+          />
+        }
+
+        {recipeHistory.length > 0 && 
+          <RecipesSectionHome
+            title='Recipes You Checked'
+            displayRecipes={recipeHistory}
+          />
+        }
 
       </StyledMainContent>
       <StyledSubContent>
@@ -61,6 +119,19 @@ Home.getInitialProps = async ({ req, res }): Promise<Props> => {
   const keywords = popupKeywords()
   const randomRecipes: RecipeInfo[] = []
 
+  if(user) {
+    const fridgeData = await appAxios.post('api/fridge/show', {
+      user_id: user.id
+    })
+    Object.values(fridgeData.data).forEach((value: any) => {
+      // TODO: define condition of expire
+      if(true) {
+        expireFoods.push(value.name)
+      }
+    })
+  }
+  
+
   const allRes = await Promise.all(randomRecipeTags.map(async tag => {
     const response = await spoonacularApiAxios.get('/recipes/random', {
       params: {
@@ -75,18 +146,7 @@ Home.getInitialProps = async ({ req, res }): Promise<Props> => {
     randomRecipes.push(recipe.recipes[0])
   })
 
-  if(user) {
-    const fridgeData = await appAxios.post('api/fridge/show', {
-      user_id: user.id
-    })
-    Object.values(fridgeData.data).forEach((value: any) => {
-      // TODO: define condition of expire
-      if(true) {
-        expireFoods.push(value.name)
-      }
-    })
-  }
-  
+
   if(res){
     if (Object.keys(cookieData).length === 0 && cookieData.constructor === Object) {
       res.writeHead(301, { Location: '/'})

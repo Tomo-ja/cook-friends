@@ -3,11 +3,13 @@ import { useCookies } from 'react-cookie'
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+
 import StyledRecipesSection from "./recipesSection.styles";
 import StyledRecipeItem from "./item.styles";
 import StyledImage from "../../styles/image.styles";
-import { RecipeSearchResult, User } from "../../helpers/typesLibrary";
 import IconButton from "../IconButton/iconButton.styles";
+
+import { RecipeSearchResult, User } from "../../helpers/typesLibrary";
 import appAxios from "../../constants/axiosBase";
 
 type Props = {
