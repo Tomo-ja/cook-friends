@@ -24,7 +24,7 @@ const FridgeSection = ({ fridge, useAsFilter }: Props) => {
 			init.push(false)
 		}
 		return init
-	})
+	})	
 
 	const handleClickFilter = (idx: number) => {
 		if(useAsFilter){

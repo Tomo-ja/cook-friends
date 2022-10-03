@@ -19,7 +19,8 @@ export default async function addToFridge(
 ) {
 	try{
 		await connectMongo()
-		const fridge = await Fridge.findOne({user_id: req.body.user_id})
+		console.log(req.body);
+		const fridge = await Fridge.findOne({ user_id: req.body.user_id })
 		fridge.stock.push({
 			ingredient_api_id: req.body.ingredient_api_id,
 			name: req.body.name,

@@ -1,10 +1,12 @@
 import styled from "styled-components";
-
-const FormStyled = styled.form`
+interface formSize{
+	witdh: string;
+}
+const FormStyled =
+	styled.form `
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 300px;
 	margin: 100px auto;
 	.ErrMesg {
 		margin-bottom: 8px;
@@ -28,6 +30,10 @@ const FormStyled = styled.form`
 		padding-top: 8px;
 		color: #ffaa4e;
 	}
+	@media only screen and (max-width: 375px) {
+		
+	}
+
 `;
 
 export default FormStyled;
