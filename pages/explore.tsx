@@ -252,7 +252,6 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
           name: value.name,
           amount: value.amount,
           unit: value.unit,
-          category: value.category,
           stored_at: stringToDate(value.stored_at).toString()
         }
       )
