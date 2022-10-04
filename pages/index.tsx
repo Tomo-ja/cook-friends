@@ -3,9 +3,9 @@ import Head from 'next/head'
 
 import { useState ,useEffect } from 'react'
 
-import parseCookies, { stringToDate, popupKeywords } from '../helpers'
+import parseCookies, { stringToDate, popupKeywords, defineExpireDate } from '../helpers'
 
-import FilterSection from '../components/Home/SearchKeywordSection'
+import SearchKeywordSection from '../components/Home/SearchKeywordSection'
 import HeroSection from '../components/Home/heroSection'
 import RecipesSectionHome from '../components/Home/recipeSection'
 
@@ -99,11 +99,11 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: P
         {expireFoods.length > 0 && 
         <>
           <h3>Expiring Ingredients</h3>
-          <FilterSection keywords={expireFoods}/>
+          <SearchKeywordSection keywords={expireFoods}/>
         </>
         }
         <h3>What Is In Your Mind</h3>
-          <FilterSection keywords={keywords}/>
+          <SearchKeywordSection keywords={keywords}/>
       </StyledSubContent>
     </StyledHome>
   )
@@ -123,8 +123,7 @@ Home.getInitialProps = async ({ req, res }): Promise<Props> => {
       user_id: user.id
     })
     Object.values(fridgeData.data).forEach((value: any) => {
-      // TODO: define condition of expire
-      if(true) {
+      if(defineExpireDate(value.stored_at) > 5) {
         expireFoods.push(value.name)
       }
     })
