@@ -1,11 +1,12 @@
 import type { NextPage } from 'next'
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import Head from 'next/head'
+import { getCookie, setCookie } from 'cookies-next';
 
 import parseCookies, { stringToDate } from '../helpers'
-import { User, Fridge, RecipeSearchResult, RecipeSearchParams } from '../helpers/typesLibrary'
+import { User, Fridge, RecipeSearchResult, RecipeSearchParams, RecipeInfo, RecipeSummary } from '../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../constants/axiosBase';
 
 import SearchSection from '../components/SearchBarSection/index'
@@ -19,13 +20,12 @@ import { complexSearchData } from '../sampleApiData'
 
 const NUMBER_ITEMS_AT_ONE_FETCH = 3
 
-
 type Props = {
   user: User | null,
   fridge: Fridge,
   recipeSearchResult: RecipeSearchResult,
-  searchParams: RecipeSearchParams,
-  recipeIds?: number[]
+  searchParams: RecipeSearchParams | null,
+  recipeIds: number[] | null
 }
 
 const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/index'),
@@ -62,21 +62,50 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
   }
 
   const handleClickRecipe = (id: number) => {
+    if (user) {
+      if (!user.historyrecipe.includes(id.toString())) {
+        user.historyrecipe.push(id.toString())
+        setCookie('user', user)
+      }
+    }
     router.push(`/recipe/${id}`)
   }
 
   useEffect(() => {
     const fetchSearchResult = async (offset: number) => {
-      searchParams.offset = offset
-      // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
-      const response = complexSearchData
-      setStateResult(prev => {
-        const newState = {...prev}
-        newState.offset = offset
-        newState.results.push(...response.data.results)
-        newState.number = response.data.number
-        return newState
-      })
+      if (searchParams) {
+        searchParams.offset = offset
+        // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
+        const response = complexSearchData
+        setStateResult(prev => {
+          const newState = {...prev}
+          newState.offset = offset
+          newState.results.push(...response.data.results)
+          newState.number = response.data.number
+          return newState
+        })
+      } else {
+        const ids = 
+          recipeSearchResult.totalResults > (offset + NUMBER_ITEMS_AT_ONE_FETCH) ?
+          recipeIds!.slice(offset - 1, offset + NUMBER_ITEMS_AT_ONE_FETCH) :
+          recipeIds!.slice(offset - 1, recipeIds!.length)
+        const allRes = await Promise.all(ids.map(async id=> {
+          const res = await spoonacularApiAxios.get(`/recipes/${id}/information`, 
+            {params: {
+              includeNutrition: false
+            }}
+          )
+          return res.data as RecipeInfo
+        }))
+        const results = allRes.map(recipe => ({id: recipe.id, title: recipe.title, image: recipe.image}))
+        setStateResult(prev => {
+          const newState = {...prev}
+          newState.offset = offset
+          newState.results.push(...results)
+          newState.number = allRes.length
+          return newState
+        })
+      }
     }
 
     if ((page * NUMBER_ITEMS_AT_ONE_FETCH) > stateRecipesResult.results.length) {
@@ -88,12 +117,12 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
 
   useEffect(() => {
     const fetchSearchResult = async () => {
-      searchParams.includeIngredients = mustIncludeIngredients.join()
+      searchParams!.includeIngredients = mustIncludeIngredients.join()
       // const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
       const response = complexSearchData
       setStateResult(response.data as RecipeSearchResult)
     }
-
+    if(searchParams === null) { return }
     if (isInitialRender){
       isInitialRender = false
     } else {
@@ -122,7 +151,10 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
       </Head>
       <SearchSection />
       <StyledMainContent>
-        <h2>Found {recipeSearchResult.totalResults} Recipes by &quot;{router.query.keyword}&quot;</h2>
+        {recipeIds ? 
+          <></> : 
+          <h2>Found {recipeSearchResult.totalResults} Recipes by &quot;{router.query.keyword}&quot;</h2>
+        }
         <DynamicRecipeSection 
           recipesSearchResult={pickDisplayItems(page, stateRecipesResult.totalResults)} 
           user={user}
@@ -158,10 +190,10 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
   const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
   const fridge: Fridge = []
   let recipeSearchResult: RecipeSearchResult
-  let params: RecipeSearchParams
-  isInitialRender = true
+  let params: RecipeSearchParams | null = null
+  let recipeIds: number[] | null = null
 
-  console.log('explore getInitialProps called')
+  isInitialRender = true
 
   if(query.keyword) {
     params = {
@@ -176,28 +208,36 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
     const response = complexSearchData
     recipeSearchResult = response.data as RecipeSearchResult
   } 
-  // else if (query.favorite) {
-  //   const ids = user!.favoriterecipe
+  else if (query.favorite || query.history) {
+    if (query.favorite) {
+      recipeIds = user!.favoriterecipe.map(id => Number(id))
+    } else {
+      recipeIds = user!.historyrecipe.map(id => Number(id))
+    }
+    const ids = recipeIds.slice(0, NUMBER_ITEMS_AT_ONE_FETCH)
+    const allRes = await Promise.all(ids.map(async id => {
+      const response = await spoonacularApiAxios.get(`/recipes/${id}/information`, 
+        {params: {
+          includeNutrition: false
+        }}
+      )
+      return response.data as RecipeInfo
+    }))
 
-  // } else if (query.history) {
-  //   const ids = user!.historyrecipe
-
-
-  // } 
+    recipeSearchResult = {
+      results: allRes.map(recipe => ({id: recipe.id, title: recipe.title, image: recipe.image})),
+      offset: 0,
+      number: NUMBER_ITEMS_AT_ONE_FETCH,
+      totalResults: recipeIds.length
+    }
+  }
   else {
-    console.error('ERROR: coming explore page without keyword')
+    console.error('ERROR: coming explore page without keyword nor history nor favorite')
     recipeSearchResult = {
       results: [],
       offset: 0,
       number: 0,
       totalResults: 0
-    }
-    params = {
-      query: "",
-      number: 0,
-      offset: 0,
-      sort: 'popularity',
-      includeIngredients: ''
     }
   }
 
@@ -230,6 +270,7 @@ Explore.getInitialProps = async ({ req, res, query }): Promise<Props> => {
     user,
     fridge,
     recipeSearchResult,
-    searchParams: params
+    searchParams: params,
+    recipeIds
   }
 }

@@ -52,8 +52,6 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: P
       return allRes
     }
 
-    console.log('history of user', user.historyrecipe)
-
     fetchRecipes(user.historyrecipe.length > 3 ? [...user.historyrecipe].slice(-3) : user.historyrecipe)
       .then(recipes => {
         setRecipeHistory(recipes)
