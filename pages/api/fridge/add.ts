@@ -24,7 +24,6 @@ export default async function addToFridge(
 			ingredient_api_id: req.body.ingredient_api_id,
 			name: req.body.name,
 			amount: req.body.amount,
-			unit: req.body.unit,
 			stored_at: req.body.stored_at || Date.now(),
 		})
 		await fridge.save()
