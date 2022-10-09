@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectMongo from "../../../utils/connectMongo";
 import Fridge from "../../../models/fridgeModel";
+import { Timestamp } from "mongodb";
 
 /*
 	expecting body {
@@ -16,14 +17,19 @@ export default async function removeFromFridge(
 ) {
 	try {
 		await connectMongo();
-    const fridge = await Fridge.findOne({ user_id: req.body.user_id });
-		fridge.stock = fridge.stock.filter(
-			(food: {[x: string]: any; amouingredient_api_idnt: string }) =>
-				food.ingredient_api_id !== req.body.food
-		);
+		const fridge = await Fridge.findOne({ user_id: req.body.user_id });
+			fridge.stock = fridge.stock.filter(
+				(value: {
+					ingredient_api_id: string;
+					name: string;
+					stored_at: Timestamp;
+					amount: number;
+					_id: string;
+				}) => value.ingredient_api_id !== req.body.ingredient_api_id
+			);
 
-		await fridge.save();
-		res.json(fridge.summary);
+		await fridge.save();		
+		res.json(fridge.stock);
 	} catch (error) {
 		console.log(error);
 		res.json({ error });

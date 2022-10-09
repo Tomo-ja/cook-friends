@@ -23,7 +23,7 @@ export default async function removeFromFridge(
 		
 		if (usedAmount === 0) {
 			// console.log(typeof req.body.amount);
-			const deletedIngredient = fridge.stock.filter(
+			fridge.stock = fridge.stock.filter(
 				(value: {
 					ingredient_api_id: string;
 					name: string;
@@ -32,10 +32,8 @@ export default async function removeFromFridge(
 					_id: string;
 				}) => value.ingredient_api_id !== req.body.ingredient_api_id
 				);
-			console.log(fridge);
-			console.log("new Object", { _id : fridge._id, user_id: fridge.user_id ,stock: deletedIngredient, __v:fridge.__v });
 			await fridge.save();
-			res.json(fridge.summary);
+			res.json(fridge.stock);
 		} else {
 			fridge.stock.forEach(
 				(element: {
@@ -50,10 +48,9 @@ export default async function removeFromFridge(
 					}
 				}
 				);
-				console.log(fridge);
 				await fridge.save()
 				// console.log(fridge);
-				res.json( fridge.summary )
+				res.json(fridge.stock);
 			}
 			
 		// for(let i=0; i<fridge.stock.length; i++){
@@ -80,81 +77,3 @@ export default async function removeFromFridge(
 	}
 }
 
-
-// new Object {
-//   _id: new ObjectId("633a59d4733aa93cea103d70"),
-//   user_id: new ObjectId("633a59d4733aa93cea103d6e"),
-//   stock: [
-//     {
-//       ingredient_api_id: '9087',
-//       name: 'dates',
-//       stored_at: 2022-10-22T00:00:00.000Z,
-//       amount: 66,
-//       _id: new ObjectId("6340ad31d2491104f1117f93")
-//     },
-//     {
-//       ingredient_api_id: '1018',
-//       name: 'edam cheese',
-//       stored_at: 2022-10-22T00:00:00.000Z,
-//       amount: 1,
-//       _id: new ObjectId("6340ad4bd2491104f1117fe3")
-//     },
-//     {
-//       ingredient_api_id: '9087',
-//       name: 'dates',
-//       stored_at: 2022-10-28T00:00:00.000Z,
-//       amount: 1,
-//       _id: new ObjectId("6340ba31d2491104f11182dc")
-//     },
-//     {
-//       ingredient_api_id: '15136',
-//       name: 'crab',
-//       stored_at: 2022-10-28T00:00:00.000Z,
-//       amount: 2,
-//       _id: new ObjectId("6340ba38d2491104f11182ec")
-//     }
-//   ],
-//   __v: 124
-// }
-// {
-//   _id: new ObjectId("633a59d4733aa93cea103d70"),
-//   user_id: new ObjectId("633a59d4733aa93cea103d6e"),
-//   stock: [
-//     {
-//       ingredient_api_id: '9087',
-//       name: 'dates',
-//       stored_at: 2022-10-22T00:00:00.000Z,
-//       amount: 66,
-//       _id: new ObjectId("6340ad31d2491104f1117f93")
-//     },
-//     {
-//       ingredient_api_id: '1018',
-//       name: 'edam cheese',
-//       stored_at: 2022-10-22T00:00:00.000Z,
-//       amount: 1,
-//       _id: new ObjectId("6340ad4bd2491104f1117fe3")
-//     },
-//     {
-//       ingredient_api_id: '93757',
-//       name: 'verjus',
-//       stored_at: 2022-10-28T00:00:00.000Z,
-//       amount: 0,
-//       _id: new ObjectId("6340ba2dd2491104f11182ce")
-//     },
-//     {
-//       ingredient_api_id: '9087',
-//       name: 'dates',
-//       stored_at: 2022-10-28T00:00:00.000Z,
-//       amount: 1,
-//       _id: new ObjectId("6340ba31d2491104f11182dc")
-//     },
-//     {
-//       ingredient_api_id: '15136',
-//       name: 'crab',
-//       stored_at: 2022-10-28T00:00:00.000Z,
-//       amount: 2,
-//       _id: new ObjectId("6340ba38d2491104f11182ec")
-//     }
-//   ],
-//   __v: 124
-// }

@@ -2,7 +2,7 @@ import Input from "../Input/input.styles";
 import Button from "../Button/button.styles";
 import FormStyled from "./form.styles";
 import appAxios from "../../constants/axiosBase";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
 import { NextPageContext } from "next";
@@ -14,13 +14,13 @@ import SearchBarSection from "../SearchBarSection/searchBarSection.styled";
 import { spoonacularApiAxios } from "../../constants/axiosBase";
 import { Timestamp } from "mongodb";
 import { log } from "console";
-
+import { amountContext } from "../../useContext/useAmount";
 
 interface props {
 	btn: string;
 	signUp: boolean;
 	fridge: boolean;
-	fridgeAction: (arg:boolean) => void;
+	fridgeAction: (arg: boolean) => void;
 }
 interface ErrMsg {
 	account: boolean;
@@ -30,9 +30,9 @@ interface ErrMsg {
 	loginPsw: boolean;
 }
 interface firdge {
-	user_id: string,
-	ingredient_api_id: number
-	name: string,
+	user_id: string;
+	ingredient_api_id: number;
+	name: string;
 }
 // export async function getServerSideProps(ctx:any) {
 // 	const cookies = nookies.get(ctx);
@@ -53,7 +53,7 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 		[]
 	);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [addFridge, setAddridge] = useState<firdge>();
+	const [addFridge, setAddfridge] = useState<firdge>();
 	const [err, setErr] = useState<ErrMsg>({
 		account: true,
 		password: true,
@@ -61,6 +61,7 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 		login: true,
 		loginPsw: true,
 	});
+	const context = useContext(amountContext)
 	const connectApi = (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault();
 		if (btn === "Sign up") {
@@ -134,9 +135,11 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 				stored_at: fourthInputRef.current?.value,
 				amount: firstInputRef.current?.value,
 			};
-			
 			appAxios.post("api/fridge/add", Ref).then((res) => {
-				console.log(res);
+				console.log("add",res);
+				inputRef.current!.value = "";
+				console.log(fridge);
+				context?.updateList([res.data])
 				fridgeAction(fridge);
 			});
 		}
@@ -168,10 +171,10 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 			});
 	};
 
-	const handleSubmit = (ingredient: string, id: any) => {
+	const handleSubmit = (ingredient: string, id: number) => {
 		setPrediction([]);
 		inputRef.current!.value = ingredient;
-		setAddridge({
+		setAddfridge({
 			user_id: "633a59d4733aa93cea103d6e",
 			ingredient_api_id: id,
 			name: ingredient,

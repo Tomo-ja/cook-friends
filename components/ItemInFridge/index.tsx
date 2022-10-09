@@ -1,15 +1,16 @@
-import { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { Dispatch, SetStateAction, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Amount from "./amount";
 import ItemInFridge, { classNames } from "./itemInFridge.styles";
 import StyledLink from "../../styles/link.styles";
 import { defineExpireDate } from "../../helpers";
-import { Fridge } from "../../helpers/typesLibrary";
+import { Fridge, CurrentFridge } from "../../helpers/typesLibrary";
 import { ParsedUrlQuery } from "querystring";
 import appAxios from "../../constants/axiosBase";
-import { set } from "mongoose";
+import { amountContext } from "../../useContext/useAmount";
 import { log } from "console";
+
 
 // FIXME: if you want to pass any additional props, you can pass but optional like example?: number
 type Props = {
@@ -17,16 +18,16 @@ type Props = {
 	useAsFilter: boolean;
 	urlQuery?: ParsedUrlQuery;
 	setMustIncludeIngredients?: Dispatch<SetStateAction<string[]>>;
-	fridgeAction: (arg: boolean) => void;
-	fridgeDel: boolean;
+	fridgeAction?: (arg: boolean) => void;
+	fridgeDel?: boolean;
 };
-interface CurrentFridge  {
-	ingredient_api_id: string,
-	name: string,
-	amount: number,
-	unit: string,
-	stored_at: string
-}[]
+// interface CurrentFridge  {
+// 	ingredient_api_id: string,
+// 	name: string,
+// 	amount: number,
+// 	unit: string,
+// 	stored_at: string
+// }[]
 
 // TODO: for atsu, you will want to create new function here to update database and may want to pass it as props to Amount component
 
@@ -38,11 +39,18 @@ const FridgeSection = ({
 	fridgeAction,
 	fridgeDel,
 }: Props) => {
-	const [tempFridge, setTempFridge] = useState<any[]>([]);
-	// console.log(tempFridge);
+	const context = useContext(amountContext)
+	const [tempFridge, setTempFridge] = useState<CurrentFridge[]>([]);
+	const [amountChange, setAmountChange] = useState<boolean>(false)
+	// console.log("tempFridge", tempFridge);
 	useEffect(() => {
-		setTempFridge(fridge)
-	},[fridge])
+		// console.log("fridge compo effect");
+		// console.log("fridge",fridge);
+		// setTempFridge(fridge)
+		context?.updateList(fridge);
+		// fridgeAction?.(!fridgeDel)
+	}, [fridge])
+
 	const router = useRouter();
 	const [selectedAsFilter, setSelectedAsFilter] = useState<boolean[]>(() => {
 		const init: boolean[] = [];
@@ -51,23 +59,33 @@ const FridgeSection = ({
 		}
 		return init;
 	});
+
 	const handleDelete = async(e: number) => {
 		console.log("fridge",fridgeDel);
-		
-		const deletedFridgeItem = tempFridge.filter((item, index) => e === index);
-		const currentFridgeItem = tempFridge.filter((item, index) => e !== index);
+		const deletedFridgeItem = context?.changedAmountList.filter(
+			(item, index) => e === index
+		);
+		console.log("del",deletedFridgeItem);
+		const currentFridgeItem = context?.changedAmountList.filter(
+			(item, index) => e !== index
+		);
 		console.log("currentFridgeItem", currentFridgeItem);
-		
-		await appAxios
-			.post("api/fridge/delete", {
-				user_id: "633a59d4733aa93cea103d6e",
-				food: deletedFridgeItem[0].ingredient_api_id,
-			})
-			.then((res) => {
-				console.log("delet", res);
-				fridgeAction(!fridgeDel);
-				setTempFridge(currentFridgeItem);
-			});
+		if (deletedFridgeItem) {			
+			await appAxios
+				.post("api/fridge/delete", {
+					user_id: "633a59d4733aa93cea103d6e",
+					ingredient_api_id: deletedFridgeItem[0].ingredient_api_id,
+				})
+				.then((res) => {
+					console.log("delet", res);
+					// fridgeAction(!fridgeDel);
+					// setTempFridge(currentFridgeItem);
+					context?.updateList(currentFridgeItem);
+				});
+		} else {
+			console.log("YABAI");
+			
+		}
 		
 	};
 	const handleClickFilter = (idx: number) => {
@@ -111,7 +129,7 @@ const FridgeSection = ({
 	}, [urlQuery]);
 	return (
 		<div>
-			{tempFridge.map((item, idx) => (
+			{context?.changedAmountList.map((item, idx) => (
 				<ItemInFridge
 					useAsFilter={useAsFilter}
 					key={item.ingredient_api_id}
@@ -146,6 +164,10 @@ const FridgeSection = ({
 									unit={item.unit}
 									ingredentId={item.ingredient_api_id}
 									useAsFilter={useAsFilter}
+									// tempFridge={tempFridge}
+									setTempFridge={() => setTempFridge(tempFridge)}
+									// amountChange={amountChange}
+									// setAmountChange={setAmountChange}
 								/>
 							</>
 						)}
