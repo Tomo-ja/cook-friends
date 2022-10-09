@@ -86,7 +86,7 @@ const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQue
 							{item.name}
 						</StyledLink>
 						}
-						<p className={classNames.expireDate}>
+						<p className={defineExpireDate(item.stored_at) > 5 ? classNames.expireDate : ""}>
 							Bought in {defineExpireDate(item.stored_at) === 0 ? 'Today' : `${defineExpireDate(item.stored_at)} days ago`}
 						</p>
 					</div>

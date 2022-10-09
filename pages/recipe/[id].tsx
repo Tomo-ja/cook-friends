@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHourglassHalf, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 
 import IngredientSection from '../../components/Recipe/ingredientSection';
 import HowToSection from '../../components/Recipe/howtoSection';
