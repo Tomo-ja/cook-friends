@@ -140,19 +140,17 @@ const FridgeSection = ({
 						{useAsFilter ? (
 							<p className={classNames.foodName}>{item.name}</p>
 						) : (
-							<StyledLink
-								hoverColor='#ffaa4e'
-								onClick={() => handleClickLink(item.name)}
+							<>
+						<StyledLink 
+							hoverColor="#ffaa4e"
+							onClick={() => handleClickLink(item.name)}
 							>
-								{item.name}
-							</StyledLink>
-						)}
-						<p className={classNames.expireDate}>
-							Bought in{" "}
-							{defineExpireDate(item.stored_at) === 0
-								? "Today"
-								: `${defineExpireDate(item.stored_at)} days ago`}
+							{item.name}
+						</StyledLink>
+						<p className={defineExpireDate(item.stored_at) > 5 ? classNames.expireDate : ""}>
+							Bought in {defineExpireDate(item.stored_at) === 0 ? 'Today' : `${defineExpireDate(item.stored_at)} days ago`}
 						</p>
+							</>)}
 					</div>
 					<div className={classNames.itemFridgeRight}>
 						{useAsFilter ? (

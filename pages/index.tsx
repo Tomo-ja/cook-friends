@@ -1,26 +1,69 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
-import parseCookies, { stringToDate, popupKeywords } from '../helpers'
 
-import FilterSection from '../components/Home/SearchKeywordSection'
+import { useState ,useEffect } from 'react'
+
+import parseCookies, { stringToDate, popupKeywords, defineExpireDate } from '../helpers'
+
+import SearchKeywordSection from '../components/Home/SearchKeywordSection'
+import HeroSection from '../components/Home/heroSection'
+import RecipesSectionHome from '../components/Home/recipeSection'
 
 import StyledSEarchSection from '../components/SearchBarSection/index'
 import StyledMainContent from '../styles/mainContent.styles'
 import StyledSubContent from '../styles/subContent.styles'
 import StyledHome from '../components/Home/home.styles'
-import { Fridge, User } from '../helpers/typesLibrary'
-import appAxios from '../constants/axiosBase'
+
+
+
+import { Fridge, User, RandomRecipes, RecipeInfo } from '../helpers/typesLibrary'
+import appAxios, { spoonacularApiAxios } from '../constants/axiosBase'
 
 
 type Props = {
   user: User | null,
   expireFoods: string[],
-  keywords: string[]
-
+  keywords: string[],
+  randomRecipes: RecipeInfo[],
 }
 
-const Home: NextPage<Props> = ({ user, expireFoods, keywords }: Props) => {
+const randomRecipeTags = ['main course', 'side dish', 'appetizer']
+// const randomRecipeTags = ['main course']
+
+
+const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: Props) => {
+
+  const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeInfo[]>([])
+  const [recipeHistory, setRecipeHistory] = useState<RecipeInfo[]>([])
+
+
+  useEffect(() => {
+    if(user === null) { return }
+
+    const fetchRecipes = async(ids: string[]) => {
+      const allRes = await Promise.all(ids.map(async id => {
+        const response = await spoonacularApiAxios.get(`/recipes/${Number(id)}/information`, 
+          {params: {
+            includeNutrition: false
+          }}
+        )
+        return response.data as RecipeInfo
+      }))
+      return allRes
+    }
+
+    fetchRecipes(user.historyrecipe.length > 3 ? [...user.historyrecipe].slice(-3) : user.historyrecipe)
+      .then(recipes => {
+        setRecipeHistory(recipes)
+    }).catch(() => { console.error('recipe history fail')})
+
+    fetchRecipes(user.favoriterecipe.length > 3 ? [...user.favoriterecipe].slice(-3) : user.favoriterecipe)
+      .then(recipes => {
+        setFavoriteRecipes(recipes)
+      }).catch(() => { console.error('favorite recipe fail')})
+  }, [])
+
+
   return (
     <StyledHome>
       <Head>
@@ -31,16 +74,34 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords }: Props) => {
       <StyledSEarchSection />
       <StyledMainContent>
 
+        <HeroSection randomRecipes={ randomRecipes } />
+
+        {favoriteRecipes.length > 0 && 
+          <RecipesSectionHome
+            title='Favorite Recipes'
+            displayRecipes={favoriteRecipes}
+            isFavorite={true}
+          />
+        }
+
+        {recipeHistory.length > 0 && 
+          <RecipesSectionHome
+            title='Recipes You Checked'
+            displayRecipes={recipeHistory}
+            isFavorite={false}
+          />
+        }
+
       </StyledMainContent>
       <StyledSubContent>
         {expireFoods.length > 0 && 
         <>
           <h3>Expiring Ingredients</h3>
-          <FilterSection keywords={expireFoods}/>
+          <SearchKeywordSection keywords={expireFoods}/>
         </>
         }
         <h3>What Is In Your Mind</h3>
-          <FilterSection keywords={keywords}/>
+          <SearchKeywordSection keywords={keywords}/>
       </StyledSubContent>
     </StyledHome>
   )
@@ -53,21 +114,35 @@ Home.getInitialProps = async ({ req, res }): Promise<Props> => {
   const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
   const expireFoods: string[] = []
   const keywords = popupKeywords()
-
-  console.log('home getinitial props called')
+  const randomRecipes: RecipeInfo[] = []
 
   if(user) {
     const fridgeData = await appAxios.post('api/fridge/show', {
       user_id: user.id
     })
     Object.values(fridgeData.data).forEach((value: any) => {
-      // TODO: define condition of expire
-      if(true) {
+      if(defineExpireDate(value.stored_at) > 5) {
         expireFoods.push(value.name)
       }
     })
   }
   
+
+  const allRes = await Promise.all(randomRecipeTags.map(async tag => {
+    const response = await spoonacularApiAxios.get('/recipes/random', {
+      params: {
+        number: 1,
+        tags: tag
+      }
+    })
+    return response.data as RandomRecipes
+  }))
+  
+  allRes.forEach(recipe => {
+    randomRecipes.push(recipe.recipes[0])
+  })
+
+
   if(res){
     if (Object.keys(cookieData).length === 0 && cookieData.constructor === Object) {
       res.writeHead(301, { Location: '/'})
@@ -78,6 +153,7 @@ Home.getInitialProps = async ({ req, res }): Promise<Props> => {
   return {
     user,
     expireFoods,
-    keywords
+    keywords,
+    randomRecipes
   } 
 }
