@@ -19,8 +19,8 @@ import { amountContext } from "../../useContext/useAmount";
 interface props {
 	btn: string;
 	signUp: boolean;
-	fridge: boolean;
-	fridgeAction: (arg: boolean) => void;
+	fridge?: boolean;
+	fridgeAction?: (arg: boolean) => void;
 }
 interface ErrMsg {
 	account: boolean;
@@ -61,7 +61,7 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 		login: true,
 		loginPsw: true,
 	});
-	const context = useContext(amountContext)
+	const context = useContext(amountContext);
 	const connectApi = (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault();
 		if (btn === "Sign up") {
@@ -136,11 +136,11 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 				amount: firstInputRef.current?.value,
 			};
 			appAxios.post("api/fridge/add", Ref).then((res) => {
-				console.log("add",res);
+				console.log("add", res);
 				inputRef.current!.value = "";
 				console.log(fridge);
-				context?.updateList([res.data])
-				fridgeAction(fridge);
+				context?.updateList([res.data]);
+				// fridgeAction(fridge);
 			});
 		}
 	};
@@ -192,32 +192,35 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 			)}
 			{!err.login && <p className='ErrMesg'>We can&apos;t find the user</p>}
 			{!err.loginPsw && <p className='ErrMesg'>Password is not coorect</p>}
-			<SearchBarSection>
-				<SearchBar
-					placeholder='Search by Ingredients'
-					onChange={handleOnChange}
-					onKeyDown={handleKeyDown}
-					ref={inputRef}
-				/>
-				{prediction.length !== 0 && (
-					<SuggestBox>
-						{prediction.map((word) => (
-							<li
-								key={word.id}
-								onClick={() => handleSubmit(word.name, word.id)}
-							>
-								{word.name}
-							</li>
-						))}
-					</SuggestBox>
-				)}
-			</SearchBarSection>
-			<div>
-				<label htmlFor='Amount'>Amount</label>
-				<Input id='Amount' type='number' ref={firstInputRef} />
-			</div>
-			{signUp ||
-				(btn !== "fridge" && (
+			{btn === "fridge" && (
+				<>
+					<SearchBarSection>
+						<SearchBar
+							placeholder='Search by Ingredients'
+							onChange={handleOnChange}
+							onKeyDown={handleKeyDown}
+							ref={inputRef}
+						/>
+						{prediction.length !== 0 && (
+							<SuggestBox>
+								{prediction.map((word) => (
+									<li
+										key={word.id}
+										onClick={() => handleSubmit(word.name, word.id)}
+									>
+										{word.name}
+									</li>
+								))}
+							</SuggestBox>
+						)}
+					</SearchBarSection>
+					<div>
+						<label htmlFor='Amount'>Amount</label>
+						<Input id='Amount' type='number' ref={firstInputRef} />
+					</div>
+				</>
+			)}
+			{signUp &&(
 					<>
 						<div>
 							<label htmlFor='Name'>Name</label>
@@ -227,7 +230,7 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 							<label htmlFor='Email'>Email</label>
 							<Input
 								id='Email'
-								type={btn === "fridge" ? "text" : "email"}
+								type={btn === 'fridge' ? "text" : "email"}
 								ref={secondInputRef}
 							/>
 						</div>
@@ -235,12 +238,12 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 							<label htmlFor='Password'>Password</label>
 							<Input
 								id='Password'
-								type={btn === "fridge" ? "text" : "password"}
+								type={btn === 'fridge' ? "text" : "password"}
 								ref={thiredInputRef}
 							/>
 						</div>
 					</>
-				))}
+				)}
 			{signUp && (
 				<div>
 					<label htmlFor='cPassword'>
@@ -261,14 +264,14 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 			>
 				{btn}
 			</Button>
-			{!signUp && (
-				<p>
+			{!signUp && btn !== 'fridge' &&  (
+				<div>
 					{" "}
 					You don&apos;t have an account yet ?{" "}
 					<Link href='/signup' className='signup'>
 						Signup
 					</Link>{" "}
-				</p>
+				</div>
 			)}
 		</FormStyled>
 	);

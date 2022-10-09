@@ -2,8 +2,7 @@ import styled from "styled-components";
 interface formSize{
 	witdh: string;
 }
-const FormStyled =
-	styled.form `
+const FormStyled = styled.form`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -31,9 +30,7 @@ const FormStyled =
 		color: #ffaa4e;
 	}
 	@media only screen and (max-width: 375px) {
-		
 	}
-
 `;
 
 export default FormStyled;

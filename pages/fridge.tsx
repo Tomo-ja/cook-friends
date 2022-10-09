@@ -50,7 +50,7 @@ export default function FridgeList(props: any) {
 				<SubContent>
 					<Form
 						btn='fridge'
-						signUp={true}
+						signUp={false}
 						fridge={submit}
 						fridgeAction={subumitState}
 					/>
@@ -68,27 +68,27 @@ export default function FridgeList(props: any) {
 		</Amount>
 	);
 }
-export async function getData(): Promise<Fridge> {
-	const fridgeData = await appAxios.post("/api/fridge/show", {
-		user_id: "633a59d4733aa93cea103d6e",
-	});
-	const fridge: Fridge = [];
-	Object.values(fridgeData.data).forEach((value: any) => {
-		fridge.push({
-			ingredient_api_id: value.ingredient_api_id,
-			name: value.name,
-			amount: value.amount,
-			unit: value.unit,
-			stored_at: stringToDate(value.stored_at).toString(),
-		});
-	});
-	return fridge;
-}
+// export async function getData(): Promise<Fridge> {
+// 	const fridgeData = await appAxios.post("/api/fridge/show", {
+// 		user_id: "633a59d4733aa93cea103d6e",
+// 	});
+// 	const fridge: Fridge = [];
+// 	Object.values(fridgeData.data).forEach((value: any) => {
+// 		fridge.push({
+// 			ingredient_api_id: value.ingredient_api_id,
+// 			name: value.name,
+// 			amount: value.amount,
+// 			unit: value.unit,
+// 			stored_at: stringToDate(value.stored_at).toString(),
+// 		});
+// 	});
+// 	return fridge;
+// }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-	const fridges = await getData();
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+// 	const fridges = await getData();
 
-	return {
-		props: { fridges },
-	};
-};
+// 	return {
+// 		props: { fridges },
+// 	};
+// };

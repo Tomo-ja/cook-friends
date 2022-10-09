@@ -44,7 +44,7 @@ const ItemInFridge = styled.div<IItemInFridge>`
 			cursor: default;
 		}
 
-		.Arrow-Top{
+		/* .Arrow-Top{
 			border-top: solid 4px #d9d9d9;
 			border-left: solid 4px #d9d9d9;
 			width: 10px;
@@ -79,8 +79,8 @@ const ItemInFridge = styled.div<IItemInFridge>`
 			:active {
 				border-bottom: solid 4px #ffaa4e;
 				border-right: solid 4px #ffaa4e;
-			}
-		}
+			} */
+		/* } */
 		.Amount{
 			color: inherit;
 		}
