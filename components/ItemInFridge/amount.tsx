@@ -44,8 +44,8 @@ const Amount = ({
 				ingredient_api_id: ingredentId,
 			})
 			.then((res) => {
-				context?.updateList(res.data);
-				console.log("amount change", res); 
+				context?.updateList(Object.values(res.data));
+				changedValue.current!.value =""
 			});
 	};
 
@@ -53,15 +53,16 @@ const Amount = ({
 		<>
 			{useAsFilter && (
 				<p className={classNames.amount}>
-					Amount: {textAmount}
+					Amount: {amount}
 					{unit}
 				</p>
 			)}
 			{!useAsFilter && (
-				<div>
+				<div style={{ "display": "flex", "justifyContent": 'space-between'}}>
+					<p>{amount}</p>
 					<input
 						className={classNames.amount}
-						placeholder={String(textAmount)}
+						placeholder={String(0)}
 						type='number'
 						onChange={changehandle}
 						ref={changedValue}

@@ -83,6 +83,7 @@ const ItemInFridge = styled.div<IItemInFridge>`
 		/* } */
 		.Amount{
 			color: inherit;
+			width: 30%;
 		}
 
 	}

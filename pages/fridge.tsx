@@ -19,6 +19,10 @@ export default function FridgeList(props: any) {
 	const subumitState = (boolean: boolean): void => {
 		return setSubmit(!boolean);
 	};
+	const [test, setTest] = useState<any>()
+	// useEffect(() => {
+	// 	setTest(props.fridges);
+	// },[])
 
 	useEffect(() => {
 		const fetch = async () => {

@@ -29,7 +29,7 @@ export default async function removeFromFridge(
 			);
 
 		await fridge.save();		
-		res.json(fridge.stock);
+		res.json(fridge.summary);
 	} catch (error) {
 		console.log(error);
 		res.json({ error });

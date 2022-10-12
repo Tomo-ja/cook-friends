@@ -25,6 +25,7 @@ const Amount = ({ children }: children) => {
 	const updateList = (newOrder: any) => {
 		setChangedAmountList(newOrder);
 	};
+	
 	return (
 		<amountContext.Provider value={{ changedAmountList, updateList }}>
 			{children}

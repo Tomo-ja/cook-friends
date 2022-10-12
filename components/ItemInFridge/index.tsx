@@ -9,7 +9,7 @@ import { Fridge, CurrentFridge } from "../../helpers/typesLibrary";
 import { ParsedUrlQuery } from "querystring";
 import appAxios from "../../constants/axiosBase";
 import { amountContext } from "../../useContext/useAmount";
-import { log } from "console";
+
 
 
 // FIXME: if you want to pass any additional props, you can pass but optional like example?: number
@@ -40,13 +40,12 @@ const FridgeSection = ({
 	fridgeDel,
 }: Props) => {
 	const context = useContext(amountContext)
+	
 	const [tempFridge, setTempFridge] = useState<CurrentFridge[]>([]);
 	const [amountChange, setAmountChange] = useState<boolean>(false)
 	// console.log("tempFridge", tempFridge);
 	useEffect(() => {
-		// console.log("fridge compo effect");
-		// console.log("fridge",fridge);
-		// setTempFridge(fridge)
+
 		context?.updateList(fridge);
 		// fridgeAction?.(!fridgeDel)
 	}, [fridge])
@@ -78,8 +77,6 @@ const FridgeSection = ({
 				})
 				.then((res) => {
 					console.log("delet", res);
-					// fridgeAction(!fridgeDel);
-					// setTempFridge(currentFridgeItem);
 					context?.updateList(currentFridgeItem);
 				});
 		} else {
@@ -162,10 +159,7 @@ const FridgeSection = ({
 									unit={item.unit}
 									ingredentId={item.ingredient_api_id}
 									useAsFilter={useAsFilter}
-									// tempFridge={tempFridge}
 									setTempFridge={() => setTempFridge(tempFridge)}
-									// amountChange={amountChange}
-									// setAmountChange={setAmountChange}
 								/>
 							</>
 						)}

@@ -138,8 +138,8 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 			appAxios.post("api/fridge/add", Ref).then((res) => {
 				console.log("add", res);
 				inputRef.current!.value = "";
-				console.log(fridge);
-				context?.updateList([res.data]);
+				const arr = Object.values(res.data);
+				context?.updateList(arr);
 				// fridgeAction(fridge);
 			});
 		}
@@ -218,44 +218,68 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 						<label htmlFor='Amount'>Amount</label>
 						<Input id='Amount' type='number' ref={firstInputRef} />
 					</div>
+					<div>
+						<label htmlFor='cPassword'>Date</label>
+						<Input id='cPassword' type='date' ref={fourthInputRef} />
+					</div>
 				</>
 			)}
-			{signUp &&(
-					<>
-						<div>
-							<label htmlFor='Name'>Name</label>
-							<Input id='Name' type={"text"} ref={firstInputRef} />
-						</div>
-						<div>
-							<label htmlFor='Email'>Email</label>
-							<Input
-								id='Email'
-								type={btn === 'fridge' ? "text" : "email"}
-								ref={secondInputRef}
-							/>
-						</div>
-						<div>
-							<label htmlFor='Password'>Password</label>
-							<Input
-								id='Password'
-								type={btn === 'fridge' ? "text" : "password"}
-								ref={thiredInputRef}
-							/>
-						</div>
-					</>
-				)}
 			{signUp && (
-				<div>
-					<label htmlFor='cPassword'>
-						{btn === "fridge" ? "Date" : "Confirm Password"}
-					</label>
-					<Input
-						id='cPassword'
-						type={btn === "fridge" ? "date" : "password"}
-						ref={fourthInputRef}
-					/>
-				</div>
+				<>
+					<div>
+						<label htmlFor='Name'>Name</label>
+						<Input id='Name' type={"text"} ref={firstInputRef} />
+					</div>
+					<div>
+						<label htmlFor='Email'>Email</label>
+						<Input
+							id='Email'
+							type={btn === "fridge" ? "text" : "email"}
+							ref={secondInputRef}
+						/>
+					</div>
+					<div>
+						<label htmlFor='Password'>Password</label>
+						<Input
+							id='Password'
+							type={btn === "fridge" ? "text" : "password"}
+							ref={thiredInputRef}
+						/>
+					</div>
+					<div>
+						<label htmlFor='cPassword'>Password</label>
+						<Input id='cPassword' type='password' ref={fourthInputRef} />
+					</div>
+				</>
 			)}
+			{btn === "Login" && (
+				<>
+					<div>
+						<label htmlFor='Email'>Email</label>
+						<Input id='Email' type='email' ref={secondInputRef} />
+					</div>
+					<div>
+						<label htmlFor='Password'>Password</label>
+						<Input id='Password' type='password' ref={thiredInputRef} />
+					</div>
+				</>
+			)}
+			{btn === "shpping" && (
+				<>
+					<div>
+						<label htmlFor='Email'>Name</label>
+						<Input id='name' type='namel' ref={secondInputRef} />
+					</div>
+					<div>
+						<label htmlFor='Password'>Amount</label>
+						<Input id='Amount' type='text' ref={thiredInputRef} />
+					</div>
+					<div>
+						<label htmlFor='Password'>Memo</label>
+						<Input id='memo' type='text' ref={fourthInputRef} />
+					</div>
+				</>
+			)} 
 			<Button
 				width='300px'
 				fontSize='14px'
@@ -264,7 +288,7 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 			>
 				{btn}
 			</Button>
-			{!signUp && btn !== 'fridge' &&  (
+			{!signUp && btn !== "fridge" && (
 				<div>
 					{" "}
 					You don&apos;t have an account yet ?{" "}
