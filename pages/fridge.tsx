@@ -10,10 +10,13 @@ import { count, log } from "console";
 import { GetServerSideProps } from "next/types";
 import { Fridge, CurrentFridge } from "../helpers/typesLibrary";
 import Amount, { amountContext } from "../useContext/useAmount";
+import ContextAmount from "../useContext/useAmount";
 export default function FridgeList(props: any) {
 	const [fridge, setFridge] = useState<any>([]);
 	const [submit, setSubmit] = useState<boolean>(false);
-  const context = useContext(amountContext);
+	const context = useContext(amountContext);
+	// console.log("fridge", context);
+	
 // console.log("context",context?.changedAmountList);
 
 	const subumitState = (boolean: boolean): void => {
@@ -47,15 +50,14 @@ export default function FridgeList(props: any) {
 				});
 		};
 		fetch();
-	}, [submit, context?.changedAmountList]);
+	}, [context?.changedAmountList]);
 	return (
-		<Amount>
+		<ContextAmount>
 			<Container>
 				<SubContent>
 					<Form
 						btn='fridge'
 						signUp={false}
-						fridge={submit}
 						fridgeAction={subumitState}
 					/>
 				</SubContent>
@@ -69,7 +71,7 @@ export default function FridgeList(props: any) {
 					/>
 				</MainContent>
 			</Container>
-		</Amount>
+		</ContextAmount>
 	);
 }
 // export async function getData(): Promise<Fridge> {

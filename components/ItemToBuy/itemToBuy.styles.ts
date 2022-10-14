@@ -1,5 +1,5 @@
 import styled from "styled-components";
-const ItemToBuy = styled.div`
+const StyledItemToBuy = styled.div`
 	margin: 16px;
 	width: 200px;
 	border: black solid 1px;
@@ -65,4 +65,4 @@ export const className = {
 	btnContainer: "btnContainer",
 	
 };
-export default ItemToBuy;
+export default StyledItemToBuy;

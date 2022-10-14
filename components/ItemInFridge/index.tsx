@@ -60,7 +60,6 @@ const FridgeSection = ({
 	});
 
 	const handleDelete = async(e: number) => {
-		console.log("fridge",fridgeDel);
 		const deletedFridgeItem = context?.changedAmountList.filter(
 			(item, index) => e === index
 		);

@@ -15,11 +15,11 @@ import { spoonacularApiAxios } from "../../constants/axiosBase";
 import { Timestamp } from "mongodb";
 import { log } from "console";
 import { amountContext } from "../../useContext/useAmount";
+import { shoppingContext } from "../../useContext/useShoppingList";
 
 interface props {
 	btn: string;
 	signUp: boolean;
-	fridge?: boolean;
 	fridgeAction?: (arg: boolean) => void;
 }
 interface ErrMsg {
@@ -43,7 +43,7 @@ interface firdge {
 
 // 	return { cookies };
 
-export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
+export const Form = ({ btn, signUp, fridgeAction }: props) => {
 	const router = useRouter();
 	const firstInputRef = useRef<HTMLInputElement>(null!);
 	const secondInputRef = useRef<HTMLInputElement>(null!);
@@ -62,6 +62,7 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 		loginPsw: true,
 	});
 	const context = useContext(amountContext);
+	const contextShoppping =useContext(shoppingContext)
 	const connectApi = (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault();
 		if (btn === "Sign up") {
@@ -142,6 +143,19 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 				context?.updateList(arr);
 				// fridgeAction(fridge);
 			});
+		} else if (btn === "shopping") {
+						const Ref = {
+							...addFridge,
+							amount: thiredInputRef.current?.value,
+							memo: fourthInputRef.current?.value,
+						};
+			appAxios.post("api/shoppingList/add", Ref).then((res) => {
+				console.log("add", res.data.shoppingList);
+				inputRef.current!.value = "";
+				thiredInputRef.current!.value = "";
+				fourthInputRef.current!.value=""
+				contextShoppping?.updateShoppingList(res.data.shoppingList.list);
+			})
 		}
 	};
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -264,12 +278,28 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 					</div>
 				</>
 			)}
-			{btn === "shpping" && (
+			{btn === "shopping" && (
 				<>
-					<div>
-						<label htmlFor='Email'>Name</label>
-						<Input id='name' type='namel' ref={secondInputRef} />
-					</div>
+					<SearchBarSection>
+						<SearchBar
+							placeholder='Search by Ingredients'
+							onChange={handleOnChange}
+							onKeyDown={handleKeyDown}
+							ref={inputRef}
+						/>
+						{prediction.length !== 0 && (
+							<SuggestBox>
+								{prediction.map((word) => (
+									<li
+										key={word.id}
+										onClick={() => handleSubmit(word.name, word.id)}
+									>
+										{word.name}
+									</li>
+								))}
+							</SuggestBox>
+						)}
+					</SearchBarSection>
 					<div>
 						<label htmlFor='Password'>Amount</label>
 						<Input id='Amount' type='text' ref={thiredInputRef} />
@@ -279,7 +309,7 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 						<Input id='memo' type='text' ref={fourthInputRef} />
 					</div>
 				</>
-			)} 
+			)}
 			<Button
 				width='300px'
 				fontSize='14px'
@@ -288,7 +318,7 @@ export const Form = ({ btn, signUp, fridge, fridgeAction }: props) => {
 			>
 				{btn}
 			</Button>
-			{!signUp && btn !== "fridge" && (
+			{!signUp && btn == "login" && (
 				<div>
 					{" "}
 					You don&apos;t have an account yet ?{" "}

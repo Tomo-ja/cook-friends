@@ -36,7 +36,6 @@ export default async function addToShoppingList(
 				name: req.body.name,
 				created_at: Date.now(),
 				amount: req.body.amount,
-				unit: req.body.unit,
 				memo: req.body.memo
 			})
 		}
