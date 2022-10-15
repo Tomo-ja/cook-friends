@@ -136,6 +136,8 @@ export const Form = ({ btn, signUp, fridgeAction }: props) => {
 				stored_at: fourthInputRef.current?.value,
 				amount: firstInputRef.current?.value,
 			};
+			console.log(Ref);
+			
 			appAxios.post("api/fridge/add", Ref).then((res) => {
 				console.log("add", res);
 				inputRef.current!.value = "";
@@ -153,7 +155,7 @@ export const Form = ({ btn, signUp, fridgeAction }: props) => {
 				console.log("add", res.data.shoppingList);
 				inputRef.current!.value = "";
 				thiredInputRef.current!.value = "";
-				fourthInputRef.current!.value=""
+				fourthInputRef.current!.value = ""
 				contextShoppping?.updateShoppingList(res.data.shoppingList.list);
 			})
 		}

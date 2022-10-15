@@ -1,7 +1,7 @@
 import styled from "styled-components";
 const StyledItemToBuy = styled.div`
 	margin: 16px;
-	width: 200px;
+	width: 95%;
 	border: black solid 1px;
 	padding: 8px;
 	.NameAmount {
@@ -36,7 +36,7 @@ const StyledItemToBuy = styled.div`
 	@media only screen and (max-width: 375px) {
     margin: 0;
     margin-top : 16px;
-    width: 340px;
+    width: 95%;
 		.NameAmount {
 			display: flex;
       flex-direction: row;
