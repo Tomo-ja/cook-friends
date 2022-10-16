@@ -5,7 +5,6 @@ import appAxios from "../../constants/axiosBase";
 import { useContext, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
-import { NextPageContext } from "next";
 import Link from "next/link";
 import SearchSection from "../SearchBarSection/index";
 import SearchBar from "../SearchBarSection/searchBar.styles";
@@ -13,14 +12,17 @@ import SuggestBox from "../SearchBarSection/suggestBox.styles";
 import SearchBarSection from "../SearchBarSection/searchBarSection.styled";
 import { spoonacularApiAxios } from "../../constants/axiosBase";
 import { Timestamp } from "mongodb";
-import { log } from "console";
 import { amountContext } from "../../useContext/useAmount";
 import { shoppingContext } from "../../useContext/useShoppingList";
+import { GetServerSideProps } from "next/types";
+import { NextPageContext } from "next";
+
 
 interface props {
 	btn: string;
 	signUp: boolean;
 	fridgeAction?: (arg: boolean) => void;
+	userId?: string
 }
 interface ErrMsg {
 	account: boolean;
@@ -30,7 +32,7 @@ interface ErrMsg {
 	loginPsw: boolean;
 }
 interface firdge {
-	user_id: string;
+	user_id: string | undefined;
 	ingredient_api_id: number;
 	name: string;
 }
@@ -43,7 +45,7 @@ interface firdge {
 
 // 	return { cookies };
 
-export const Form = ({ btn, signUp, fridgeAction }: props) => {
+export const Form = ({ btn, signUp, userId }: props) => {
 	const router = useRouter();
 	const firstInputRef = useRef<HTMLInputElement>(null!);
 	const secondInputRef = useRef<HTMLInputElement>(null!);
@@ -62,7 +64,11 @@ export const Form = ({ btn, signUp, fridgeAction }: props) => {
 		loginPsw: true,
 	});
 	const context = useContext(amountContext);
-	const contextShoppping =useContext(shoppingContext)
+	const contextShoppping = useContext(shoppingContext);
+	// const cookies = parseCookies();
+	// console.log("front",userId);
+
+	// console.log({ cookies });
 	const connectApi = (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault();
 		if (btn === "Sign up") {
@@ -137,7 +143,7 @@ export const Form = ({ btn, signUp, fridgeAction }: props) => {
 				amount: firstInputRef.current?.value,
 			};
 			console.log(Ref);
-			
+
 			appAxios.post("api/fridge/add", Ref).then((res) => {
 				console.log("add", res);
 				inputRef.current!.value = "";
@@ -146,18 +152,18 @@ export const Form = ({ btn, signUp, fridgeAction }: props) => {
 				// fridgeAction(fridge);
 			});
 		} else if (btn === "shopping") {
-						const Ref = {
-							...addFridge,
-							amount: thiredInputRef.current?.value,
-							memo: fourthInputRef.current?.value,
-						};
+			const Ref = {
+				...addFridge,
+				amount: thiredInputRef.current?.value,
+				memo: fourthInputRef.current?.value,
+			};
 			appAxios.post("api/shoppingList/add", Ref).then((res) => {
 				console.log("add", res.data.shoppingList);
 				inputRef.current!.value = "";
 				thiredInputRef.current!.value = "";
-				fourthInputRef.current!.value = ""
+				fourthInputRef.current!.value = "";
 				contextShoppping?.updateShoppingList(res.data.shoppingList.list);
-			})
+			});
 		}
 	};
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -191,7 +197,7 @@ export const Form = ({ btn, signUp, fridgeAction }: props) => {
 		setPrediction([]);
 		inputRef.current!.value = ingredient;
 		setAddfridge({
-			user_id: "633a59d4733aa93cea103d6e",
+			user_id: userId,
 			ingredient_api_id: id,
 			name: ingredient,
 		});
@@ -332,3 +338,4 @@ export const Form = ({ btn, signUp, fridgeAction }: props) => {
 		</FormStyled>
 	);
 };
+

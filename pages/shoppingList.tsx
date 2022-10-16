@@ -9,6 +9,8 @@ import { amountContext } from "../useContext/useAmount";
 import { Timestamp } from "mongodb";
 import Context from "../useContext/useAmount";
 import ContextShopping, { shoppingContext } from "../useContext/useShoppingList";
+import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
+import { NextPageContext } from "next";
 interface list {
 	amount: number;
 	created_at: Timestamp;
@@ -18,19 +20,18 @@ interface list {
 	_id: string;
 }
 
-export default function ShoppingList() {
+export default function ShoppingList( props :any) {
 	const context = useContext(shoppingContext);
 	const [shoppingList, setShoopingList] = useState<list[]>([]);
-	// console.log(context?.shoppingList);
 
 	useEffect(() => {
 		const fetchShoopingList = async () => {
 			await appAxios
 				.post("api/shoppingList/show", {
-					user_id: "633a59d4733aa93cea103d6e",
+					user_id: props.Id.id,
 				})
 				.then((res) => {
-						setShoopingList(res.data.shoppingList.list);
+					setShoopingList(res.data.shoppingList.list);
 				});
 		};
 		fetchShoopingList();
@@ -39,7 +40,7 @@ export default function ShoppingList() {
 		<ContextShopping>
 			<Container>
 				<SubContent>
-					<Form btn={"shopping"} signUp={false} />
+					<Form btn={"shopping"} signUp={false} userId={props.Id.id} />
 				</SubContent>
 				<MainContent>
 					<ItemToBuy list={shoppingList} />
@@ -47,4 +48,14 @@ export default function ShoppingList() {
 			</Container>
 		</ContextShopping>
 	);
+}
+export async function getServerSideProps(ctx?: NextPageContext) {
+	const cookie = parseCookies(ctx);
+	// console.log(cookie.user); // { accessToken: 'test1234' }
+	const cookieId = JSON.parse(cookie.user);
+	return {
+		props: {
+			Id: cookieId || null,
+		},
+	};
 }

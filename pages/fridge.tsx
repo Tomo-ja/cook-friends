@@ -11,11 +11,16 @@ import { GetServerSideProps } from "next/types";
 import { Fridge, CurrentFridge } from "../helpers/typesLibrary";
 import Amount, { amountContext } from "../useContext/useAmount";
 import ContextAmount from "../useContext/useAmount";
+import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
+import { NextPageContext } from "next";
+
 export default function FridgeList(props: any) {
 	const [fridge, setFridge] = useState<any>([]);
 	const [submit, setSubmit] = useState<boolean>(false);
+	const [id, setId] = useState<string>("")
 	const context = useContext(amountContext);
-	// console.log("fridge", context);
+	// console.log("id", id);
+	// console.log("props", props.Id.id);
 	
 // console.log("context",context?.changedAmountList);
 
@@ -30,7 +35,7 @@ export default function FridgeList(props: any) {
 	useEffect(() => {
 		const fetch = async () => {
 			await appAxios
-				.post("api/fridge/show", { user_id: "633a59d4733aa93cea103d6e" })
+				.post("api/fridge/show", { user_id: props.Id.id })
 				.then((res) => {
 					const tempArr: {
 						ingredient_api_id: number;
@@ -50,6 +55,7 @@ export default function FridgeList(props: any) {
 				});
 		};
 		fetch();
+		setId(props.Id.id);
 	}, [context?.changedAmountList]);
 	return (
 		<ContextAmount>
@@ -58,7 +64,7 @@ export default function FridgeList(props: any) {
 					<Form
 						btn='fridge'
 						signUp={false}
-						fridgeAction={subumitState}
+						userId={id}
 					/>
 				</SubContent>
 				<MainContent>
@@ -74,27 +80,13 @@ export default function FridgeList(props: any) {
 		</ContextAmount>
 	);
 }
-// export async function getData(): Promise<Fridge> {
-// 	const fridgeData = await appAxios.post("/api/fridge/show", {
-// 		user_id: "633a59d4733aa93cea103d6e",
-// 	});
-// 	const fridge: Fridge = [];
-// 	Object.values(fridgeData.data).forEach((value: any) => {
-// 		fridge.push({
-// 			ingredient_api_id: value.ingredient_api_id,
-// 			name: value.name,
-// 			amount: value.amount,
-// 			unit: value.unit,
-// 			stored_at: stringToDate(value.stored_at).toString(),
-// 		});
-// 	});
-// 	return fridge;
-// }
+export async function getServerSideProps(ctx?: NextPageContext) {
+	const cookie = parseCookies(ctx);
+	const cookieId = JSON.parse(cookie.user);
+	return {
+		props: {
+			Id: cookieId || null,
+		},
+	};
+}
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-// 	const fridges = await getData();
-
-// 	return {
-// 		props: { fridges },
-// 	};
-// };
