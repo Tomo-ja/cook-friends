@@ -9,6 +9,7 @@ import { Fridge, CurrentFridge } from "../../helpers/typesLibrary";
 import { ParsedUrlQuery } from "querystring";
 import appAxios from "../../constants/axiosBase";
 import { amountContext } from "../../useContext/useAmount";
+import Button from "../Button/button.styles";
 
 
 
@@ -137,16 +138,26 @@ const FridgeSection = ({
 							<p className={classNames.foodName}>{item.name}</p>
 						) : (
 							<>
-						<StyledLink 
-							hoverColor="#ffaa4e"
-							onClick={() => handleClickLink(item.name)}
-							>
-							{item.name}
-						</StyledLink>
-						<p className={defineExpireDate(item.stored_at) > 5 ? classNames.expireDate : ""}>
-							Bought in {defineExpireDate(item.stored_at) === 0 ? 'Today' : `${defineExpireDate(item.stored_at)} days ago`}
-						</p>
-							</>)}
+								<StyledLink
+									hoverColor='#ffaa4e'
+									onClick={() => handleClickLink(item.name)}
+								>
+									{item.name}
+								</StyledLink>
+								<p
+									className={
+										defineExpireDate(item.stored_at) > 5
+											? classNames.expireDate
+											: ""
+									}
+								>
+									Bought in{" "}
+									{defineExpireDate(item.stored_at) === 0
+										? "Today"
+										: `${defineExpireDate(item.stored_at)} days ago`}
+								</p>
+							</>
+						)}
 					</div>
 					<div className={classNames.itemFridgeRight}>
 						{useAsFilter ? (
@@ -164,7 +175,14 @@ const FridgeSection = ({
 						)}
 					</div>
 					<div className={classNames.itemFridgeRight}>
-						<button onClick={() => handleDelete(idx)}>delete</button>
+						<Button
+							width='50px'
+							fontSize='5px'
+							fontThin={true}
+							onClick={() => handleDelete(idx)}
+						>
+							delete
+						</Button>
 					</div>
 				</ItemInFridge>
 			))}
