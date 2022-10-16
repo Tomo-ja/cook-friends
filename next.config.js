@@ -7,6 +7,10 @@ const nextConfig = {
   env: {
     API_KEY: process.env.API_KEY,
   },
+    compiler: {
+    // Enables the styled-components SWC transform
+    styledComponents: true
+  },
   swcMinify: true,
 }
 
