@@ -16,13 +16,17 @@ import { amountContext } from "../../useContext/useAmount";
 import { shoppingContext } from "../../useContext/useShoppingList";
 import { GetServerSideProps } from "next/types";
 import { NextPageContext } from "next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
+import StyledSwitch from "../switch/siwtch";
 
 
 interface props {
 	btn: string;
 	signUp: boolean;
-	fridgeAction?: (arg: boolean) => void;
-	userId?: string
+	userId?: string;
+	modal?: boolean;
+	setModal?: (arg:boolean) => void;
 }
 interface ErrMsg {
 	account: boolean;
@@ -45,7 +49,7 @@ interface firdge {
 
 // 	return { cookies };
 
-export const Form = ({ btn, signUp, userId }: props) => {
+export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 	const router = useRouter();
 	const firstInputRef = useRef<HTMLInputElement>(null!);
 	const secondInputRef = useRef<HTMLInputElement>(null!);
@@ -63,6 +67,7 @@ export const Form = ({ btn, signUp, userId }: props) => {
 		login: true,
 		loginPsw: true,
 	});
+	const [switchModal, setSwitchModal] = useState<boolean>(false);
 	const context = useContext(amountContext);
 	const contextShoppping = useContext(shoppingContext);
 	// const cookies = parseCookies();
@@ -192,7 +197,6 @@ export const Form = ({ btn, signUp, userId }: props) => {
 				console.log(error);
 			});
 	};
-
 	const handleSubmit = (ingredient: string, id: number) => {
 		setPrediction([]);
 		inputRef.current!.value = ingredient;
@@ -202,8 +206,18 @@ export const Form = ({ btn, signUp, userId }: props) => {
 			name: ingredient,
 		});
 	};
+	const handleSwitch = () => {
+		setSwitchModal(!switchModal);
+		console.log("switch clicked");
+		console.log("clicked", modal);
+		
+		setModal?.(!modal);
+	};
 	return (
 		<FormStyled>
+			<StyledSwitch>
+				<FontAwesomeIcon icon={faSquareXmark} onClick={handleSwitch} />
+			</StyledSwitch>
 			{!err.account && <p className='ErrMesg'>This Email has an account</p>}
 			{!err.password && <p className='ErrMesg'>Password is not matched</p>}
 			{!err.validation && (
@@ -338,4 +352,8 @@ export const Form = ({ btn, signUp, userId }: props) => {
 		</FormStyled>
 	);
 };
+
+function setModal(arg0: boolean) {
+	throw new Error("Function not implemented.");
+}
 

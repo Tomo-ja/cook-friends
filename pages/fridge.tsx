@@ -13,16 +13,16 @@ import Amount, { amountContext } from "../useContext/useAmount";
 import ContextAmount from "../useContext/useAmount";
 import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
 import { NextPageContext } from "next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import StyledSwitch from "../components/switch/siwtch";
 
 export default function FridgeList(props: any) {
 	const [fridge, setFridge] = useState<any>([]);
 	const [submit, setSubmit] = useState<boolean>(false);
 	const [id, setId] = useState<string>("")
 	const context = useContext(amountContext);
-	// console.log("id", id);
-	// console.log("props", props.Id.id);
-	
-// console.log("context",context?.changedAmountList);
+	const [switchModal, setSwitchModal] = useState<boolean>(false);
 
 	const subumitState = (boolean: boolean): void => {
 		return setSubmit(!boolean);
@@ -57,14 +57,19 @@ export default function FridgeList(props: any) {
 		fetch();
 		setId(props.Id.id);
 	}, [context?.changedAmountList]);
+	const handleSwitch = () => {
+		setSwitchModal(!switchModal);
+	}
 	return (
 		<ContextAmount>
 			<Container>
-				<SubContent>
+				<SubContent className={switchModal ? "open" : ""}>
 					<Form
 						btn='fridge'
 						signUp={false}
 						userId={id}
+						modal={switchModal}
+						setModal={setSwitchModal}
 					/>
 				</SubContent>
 				<MainContent>
@@ -75,6 +80,9 @@ export default function FridgeList(props: any) {
 						fridgeAction={subumitState}
 						fridgeDel={submit}
 					/>
+					<StyledSwitch>
+						<FontAwesomeIcon icon={faPlus} onClick={handleSwitch} />
+					</StyledSwitch>
 				</MainContent>
 			</Container>
 		</ContextAmount>

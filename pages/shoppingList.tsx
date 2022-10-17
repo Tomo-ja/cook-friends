@@ -11,6 +11,9 @@ import Context from "../useContext/useAmount";
 import ContextShopping, { shoppingContext } from "../useContext/useShoppingList";
 import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
 import { NextPageContext } from "next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import StyledSwitch from "../components/switch/siwtch";
 interface list {
 	amount: number;
 	created_at: Timestamp;
@@ -23,6 +26,7 @@ interface list {
 export default function ShoppingList( props :any) {
 	const context = useContext(shoppingContext);
 	const [shoppingList, setShoopingList] = useState<list[]>([]);
+	const [switchModal, setSwitchModal] = useState<boolean>(false);
 
 	useEffect(() => {
 		const fetchShoopingList = async () => {
@@ -36,15 +40,27 @@ export default function ShoppingList( props :any) {
 		};
 		fetchShoopingList();
 	}, [context?.shoppingList]);
+	const handleSwitch = () => {
+		setSwitchModal(!switchModal);
+	};
 	return (
 		<ContextShopping>
 			<Container>
-				<SubContent>
-					<Form btn={"shopping"} signUp={false} userId={props.Id.id} />
+				<SubContent className={switchModal ? "open" : ""}>
+					<Form
+						btn={"shopping"}
+						signUp={false}
+						userId={props.Id.id}
+						modal={switchModal}
+						setModal={setSwitchModal}
+					/>
 				</SubContent>
 				<MainContent>
 					<ItemToBuy list={shoppingList} />
 				</MainContent>
+				<StyledSwitch>
+					<FontAwesomeIcon icon={faPlus} onClick={handleSwitch} />
+				</StyledSwitch>
 			</Container>
 		</ContextShopping>
 	);
