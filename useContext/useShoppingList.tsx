@@ -27,7 +27,7 @@ export const shoppingContext = createContext<userDataInterface | null>(null);
 
 const ContextShopping = ({ children }: children) => {
 	const [shoppingList, setShoppingList] = useState<list[]>([]);
-	// console.log(shoppingList);
+	console.log(shoppingList);
 	
 	const updateShoppingList = (item: any) => {
 		setShoppingList(item);

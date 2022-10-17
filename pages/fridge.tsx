@@ -19,15 +19,10 @@ import StyledSwitch from "../components/switch/siwtch";
 
 export default function FridgeList(props: any) {
 	const [fridge, setFridge] = useState<any>([]);
-	const [submit, setSubmit] = useState<boolean>(false);
 	const [id, setId] = useState<string>("")
 	const context = useContext(amountContext);
 	const [switchModal, setSwitchModal] = useState<boolean>(false);
 
-	const subumitState = (boolean: boolean): void => {
-		return setSubmit(!boolean);
-	};
-	const [test, setTest] = useState<any>()
 	// useEffect(() => {
 	// 	setTest(props.fridges);
 	// },[])
@@ -75,10 +70,8 @@ export default function FridgeList(props: any) {
 				<MainContent>
 					<FridgeSection
 						fridge={fridge}
-						// fridge={props.fridges || fridge}
 						useAsFilter={false}
-						fridgeAction={subumitState}
-						fridgeDel={submit}
+						userId={id}
 					/>
 					<StyledSwitch>
 						<FontAwesomeIcon icon={faPlus} onClick={handleSwitch} />

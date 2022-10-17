@@ -21,6 +21,8 @@ type Props = {
 	setMustIncludeIngredients?: Dispatch<SetStateAction<string[]>>;
 	fridgeAction?: (arg: boolean) => void;
 	fridgeDel?: boolean;
+	userId?: string;
+	
 };
 // interface CurrentFridge  {
 // 	ingredient_api_id: string,
@@ -37,19 +39,13 @@ const FridgeSection = ({
 	useAsFilter,
 	setMustIncludeIngredients,
 	urlQuery,
-	fridgeAction,
-	fridgeDel,
+	userId ,
 }: Props) => {
-	const context = useContext(amountContext)
-	
-	const [tempFridge, setTempFridge] = useState<CurrentFridge[]>([]);
-	const [amountChange, setAmountChange] = useState<boolean>(false)
-	// console.log("tempFridge", tempFridge);
+	const context = useContext(amountContext);
 	useEffect(() => {
-
 		context?.updateList(fridge);
 		// fridgeAction?.(!fridgeDel)
-	}, [fridge])
+	}, [fridge]);
 
 	const router = useRouter();
 	const [selectedAsFilter, setSelectedAsFilter] = useState<boolean[]>(() => {
@@ -60,19 +56,19 @@ const FridgeSection = ({
 		return init;
 	});
 
-	const handleDelete = async(e: number) => {
+	const handleDelete = async (e: number) => {
 		const deletedFridgeItem = context?.changedAmountList.filter(
 			(item, index) => e === index
 		);
-		console.log("del",deletedFridgeItem);
+		console.log("del", deletedFridgeItem);
 		const currentFridgeItem = context?.changedAmountList.filter(
 			(item, index) => e !== index
 		);
-		console.log("currentFridgeItem", currentFridgeItem);
-		if (deletedFridgeItem) {			
+		// console.log("currentFridgeItem", currentFridgeItem);
+		if (deletedFridgeItem) {
 			await appAxios
 				.post("api/fridge/delete", {
-					user_id: "633a59d4733aa93cea103d6e",
+					user_id: userId,
 					ingredient_api_id: deletedFridgeItem[0].ingredient_api_id,
 				})
 				.then((res) => {
@@ -81,9 +77,7 @@ const FridgeSection = ({
 				});
 		} else {
 			console.log("YABAI");
-			
 		}
-		
 	};
 	const handleClickFilter = (idx: number) => {
 		if (useAsFilter) {
@@ -169,7 +163,7 @@ const FridgeSection = ({
 									unit={item.unit}
 									ingredentId={item.ingredient_api_id}
 									useAsFilter={useAsFilter}
-									setTempFridge={() => setTempFridge(tempFridge)}
+										userId={userId}
 								/>
 							</>
 						)}

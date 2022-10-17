@@ -56,7 +56,7 @@ export default function ShoppingList( props :any) {
 					/>
 				</SubContent>
 				<MainContent>
-					<ItemToBuy list={shoppingList} />
+					<ItemToBuy list={shoppingList} userId={props.Id.id} />
 				</MainContent>
 				<StyledSwitch>
 					<FontAwesomeIcon icon={faPlus} onClick={handleSwitch} />

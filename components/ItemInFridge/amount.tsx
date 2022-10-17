@@ -9,7 +9,7 @@ type Props = {
 	unit: string;
 	ingredentId: string;
 	useAsFilter: boolean;
-	setTempFridge: (data:object[]) => void;
+	userId?: string;
 	// tempFridge: object[];
 };
 
@@ -24,7 +24,7 @@ const Amount = ({
 	unit,
 	ingredentId,
 	useAsFilter,
-	setTempFridge,
+	userId
 }: Props) => {
 	const context = useContext(amountContext)
 	const [textAmount, setTextAmount] = useState(amount);
@@ -39,7 +39,7 @@ const Amount = ({
 		const changedAmount = changedValue.current?.value;
 		appAxios
 			.post("api/fridge/remove", {
-				user_id: "633a59d4733aa93cea103d6e",
+				user_id: userId,
 				amount: changedAmount,
 				ingredient_api_id: ingredentId,
 			})

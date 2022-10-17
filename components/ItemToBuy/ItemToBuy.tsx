@@ -18,11 +18,12 @@ interface list {
 type itemTobuy = {
 	[x: string]: any;
 	list: list[];
+	userId: string;
 };
 
-const ItemToBuy = ({ list }: itemTobuy) => {
-	const [buringToItem, setBuringToItem] = useState<list>();
-
+const ItemToBuy = ({ list, userId}: itemTobuy) => {
+	// console.log(userId);
+	
 	const context = useContext(shoppingContext);
 	useEffect(() => {
 		context?.updateShoppingList(list);
@@ -31,17 +32,18 @@ const ItemToBuy = ({ list }: itemTobuy) => {
 	const handleDelete = (id: string) => {
 		appAxios
 			.post("api/shoppingList/delete", {
-				user_id: "633a59d4733aa93cea103d6e",
+				user_id: userId,
 				ingredient_api_id: id,
 			})
-			.then((res) => { context?.updateShoppingList(res.data.shoppingList.list); console.log(res.data);
-			 });
+			.then((res) => {
+				context?.updateShoppingList(res.data.shoppingList.list);
+				console.log(res.data);
+			});
 	};
 	const handlefridge = async (e: list) => {
-		console.log(e);
-		console.log("clicked");
+
 		const Ref = {
-			user_id: "633a59d4733aa93cea103d6e",
+			user_id: userId,
 			amount: e.amount,
 			ingredient_api_id: e.ingredient_api_id,
 			name: e.name,
@@ -51,7 +53,7 @@ const ItemToBuy = ({ list }: itemTobuy) => {
 		});
 		await appAxios
 			.post("api/shoppingList/delete", {
-				user_id: "633a59d4733aa93cea103d6e",
+				user_id: userId,
 				ingredient_api_id: e.ingredient_api_id,
 			})
 			.then((value) => {

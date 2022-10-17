@@ -133,7 +133,7 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 					});
 				} else {
 					const cookies = parseCookies();
-					console.log("user cookie", res.data);
+					// console.log("user cookie", res.data);
 					setCookie(null, "user", JSON.stringify(res.data), {
 						maxAge: 30 * 24 * 60 * 60,
 						path: "/",
@@ -147,7 +147,7 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 				stored_at: fourthInputRef.current?.value,
 				amount: firstInputRef.current?.value,
 			};
-			console.log(Ref);
+			// console.log(Ref);
 
 			appAxios.post("api/fridge/add", Ref).then((res) => {
 				console.log("add", res);
@@ -340,7 +340,7 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 			>
 				{btn}
 			</Button>
-			{!signUp && btn == "login" && (
+			{btn === "Login" && (
 				<div>
 					{" "}
 					You don&apos;t have an account yet ?{" "}
