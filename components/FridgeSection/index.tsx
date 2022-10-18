@@ -11,6 +11,7 @@ import { defineExpireDate } from "../../helpers";
 import { Fridge } from "../../helpers/typesLibrary";
 
 type Props = {
+	setTrigger?: Dispatch<SetStateAction<number>>,
 	useAsFilter: boolean,
 	fridge?: Fridge,
 	urlQuery?: ParsedUrlQuery,
@@ -27,7 +28,7 @@ const initFilter = (length: number): boolean[] => {
 }
 
 
-const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQuery, userId }: Props) => {
+const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQuery, userId, setTrigger }: Props) => {
 
 	const router = useRouter()
 
@@ -104,7 +105,15 @@ const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQue
 							<p className={classNames.amount}>{item.amount}{item.unit}</p>
 						:
 							<>
-								<Amount useAsFilter={false} ingredientId={item.ingredient_api_id} amount={item.amount} unit={item.unit} name={item.name} />
+								<Amount 
+									userId={userId}
+									useAsFilter={false} 
+									ingredientId={item.ingredient_api_id} 
+									amount={item.amount} 
+									unit={item.unit} 
+									name={item.name}
+									setTrigger={setTrigger}
+								/>
 							</>
 						}
 					</div>

@@ -16,17 +16,42 @@ import { Fridge, User } from "../helpers/typesLibrary";
 
 type Props = {
 	user: User,
-	fridge: Fridge
 }
 
-const FridgeList = ({ user, fridge }: Props) => {
+const FridgeList = ({ user }: Props) => {
 
-	const [displayedFridge, setDisplayedFridge] = useState(fridge)
+	const [fridgeUpdateTrigger, setFridgeUpdateTrigger] = useState(0)
+
+	const [displayedFridge, setDisplayedFridge] = useState<Fridge>([])
 	const [switchModal, setSwitchModal] = useState<boolean>(false);
 
 	const handleSwitch = () => {
 		setSwitchModal(!switchModal);
 	}
+
+	useEffect(() => {
+		const fetchFridgeData = async () => {
+			const fridge: Fridge = []
+			const fridgeData = await appAxios.post('api/fridge/show', {
+				user_id: user.id
+			})
+			Object.values(fridgeData.data).forEach((value: any) => {
+				fridge.push(
+					{
+						ingredient_api_id: value.ingredient_api_id,
+						name: value.name,
+						amount: value.amount,
+						unit: value.unit,
+						stored_at: stringToDate(value.stored_at).toString()
+					}
+				)
+			})
+			setDisplayedFridge(fridge)
+		}
+
+		fetchFridgeData()
+
+	}, [fridgeUpdateTrigger])
 
 	return (
 		<StyledContainer>
@@ -37,10 +62,12 @@ const FridgeList = ({ user, fridge }: Props) => {
 					userId={user.id}
 					modal={switchModal}
 					setModal={setSwitchModal}
+					setTrigger={setFridgeUpdateTrigger}
 				/>
 			</StyledSubContent>
 			<StyledMainContent>
 				<FridgeSection
+					setTrigger={setFridgeUpdateTrigger}
 					fridge={displayedFridge}
 					useAsFilter={false}
 					userId={user.id}
@@ -61,27 +88,10 @@ export default FridgeList
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 	const cookieData = cookie.parse(req.headers.cookie!)
 	const user: User = JSON.parse(cookieData.user)
-	const fridge: Fridge = []
-
-	const fridgeData = await appAxios.post('api/fridge/show', {
-		user_id: user.id
-	})
-	Object.values(fridgeData.data).forEach((value: any) => {
-		fridge.push(
-			{
-				ingredient_api_id: value.ingredient_api_id,
-				name: value.name,
-				amount: value.amount,
-				unit: value.unit,
-				stored_at: stringToDate(value.stored_at).toString()
-			}
-		)
-	})
 
 	return { 
 		props: {
 			user,
-			fridge
 		}
 	}
 }

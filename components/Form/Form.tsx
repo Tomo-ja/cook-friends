@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { parseCookies, setCookie } from "nookies";
 
@@ -26,7 +26,9 @@ interface props {
 	userId?: string;
 	modal?: boolean;
 	setModal?: (arg:boolean) => void;
+	setTrigger?: Dispatch<SetStateAction<number>>;
 }
+
 interface ErrMsg {
 	account: boolean;
 	password: boolean;
@@ -41,7 +43,7 @@ interface firdge {
 }
 
 
-const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
+const Form = ({ btn, signUp, userId, modal, setModal, setTrigger }: props) => {
 	const router = useRouter();
 	const firstInputRef = useRef<HTMLInputElement>(null!);
 	const secondInputRef = useRef<HTMLInputElement>(null!);
@@ -140,8 +142,7 @@ const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 			appAxios.post("api/fridge/add", Ref).then((res) => {
 				console.log("add", res);
 				inputRef.current!.value = "";
-				const arr = Object.values(res.data);
-				context?.updateList(arr);
+				setTrigger!(prev => prev + 1)
 			});
 		} else if (btn === "shopping") {
 			const Ref = {

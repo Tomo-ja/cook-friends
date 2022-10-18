@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 
 
 import { classNames } from "./itemInFridge.styles";
@@ -14,22 +14,17 @@ type Props = {
 	unit: string,
 	useAsFilter: boolean,
 	userId?: string,
+	setTrigger?: Dispatch<SetStateAction<number>>,
 };
 
 
-const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name }: Props) => {
+const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrigger }: Props) => {
 
-	const [activeChangeButton, setActiveChangeButton] = useState(false);
 	const [value, setValue] = useState(amount)
 
 	const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
 		const newValue = e.currentTarget.value
 		setValue(parseInt(newValue))
-	}
-
-	const handleFocusOff = () => {
-		setActiveChangeButton(false)
-		setValue(amount)
 	}
 
 	// need to update 
@@ -49,6 +44,8 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name }: Props
 				ingredient_api_id: ingredientId,
 				name,
 				unit
+			}).then(()=> {
+				setTrigger!(prev => prev + 1)
 			})
 		} catch (error) {
 			console.log('update amount fail', error)
@@ -61,6 +58,8 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name }: Props
 			await appAxios.post('api/fridge/delete', {
 				user_id: userId,
 				ingredient_api_id: ingredientId
+			}).then(() => {
+				setTrigger!(prev => prev + 1)
 			})
 		}catch(error){
 			console.log('delete item fail', error)
@@ -81,8 +80,6 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name }: Props
 						className={classNames.amount}
 						type='number'
 						onChange={handleOnChange}
-						onFocus={() => setActiveChangeButton(true)}
-						onBlur={() => handleFocusOff()}
 						value={value}
 					/>
 					<StyledButton
