@@ -6,7 +6,6 @@ import Container from "../styles/container.styles";
 import MainContent from "../styles/mainContent.styles";
 import SubContent from "../styles/subContent.styles";
 import { stringToDate } from "../helpers";
-import { count, log } from "console";
 import { GetServerSideProps } from "next/types";
 import { Fridge, CurrentFridge } from "../helpers/typesLibrary";
 import Amount, { amountContext } from "../useContext/useAmount";
