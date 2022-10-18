@@ -28,7 +28,7 @@ type Props = {
   recipeIds: number[] | null
 }
 
-const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/index'),
+const DynamicFridgeSection = dynamic(() => import('../components/Fridge/index'),
 {ssr: true})
 
 const DynamicRecipeSection = dynamic(() => import('../components/RecipesSection/index'), 

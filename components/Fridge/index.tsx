@@ -1,15 +1,16 @@
 import { Dispatch, SetStateAction, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
+
 import Amount from "./amount";
 import ItemInFridge, { classNames } from "./itemInFridge.styles";
+import StyledButton from "../Button/button.styles";
 import StyledLink from "../../styles/link.styles";
 import { defineExpireDate } from "../../helpers";
 import { Fridge, CurrentFridge } from "../../helpers/typesLibrary";
 import { ParsedUrlQuery } from "querystring";
 import appAxios from "../../constants/axiosBase";
+
 import { amountContext } from "../../useContext/useAmount";
-import Button from "../Button/button.styles";
 
 
 
@@ -169,14 +170,14 @@ const FridgeSection = ({
 						)}
 					</div>
 					<div className={classNames.itemFridgeRight}>
-						<Button
-							width='50px'
-							fontSize='5px'
+						<StyledButton
+							width='75px'
+							fontSize="11px"
 							fontThin={true}
 							onClick={() => handleDelete(idx)}
 						>
 							delete
-						</Button>
+						</StyledButton>
 					</div>
 				</ItemInFridge>
 			))}

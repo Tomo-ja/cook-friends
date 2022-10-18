@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 interface IIconButton {
-	width?: string,
 	backgroundColor: string,
+	width?: string,
 	square?: boolean
 }
 

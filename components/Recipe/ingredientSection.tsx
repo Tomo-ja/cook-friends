@@ -1,7 +1,5 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCartPlus } from "@fortawesome/free-solid-svg-icons"
+import FontAwesomeButton, { IconKind } from "../FontAwesomeButton"
 
-import StyledIconButton from "../IconButton/iconButton.styles"
 import StyledIngredientSection, {classNames} from "./section.styles"
 import { Fridge, Ingredient } from "../../helpers/typesLibrary"
 
@@ -40,9 +38,12 @@ const IngredientSection = ({ ingredients, fridge, handleClick }: Props) => {
 			<ul>
 				{ingredients.map((ingredient, idx) => (
 				<li className={classNames.complexList} key={ingredient.id}>
-					<StyledIconButton backgroundColor='#000' square={true} onClick={() => handleClick(ingredient)}>
-						<FontAwesomeIcon icon={faCartPlus} color = 'white' style={{display: 'block', width: '16px', height: '16px'}}/>
-					</StyledIconButton>
+					<FontAwesomeButton
+						handleClick={handleClick}
+						target={ingredient}
+						iconKind={IconKind.CartPlus}
+						isButtonSquare={true}
+					/>
 					<div className={classNames.inOneLine}>
 						<p className={userHasIngredient[idx] ? '' : classNames.textRed}>{capitalize(ingredient.name)}</p>
 						<p>{ingredient.amount} {ingredient.unit}</p>

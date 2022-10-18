@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Form } from "../components/Form/Form";
-import FridgeSection from "../components/ItemInFridge";
+import FridgeSection from "../components/Fridge";
 import appAxios from "../constants/axiosBase";
 import Container from "../styles/container.styles";
 import MainContent from "../styles/mainContent.styles";

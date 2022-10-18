@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import IconButton from "../IconButton/iconButton.styles";
+import IconButton from "../FontAwesomeButton/iconButton.styles";
 import StyledItemToBuy from "../ItemToBuy/itemToBuy.styles";
 import appAxios from "../../constants/axiosBase";
 import { Timestamp } from "mongodb";
@@ -74,16 +74,16 @@ const ItemToBuy = ({ list, userId}: itemTobuy) => {
 							<p className='txt'>{item.memo}</p>
 							<div className='btnContainer'>
 								<IconButton
-									backgroundColor='gray'
+									backgroundColor='#000'
 									onClick={() => handleDelete(item.ingredient_api_id)}
 								>
-									<FontAwesomeIcon icon={faTrash} style={{ color: "#000" }} />
+									<FontAwesomeIcon icon={faTrash} color='white' style={{display: 'block', marginRight: '0px', width: '16px', height: '16px'}}/>
 								</IconButton>
 								<IconButton
-									backgroundColor='gray'
+									backgroundColor='#000'
 									onClick={() => handlefridge(item)}
 								>
-									<FontAwesomeIcon icon={faShoppingCart} />
+									<FontAwesomeIcon icon={faShoppingCart} color='white' style={{display: 'block', marginRight: '0px', width: '16px', height: '16px'}}/>
 								</IconButton>
 							</div>
 						</StyledItemToBuy>
