@@ -14,7 +14,14 @@ export type Fridge = {
 	unit: string,
 	stored_at: string
 }[]
-
+export type CurrentFridge ={
+	ingredient_api_id: string;
+	name: string;
+	amount: number;
+	unit: string;
+	stored_at: string;
+}
+[];
 export type RecipeSummary = {
 	id: number,
 	title: string,

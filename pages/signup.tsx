@@ -5,7 +5,10 @@ import Container from "../styles/container.styles";
 export default function SignIn() {
 	return (
 		<Container>
-			<Form btn='Sign up' signUp={true} />
+			<Form
+				btn='Sign up'
+				signUp={true}
+			/>
 		</Container>
 	);
 }

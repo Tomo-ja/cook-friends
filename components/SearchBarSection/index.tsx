@@ -15,18 +15,22 @@ const SearchSection = () => {
 
 
 	const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
-		spoonacularApiAxios.get('/food/ingredients/autocomplete', { 
-			params: {
-				number: 10,
-				query: e.currentTarget.value,
-			}
-		}).then(data => {
-			const words: {id: number, name: string}[] = data.data
-			setPrediction(words)
-		}).catch(error => {
-			console.log(error)
-		})
-	}
+		spoonacularApiAxios
+			.get("/food/ingredients/autocomplete", {
+				params: {
+					number: 10,
+					query: e.currentTarget.value,
+					metaInformation: true,
+				},
+			})
+			.then((data) => {
+				const words: { id: number; name: string }[] = data.data;
+				setPrediction(words);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	// FIXME: recreate this function to search any keyword or multiple keywords
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

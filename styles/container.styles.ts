@@ -47,6 +47,7 @@ const Container = styled.div`
         margin: 0;
         background-color: white;
         box-shadow: -11px 1px 12px -4px rgba(0,0,0,0.75);
+        z-index: 2;
       }
   }
 
