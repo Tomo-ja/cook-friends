@@ -18,6 +18,7 @@ import { spoonacularApiAxios } from "../../constants/axiosBase";
 import { amountContext } from "../../useContext/useAmount";
 import { shoppingContext } from "../../useContext/useShoppingList";
 
+// TODO: need to be refactored
 
 interface props {
 	btn: string;

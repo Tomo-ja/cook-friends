@@ -15,7 +15,6 @@ import { amountContext } from "../../useContext/useAmount";
 
 
 
-// FIXME: if you want to pass any additional props, you can pass but optional like example?: number
 type Props = {
 	fridge: Fridge;
 	useAsFilter: boolean;
@@ -27,7 +26,6 @@ type Props = {
 	
 };
 
-// TODO: for atsu, you will want to create new function here to update database and may want to pass it as props to Amount component
 
 const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients, urlQuery, userId }: Props) => {
 
@@ -70,6 +68,7 @@ const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients, urlQuer
 			console.log("YABAI");
 		}
 	};
+
 	const handleClickFilter = (idx: number) => {
 		if (useAsFilter) {
 			const isFilterOut = selectedAsFilter[idx];
@@ -109,6 +108,8 @@ const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients, urlQuer
 			return init;
 		});
 	}, [urlQuery]);
+
+
 	return (
 		<div>
 			{context?.changedAmountList.map((item, idx) => (
