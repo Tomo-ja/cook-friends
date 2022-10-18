@@ -1,6 +1,6 @@
-import { NextPageContext } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType, NextPageContext } from "next";
 import { useContext, useEffect, useState } from "react";
-import { parseCookies, } from "nookies";
+import * as cookie from 'cookie'
 
 import Form from "../components/Form/Form";
 import FridgeSection from "../components/FridgeSection";
@@ -12,81 +12,79 @@ import StyledSubContent from "../styles/subContent.styles";
 
 import appAxios from "../constants/axiosBase";
 import { stringToDate } from "../helpers";
-import ContextAmount, { amountContext } from "../useContext/useAmount";
+import { Fridge, User } from "../helpers/typesLibrary";
 
-export default function FridgeList(props: any) {
-	const [fridge, setFridge] = useState<any>([]);
-	const [id, setId] = useState<string>("")
-	const context = useContext(amountContext);
+type Props = {
+	user: User,
+	fridge: Fridge
+}
+
+const FridgeList = ({ user, fridge }: Props) => {
+
+	const [displayedFridge, setDisplayedFridge] = useState(fridge)
 	const [switchModal, setSwitchModal] = useState<boolean>(false);
-
-
-	useEffect(() => {
-		const fetch = async () => {
-			await appAxios
-				.post("api/fridge/show", { user_id: props.Id.id })
-				.then((res) => {
-					const tempArr: {
-						ingredient_api_id: number;
-						name: string;
-						amount: number;
-						stored_at: string;
-					}[] = [];
-					Object.values(res.data).forEach((value: any) => {
-						tempArr.push({
-							ingredient_api_id: value.ingredient_api_id,
-							name: value.name,
-							amount: value.amount,
-							stored_at: stringToDate(value.stored_at).toString(),
-						});
-					});
-					setFridge(tempArr);
-				});
-		};
-		fetch();
-		setId(props.Id.id);
-	}, [context?.changedAmountList]);
 
 	const handleSwitch = () => {
 		setSwitchModal(!switchModal);
 	}
 
 	return (
-		<ContextAmount>
-			<StyledContainer>
-				<StyledSubContent className={switchModal ? "open" : ""}>
-					<Form
-						btn='fridge'
-						signUp={false}
-						userId={id}
-						modal={switchModal}
-						setModal={setSwitchModal}
-					/>
-				</StyledSubContent>
-				<StyledMainContent>
-					<FridgeSection
-						fridge={fridge}
-						useAsFilter={false}
-						userId={id}
-					/>
-					<FontAwesomeButton
-						handleClick={handleSwitch}
-						target={null}
-						iconKind={IconKind.Plus}
-						displayOnlyMobile={true}
-					/>
-				</StyledMainContent>
-			</StyledContainer>
-		</ContextAmount>
+		<StyledContainer>
+			<StyledSubContent className={switchModal ? "open" : ""}>
+				<Form
+					btn='fridge'
+					signUp={false}
+					userId={user.id}
+					modal={switchModal}
+					setModal={setSwitchModal}
+				/>
+			</StyledSubContent>
+			<StyledMainContent>
+				<FridgeSection
+					fridge={displayedFridge}
+					useAsFilter={false}
+					userId={user.id}
+				/>
+				<FontAwesomeButton
+					handleClick={handleSwitch}
+					target={null}
+					iconKind={IconKind.Plus}
+					displayOnlyMobile={true}
+				/>
+			</StyledMainContent>
+		</StyledContainer>
 	);
 }
-export async function getServerSideProps(ctx?: NextPageContext) {
-	const cookie = parseCookies(ctx);
-	const cookieId = JSON.parse(cookie.user);
-	return {
+
+export default FridgeList
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	const cookieData = cookie.parse(req.headers.cookie!)
+	const user: User = JSON.parse(cookieData.user)
+	const fridge: Fridge = []
+
+	const fridgeData = await appAxios.post('api/fridge/show', {
+		user_id: user.id
+	})
+	Object.values(fridgeData.data).forEach((value: any) => {
+		fridge.push(
+			{
+				ingredient_api_id: value.ingredient_api_id,
+				name: value.name,
+				amount: value.amount,
+				unit: value.unit,
+				stored_at: stringToDate(value.stored_at).toString()
+			}
+		)
+	})
+
+	return { 
 		props: {
-			Id: cookieId || null,
-		},
-	};
+			user,
+			fridge
+		}
+	}
 }
+
+
 

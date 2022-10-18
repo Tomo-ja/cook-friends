@@ -17,11 +17,11 @@ export type Ingredient = {
 }
 
 export type ItemOnList = {
+	ingredient_api_id: string;
+	name: string;
 	amount: number;
 	created_at: Timestamp;
-	ingredient_api_id: string;
 	memo: string;
-	name: string;
 	_id: string;
 }
 
