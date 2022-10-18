@@ -1,24 +1,22 @@
-import Input from "../Input/input.styles";
-import Button from "../Button/button.styles";
-import FormStyled from "./form.styles";
-import appAxios from "../../constants/axiosBase";
 import { useContext, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies, setCookie } from "nookies";
+
 import Link from "next/link";
-import SearchSection from "../SearchBarSection/index";
-import SearchBar from "../SearchBarSection/searchBar.styles";
-import SuggestBox from "../SearchBarSection/suggestBox.styles";
-import SearchBarSection from "../SearchBarSection/searchBarSection.styled";
+
+import FontAwesomeButton, { IconKind } from "../FontAwesomeButton";
+
+import StyledInput from "../Input/input.styles";
+import StyledButton from "../Button/button.styles";
+import StyledForm from "./form.styles";
+import StyledSearchBar from "../SearchBarSection/searchBar.styles";
+import StyledSearchBarSection from "../SearchBarSection/searchBarSection.styled";
+import StyledSuggestBox from "../SearchBarSection/suggestBox.styles";
+
+import appAxios from "../../constants/axiosBase";
 import { spoonacularApiAxios } from "../../constants/axiosBase";
-import { Timestamp } from "mongodb";
 import { amountContext } from "../../useContext/useAmount";
 import { shoppingContext } from "../../useContext/useShoppingList";
-import { GetServerSideProps } from "next/types";
-import { NextPageContext } from "next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
-import StyledSwitch from "../switch/siwtch";
 
 
 interface props {
@@ -40,16 +38,9 @@ interface firdge {
 	ingredient_api_id: number;
 	name: string;
 }
-// export async function getServerSideProps(ctx:any) {
-// 	const cookies = nookies.get(ctx);
-// 	nookies.set(ctx, "accessToken", '1', {
-// 		maxAge: 30 * 24 * 60 * 60,
-// 		path: "/login",
-// 	});
 
-// 	return { cookies };
 
-export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
+const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 	const router = useRouter();
 	const firstInputRef = useRef<HTMLInputElement>(null!);
 	const secondInputRef = useRef<HTMLInputElement>(null!);
@@ -70,10 +61,7 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 	const [switchModal, setSwitchModal] = useState<boolean>(false);
 	const context = useContext(amountContext);
 	const contextShoppping = useContext(shoppingContext);
-	// const cookies = parseCookies();
-	// console.log("front",userId);
 
-	// console.log({ cookies });
 	const connectApi = (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault();
 		if (btn === "Sign up") {
@@ -147,14 +135,12 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 				stored_at: fourthInputRef.current?.value,
 				amount: firstInputRef.current?.value,
 			};
-			// console.log(Ref);
 
 			appAxios.post("api/fridge/add", Ref).then((res) => {
 				console.log("add", res);
 				inputRef.current!.value = "";
 				const arr = Object.values(res.data);
 				context?.updateList(arr);
-				// fridgeAction(fridge);
 			});
 		} else if (btn === "shopping") {
 			const Ref = {
@@ -214,10 +200,16 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 		setModal?.(!modal);
 	};
 	return (
-		<FormStyled>
-			<StyledSwitch>
-				<FontAwesomeIcon icon={faSquareXmark} onClick={handleSwitch} />
-			</StyledSwitch>
+		<StyledForm>
+			<FontAwesomeButton
+				handleClick={handleSwitch}
+				target={null}
+				iconKind={IconKind.XMark}
+				displayOnlyMobile={true}
+				isButtonSquare={true}
+				iconColor='white'
+				bcColor="black"
+			/>
 			{!err.account && <p className='ErrMesg'>This Email has an account</p>}
 			{!err.password && <p className='ErrMesg'>Password is not matched</p>}
 			{!err.validation && (
@@ -230,15 +222,15 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 			{!err.loginPsw && <p className='ErrMesg'>Password is not coorect</p>}
 			{btn === "fridge" && (
 				<>
-					<SearchBarSection>
-						<SearchBar
+					<StyledSearchBarSection>
+						<StyledSearchBar
 							placeholder='Search by Ingredients'
 							onChange={handleOnChange}
 							onKeyDown={handleKeyDown}
 							ref={inputRef}
 						/>
 						{prediction.length !== 0 && (
-							<SuggestBox>
+							<StyledSuggestBox>
 								{prediction.map((word) => (
 									<li
 										key={word.id}
@@ -247,16 +239,16 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 										{word.name}
 									</li>
 								))}
-							</SuggestBox>
+							</StyledSuggestBox>
 						)}
-					</SearchBarSection>
+					</StyledSearchBarSection>
 					<div>
 						<label htmlFor='Amount'>Amount</label>
-						<Input id='Amount' type='number' ref={firstInputRef} />
+						<StyledInput id='Amount' type='number' ref={firstInputRef} />
 					</div>
 					<div>
 						<label htmlFor='cPassword'>Date</label>
-						<Input id='cPassword' type='date' ref={fourthInputRef} />
+						<StyledInput id='cPassword' type='date' ref={fourthInputRef} />
 					</div>
 				</>
 			)}
@@ -264,11 +256,11 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 				<>
 					<div>
 						<label htmlFor='Name'>Name</label>
-						<Input id='Name' type={"text"} ref={firstInputRef} />
+						<StyledInput id='Name' type={"text"} ref={firstInputRef} />
 					</div>
 					<div>
 						<label htmlFor='Email'>Email</label>
-						<Input
+						<StyledInput
 							id='Email'
 							type={btn === "fridge" ? "text" : "email"}
 							ref={secondInputRef}
@@ -276,7 +268,7 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 					</div>
 					<div>
 						<label htmlFor='Password'>Password</label>
-						<Input
+						<StyledInput
 							id='Password'
 							type={btn === "fridge" ? "text" : "password"}
 							ref={thiredInputRef}
@@ -284,7 +276,7 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 					</div>
 					<div>
 						<label htmlFor='cPassword'>Password</label>
-						<Input id='cPassword' type='password' ref={fourthInputRef} />
+						<StyledInput id='cPassword' type='password' ref={fourthInputRef} />
 					</div>
 				</>
 			)}
@@ -292,25 +284,25 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 				<>
 					<div>
 						<label htmlFor='Email'>Email</label>
-						<Input id='Email' type='email' ref={secondInputRef} />
+						<StyledInput id='Email' type='email' ref={secondInputRef} />
 					</div>
 					<div>
 						<label htmlFor='Password'>Password</label>
-						<Input id='Password' type='password' ref={thiredInputRef} />
+						<StyledInput id='Password' type='password' ref={thiredInputRef} />
 					</div>
 				</>
 			)}
 			{btn === "shopping" && (
 				<>
-					<SearchBarSection>
-						<SearchBar
+					<StyledSearchBarSection>
+						<StyledSearchBar
 							placeholder='Search by Ingredients'
 							onChange={handleOnChange}
 							onKeyDown={handleKeyDown}
 							ref={inputRef}
 						/>
 						{prediction.length !== 0 && (
-							<SuggestBox>
+							<StyledSuggestBox>
 								{prediction.map((word) => (
 									<li
 										key={word.id}
@@ -319,27 +311,27 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 										{word.name}
 									</li>
 								))}
-							</SuggestBox>
+							</StyledSuggestBox>
 						)}
-					</SearchBarSection>
+					</StyledSearchBarSection>
 					<div>
 						<label htmlFor='Password'>Amount</label>
-						<Input id='Amount' type='text' ref={thiredInputRef} />
+						<StyledInput id='Amount' type='text' ref={thiredInputRef} />
 					</div>
 					<div>
 						<label htmlFor='Password'>Memo</label>
-						<Input id='memo' type='text' ref={fourthInputRef} />
+						<StyledInput id='memo' type='text' ref={fourthInputRef} />
 					</div>
 				</>
 			)}
-			<Button
+			<StyledButton
 				width='300px'
 				fontSize='14px'
 				fontThin={true}
 				onClick={connectApi}
 			>
 				{btn}
-			</Button>
+			</StyledButton>
 			{btn === "Login" && (
 				<div>
 					{" "}
@@ -349,11 +341,8 @@ export const Form = ({ btn, signUp, userId, modal, setModal }: props) => {
 					</Link>{" "}
 				</div>
 			)}
-		</FormStyled>
+		</StyledForm>
 	);
 };
 
-function setModal(arg0: boolean) {
-	throw new Error("Function not implemented.");
-}
-
+export default Form

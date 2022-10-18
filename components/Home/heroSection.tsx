@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -5,20 +7,23 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-import StyledSlideItem, {classNames} from "./heroSection.styles";
+import StyledSlideItem, { classNames } from "./heroSection.styles";
 import StyledButton from '../Button/button.styles';
 
-
-
 import { RecipeInfo } from "../../helpers/typesLibrary";
-
-
 
 type Props = {
 	randomRecipes: RecipeInfo[]
 }
 
 const HeroSection = ({ randomRecipes }: Props) => {
+
+	const router = useRouter()
+
+	const handleOnRecipeClick = (recipeId: number) => {
+    router.push(`/recipe/${recipeId}`)
+	}
+
 	return (
 		<section>
 			<Swiper
@@ -39,7 +44,7 @@ const HeroSection = ({ randomRecipes }: Props) => {
 				<SwiperSlide key={recipe.id}>
 					<StyledSlideItem backgroundImageUrl={recipe.image}>
 						<h2 className={classNames.textOnImage}>{recipe.title}</h2>
-						<StyledButton width='30%'>See Detail</StyledButton>
+						<StyledButton width='30%' onClick={() => handleOnRecipeClick(recipe.id)}>See Detail</StyledButton>
 					</StyledSlideItem>
 				</SwiperSlide>
 			))}

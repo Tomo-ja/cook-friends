@@ -25,17 +25,21 @@ const pickIcon = (kind: IconKind): IconDefinition => {
 }
 
 type Props = {
-	handleClick: (target: any) => void,
+	handleClick: (target: any, target2?: any) => void,
 	target: any,
+	target2?: any
 	iconKind: IconKind,
+	iconColor?: string,
 	isButtonSquare?: boolean,
 	bcColor?: string,
-	width?: string
+	width?: string,
+	displayOnlyMobile?: boolean
+
 }
 
 
 
-const FontAwesomeButton = ({ handleClick, target, iconKind, isButtonSquare, bcColor, width }: Props) => {
+const FontAwesomeButton = ({ handleClick, target, target2, iconKind, isButtonSquare,iconColor, bcColor, width, displayOnlyMobile }: Props) => {
 	
 	const icon = pickIcon(iconKind)
 
@@ -44,11 +48,12 @@ const FontAwesomeButton = ({ handleClick, target, iconKind, isButtonSquare, bcCo
 			width={width && width}
 			backgroundColor={bcColor ? bcColor : '#000'}
 			square={isButtonSquare}
-			onClick={()=> handleClick(target)}
+			displayOnlyMobile={displayOnlyMobile}
+			onClick={()=> handleClick(target, target2)}
 		>
 			<FontAwesomeIcon
 				icon={icon}
-				color='white'
+				color={iconColor ? iconColor : 'white'}
 				style={{display: 'block', width: '16px', height: '16px'}}
 			/>
 		</StyledIconButton>

@@ -8,16 +8,13 @@ import { User } from "../../helpers/typesLibrary";
 type Props = {
 	handleReduceModalOpen: () => void,
 	user: User | null
-
 }
-
 
 const FeedbackSection = ({ handleReduceModalOpen, user  }: Props) => {
 
 	const router = useRouter()
 
 	const handleClickBackToHome = () => {
-		// FIXME: in this way, nothing show up when user back to this page by back button
 		router.push('/')
 	}
 

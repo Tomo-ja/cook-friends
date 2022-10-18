@@ -1,16 +1,15 @@
 import { NextPage } from 'next'
+import Head from 'next/head';
 import Image from 'next/image'
 
 import { useState } from 'react';
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 
 import IngredientSection from '../../components/Recipe/ingredientSection';
 import HowToSection from '../../components/Recipe/howtoSection';
 import AddListModal from '../../components/Recipe/addListModal';
 import ReduceFridgeModal from '../../components/Recipe/reduceFridgeModal';
 import FeedbackSection from '../../components/Recipe/feedbackSection';
+import FontAwesomeButton, { IconKind } from '../../components/FontAwesomeButton';
 
 import StyledRecipe, {RecipeContainer} from '../../components/Recipe/recipe.styles'
 import StyledImage from '../../styles/image.styles'
@@ -19,7 +18,6 @@ import StyledTagSection from '../../components/Recipe/tagSection.styles';
 import parseCookies, { stringToDate } from '../../helpers/index'
 import { User, RecipeInfo, Fridge, Ingredient } from '../../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../../constants/axiosBase'
-import Head from 'next/head';
 
 
 type Props = {
@@ -79,7 +77,13 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 
 				<h2>{recipeInfo.title}</h2>
 				<StyledTagSection>
-					<FontAwesomeIcon icon={faHourglassHalf} style={{display: 'block', marginRight: '8px', width: '16px', height: '16px'}}/>
+					<FontAwesomeButton 
+						handleClick={()=>{}}
+						target={null}
+						iconKind={IconKind.TimeGlass}
+						iconColor='black'
+						bcColor='white'
+					/>
 					<p>{recipeInfo.readyInMinutes} min</p>
 				</StyledTagSection>
 

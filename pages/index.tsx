@@ -3,7 +3,7 @@ import Head from 'next/head'
 
 import { useState ,useEffect } from 'react'
 
-import parseCookies, { stringToDate, popupKeywords, defineExpireDate } from '../helpers'
+import parseCookies, { popupKeywords, defineExpireDate } from '../helpers'
 
 import SearchKeywordSection from '../components/Home/SearchKeywordSection'
 import HeroSection from '../components/Home/heroSection'
@@ -16,7 +16,7 @@ import StyledHome from '../components/Home/home.styles'
 
 
 
-import { Fridge, User, RandomRecipes, RecipeInfo } from '../helpers/typesLibrary'
+import { User, RandomRecipes, RecipeInfo } from '../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../constants/axiosBase'
 
 
@@ -28,8 +28,6 @@ type Props = {
 }
 
 const randomRecipeTags = ['main course', 'side dish', 'appetizer']
-// const randomRecipeTags = ['main course']
-
 
 const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes }: Props) => {
 

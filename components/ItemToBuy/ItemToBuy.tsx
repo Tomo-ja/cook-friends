@@ -1,28 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import IconButton from "../FontAwesomeButton/iconButton.styles";
-import StyledItemToBuy from "../ItemToBuy/itemToBuy.styles";
-import appAxios from "../../constants/axiosBase";
-import { Timestamp } from "mongodb";
-import { shoppingContext } from "../../useContext/useShoppingList";
-interface list {
-	amount: number;
-	created_at: Timestamp;
-	ingredient_api_id: string;
-	memo: string;
-	name: string;
-	_id: string;
-}
-type itemTobuy = {
-	[x: string]: any;
-	list: list[];
-	userId: string;
-};
+import React, { useContext, useEffect } from "react";
 
-const ItemToBuy = ({ list, userId}: itemTobuy) => {
-	// console.log(userId);
+import FontAwesomeButton, { IconKind } from "../FontAwesomeButton";
+
+import StyledItemToBuy from "../ItemToBuy/itemToBuy.styles";
+
+import { ItemOnList } from "../../helpers/typesLibrary";
+import appAxios from "../../constants/axiosBase";
+import { shoppingContext } from "../../useContext/useShoppingList";
+
+
+type Props = {
+	list: ItemOnList[];
+	userId: string;
+}
+
+const ItemToBuy = ({ list, userId }: Props) => {
 	
 	const context = useContext(shoppingContext);
 	useEffect(() => {
@@ -40,7 +32,7 @@ const ItemToBuy = ({ list, userId}: itemTobuy) => {
 				console.log(res.data);
 			});
 	};
-	const handlefridge = async (e: list) => {
+	const handleFridge = async (e: ItemOnList) => {
 
 		const Ref = {
 			user_id: userId,
@@ -64,7 +56,7 @@ const ItemToBuy = ({ list, userId}: itemTobuy) => {
 	return (
 		<>
 			<div style={{ display: "Grid", gridTemplateColumns: "1fr 1fr" }}>
-				{context?.shoppingList.map((item: list, index: number) => {
+				{context?.shoppingList.map((item: ItemOnList, index: number) => {
 					return (
 						<StyledItemToBuy key={index}>
 							<div className='NameAmount'>
@@ -73,18 +65,16 @@ const ItemToBuy = ({ list, userId}: itemTobuy) => {
 							</div>
 							<p className='txt'>{item.memo}</p>
 							<div className='btnContainer'>
-								<IconButton
-									backgroundColor='#000'
-									onClick={() => handleDelete(item.ingredient_api_id)}
-								>
-									<FontAwesomeIcon icon={faTrash} color='white' style={{display: 'block', marginRight: '0px', width: '16px', height: '16px'}}/>
-								</IconButton>
-								<IconButton
-									backgroundColor='#000'
-									onClick={() => handlefridge(item)}
-								>
-									<FontAwesomeIcon icon={faShoppingCart} color='white' style={{display: 'block', marginRight: '0px', width: '16px', height: '16px'}}/>
-								</IconButton>
+								<FontAwesomeButton 
+									handleClick={handleDelete}
+									target={item.ingredient_api_id}
+									iconKind={IconKind.Trash}
+								/>
+								<FontAwesomeButton 
+									handleClick={handleFridge}
+									target={item}
+									iconKind={IconKind.Cart}
+								/>
 							</div>
 						</StyledItemToBuy>
 					);

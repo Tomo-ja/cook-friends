@@ -1,10 +1,11 @@
 import { useState } from "react"
+
 import Input from "./input"
 
 import StyledModal, {classNames} from "./modal.styles"
 import StyledButton from './button.styles'
-import { Ingredient, User } from "../../helpers/typesLibrary"
 
+import { Ingredient, User } from "../../helpers/typesLibrary"
 import  appAxios  from '../../constants/axiosBase'
 
 type Props = {

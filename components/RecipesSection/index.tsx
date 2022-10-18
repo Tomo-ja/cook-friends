@@ -4,6 +4,8 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
+import FontAwesomeButton, { IconKind } from "../FontAwesomeButton";
+
 import StyledRecipesSection from "./recipesSection.styles";
 import StyledRecipeItem from "./item.styles";
 import StyledImage from "../../styles/image.styles";
@@ -51,11 +53,11 @@ const RecipeSection = ({ recipesSearchResult, user, handleClickRecipe }: Props) 
 			const updatedUser = await response.data
 			setCookie('user', JSON.stringify(updatedUser.user), {
 				path: '/',
-				maxAge: 3600, // expires 1hr
+				maxAge: 3600, 
 				sameSite: true 
 			})
 		}catch(err){
-			console.error(err)
+			console.error('inside of updateDatabase', err)
 		}
 	}
 
@@ -77,12 +79,21 @@ const RecipeSection = ({ recipesSearchResult, user, handleClickRecipe }: Props) 
 		})
 	}
 
+	// TODO: replace FontAwesome button
 
 	return (
 		<StyledRecipesSection lessThan3={recipesSearchResult.results.length < 3}>
 			{recipesSearchResult.results.map((recipe, idx) => (
 				<StyledRecipeItem key={recipe.id}>
 					{user && 
+						// <FontAwesomeButton
+						// 	handleClick={handleFavButton}
+						// 	target={recipe.id}
+						// 	target2={idx}
+						// 	iconKind={IconKind.Star}
+						// 	bcColor={isFavRecipe[idx] ? 'white': '#c4c4c4'}
+						// 	iconColor={isFavRecipe[idx] ? '#ffaa4e': 'white'}
+						// />
 						<IconButton backgroundColor={isFavRecipe[idx] ? 'white': '#c4c4c4'} onClick={() => handleFavButton(recipe.id, idx)}>
 							<FontAwesomeIcon icon={faStar} color={isFavRecipe[idx] ? '#ffaa4e': 'white'} style={{width: '16px', height: '16px'}}/>
 						</IconButton>

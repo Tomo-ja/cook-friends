@@ -3,9 +3,6 @@ import FontAwesomeButton, { IconKind } from "../FontAwesomeButton"
 import StyledIngredientSection, {classNames} from "./section.styles"
 import { Fridge, Ingredient } from "../../helpers/typesLibrary"
 
-
-// TODO: pass fridge data and recipes ingredients data to display
-
 type Props = {
 	ingredients: Ingredient[],
 	fridge: Fridge | null,

@@ -3,14 +3,22 @@ import styled from 'styled-components'
 interface IIconButton {
 	backgroundColor: string,
 	width?: string,
-	square?: boolean
+	square?: boolean,
+	displayOnlyMobile?: boolean
 }
 
 const IconButton = styled.button<IIconButton>`
 	all: unset;
   width: ${props => props.width ? props.width : '30px'};
 	aspect-ratio: 1;
-	display: flex;
+	display: ${props => props.displayOnlyMobile ? 'none': 'flex'};
+
+	@media only screen and (max-width: 768px) {
+		display: flex;
+		margin-left: ${props => props.displayOnlyMobile ? 'calc(100% - 30px)': 0};
+    margin-block: ${props => props.displayOnlyMobile ? '5%': 0};
+	}
+
 	justify-content: center;
 	align-items: center;
 	border-radius: ${props => props.square ? '0' : '50%'};
@@ -45,6 +53,9 @@ const IconButton = styled.button<IIconButton>`
 		opacity: 1;
 		transition: 0s;
 	}
+
+
+
 `
 
 export default IconButton

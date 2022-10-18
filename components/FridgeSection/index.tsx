@@ -1,15 +1,16 @@
 import { Dispatch, SetStateAction, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
+import { ParsedUrlQuery } from "querystring";
 
 import Amount from "./amount";
-import ItemInFridge, { classNames } from "./itemInFridge.styles";
+
+import StyledItemInFridge, { classNames } from "./itemInFridge.styles";
 import StyledButton from "../Button/button.styles";
 import StyledLink from "../../styles/link.styles";
-import { defineExpireDate } from "../../helpers";
-import { Fridge, CurrentFridge } from "../../helpers/typesLibrary";
-import { ParsedUrlQuery } from "querystring";
-import appAxios from "../../constants/axiosBase";
 
+import { defineExpireDate } from "../../helpers";
+import { Fridge } from "../../helpers/typesLibrary";
+import appAxios from "../../constants/axiosBase";
 import { amountContext } from "../../useContext/useAmount";
 
 
@@ -25,30 +26,19 @@ type Props = {
 	userId?: string;
 	
 };
-// interface CurrentFridge  {
-// 	ingredient_api_id: string,
-// 	name: string,
-// 	amount: number,
-// 	unit: string,
-// 	stored_at: string
-// }[]
 
 // TODO: for atsu, you will want to create new function here to update database and may want to pass it as props to Amount component
 
-const FridgeSection = ({
-	fridge,
-	useAsFilter,
-	setMustIncludeIngredients,
-	urlQuery,
-	userId ,
-}: Props) => {
+const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients, urlQuery, userId }: Props) => {
+
 	const context = useContext(amountContext);
+
 	useEffect(() => {
 		context?.updateList(fridge);
-		// fridgeAction?.(!fridgeDel)
 	}, [fridge]);
 
 	const router = useRouter();
+
 	const [selectedAsFilter, setSelectedAsFilter] = useState<boolean[]>(() => {
 		const init: boolean[] = [];
 		for (let i = 0; i < fridge.length; i++) {
@@ -65,7 +55,7 @@ const FridgeSection = ({
 		const currentFridgeItem = context?.changedAmountList.filter(
 			(item, index) => e !== index
 		);
-		// console.log("currentFridgeItem", currentFridgeItem);
+		
 		if (deletedFridgeItem) {
 			await appAxios
 				.post("api/fridge/delete", {
@@ -122,7 +112,7 @@ const FridgeSection = ({
 	return (
 		<div>
 			{context?.changedAmountList.map((item, idx) => (
-				<ItemInFridge
+				<StyledItemInFridge
 					useAsFilter={useAsFilter}
 					key={item.ingredient_api_id}
 					className={selectedAsFilter[idx] ? classNames.selected : ""}
@@ -179,7 +169,7 @@ const FridgeSection = ({
 							delete
 						</StyledButton>
 					</div>
-				</ItemInFridge>
+				</StyledItemInFridge>
 			))}
 		</div>
 	);

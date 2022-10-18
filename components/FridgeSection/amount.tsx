@@ -1,7 +1,6 @@
 import { classNames } from "./itemInFridge.styles";
 import { useContext, useRef, useState } from "react";
 import appAxios from "../../constants/axiosBase";
-import {CurrentFridge} from "../../helpers/typesLibrary"
 import { amountContext } from "../../useContext/useAmount";
 
 type Props = {

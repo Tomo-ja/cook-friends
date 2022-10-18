@@ -1,21 +1,18 @@
-import { useContext, useEffect, useState } from "react";
-import { Form } from "../components/Form/Form";
-import FridgeSection from "../components/Fridge";
-import appAxios from "../constants/axiosBase";
-import Container from "../styles/container.styles";
-import MainContent from "../styles/mainContent.styles";
-import SubContent from "../styles/subContent.styles";
-import { stringToDate } from "../helpers";
-import { count, log } from "console";
-import { GetServerSideProps } from "next/types";
-import { Fridge, CurrentFridge } from "../helpers/typesLibrary";
-import Amount, { amountContext } from "../useContext/useAmount";
-import ContextAmount from "../useContext/useAmount";
-import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
 import { NextPageContext } from "next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import StyledSwitch from "../components/switch/siwtch";
+import { useContext, useEffect, useState } from "react";
+import { parseCookies, } from "nookies";
+
+import Form from "../components/Form/Form";
+import FridgeSection from "../components/FridgeSection";
+import FontAwesomeButton, { IconKind } from "../components/FontAwesomeButton";
+
+import StyledContainer from "../styles/container.styles";
+import StyledMainContent from "../styles/mainContent.styles";
+import StyledSubContent from "../styles/subContent.styles";
+
+import appAxios from "../constants/axiosBase";
+import { stringToDate } from "../helpers";
+import ContextAmount, { amountContext } from "../useContext/useAmount";
 
 export default function FridgeList(props: any) {
 	const [fridge, setFridge] = useState<any>([]);
@@ -23,9 +20,6 @@ export default function FridgeList(props: any) {
 	const context = useContext(amountContext);
 	const [switchModal, setSwitchModal] = useState<boolean>(false);
 
-	// useEffect(() => {
-	// 	setTest(props.fridges);
-	// },[])
 
 	useEffect(() => {
 		const fetch = async () => {
@@ -52,13 +46,15 @@ export default function FridgeList(props: any) {
 		fetch();
 		setId(props.Id.id);
 	}, [context?.changedAmountList]);
+
 	const handleSwitch = () => {
 		setSwitchModal(!switchModal);
 	}
+
 	return (
 		<ContextAmount>
-			<Container>
-				<SubContent className={switchModal ? "open" : ""}>
+			<StyledContainer>
+				<StyledSubContent className={switchModal ? "open" : ""}>
 					<Form
 						btn='fridge'
 						signUp={false}
@@ -66,18 +62,21 @@ export default function FridgeList(props: any) {
 						modal={switchModal}
 						setModal={setSwitchModal}
 					/>
-				</SubContent>
-				<MainContent>
+				</StyledSubContent>
+				<StyledMainContent>
 					<FridgeSection
 						fridge={fridge}
 						useAsFilter={false}
 						userId={id}
 					/>
-					<StyledSwitch>
-						<FontAwesomeIcon icon={faPlus} onClick={handleSwitch} />
-					</StyledSwitch>
-				</MainContent>
-			</Container>
+					<FontAwesomeButton
+						handleClick={handleSwitch}
+						target={null}
+						iconKind={IconKind.Plus}
+						displayOnlyMobile={true}
+					/>
+				</StyledMainContent>
+			</StyledContainer>
 		</ContextAmount>
 	);
 }
