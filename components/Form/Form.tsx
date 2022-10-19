@@ -43,7 +43,7 @@ interface firdge {
 }
 
 
-const Form = ({ btn, signUp, userId, modal, setModal, setTrigger }: props) => {
+const Form = ({ btn, signUp, userId, setTrigger }: props) => {
 	const router = useRouter();
 	const firstInputRef = useRef<HTMLInputElement>(null!);
 	const secondInputRef = useRef<HTMLInputElement>(null!);
@@ -194,24 +194,9 @@ const Form = ({ btn, signUp, userId, modal, setModal, setTrigger }: props) => {
 			name: ingredient,
 		});
 	};
-	const handleSwitch = () => {
-		setSwitchModal(!switchModal);
-		console.log("switch clicked");
-		console.log("clicked", modal);
-		
-		setModal?.(!modal);
-	};
 	return (
 		<StyledForm>
-			<FontAwesomeButton
-				handleClick={handleSwitch}
-				target={null}
-				iconKind={IconKind.XMark}
-				displayOnlyMobile={true}
-				isButtonSquare={true}
-				iconColor='white'
-				bcColor="black"
-			/>
+
 			{!err.account && <p className='ErrMesg'>This Email has an account</p>}
 			{!err.password && <p className='ErrMesg'>Password is not matched</p>}
 			{!err.validation && (

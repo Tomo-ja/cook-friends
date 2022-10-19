@@ -13,6 +13,7 @@ import StyledSubContent from "../styles/subContent.styles";
 import appAxios from "../constants/axiosBase";
 import { stringToDate } from "../helpers";
 import { Fridge, User } from "../helpers/typesLibrary";
+import FridgeForm from "../components/Form/fridge";
 
 type Props = {
 	user: User,
@@ -56,14 +57,19 @@ const FridgeList = ({ user }: Props) => {
 	return (
 		<StyledContainer>
 			<StyledSubContent className={switchModal ? "open" : ""}>
-				<Form
-					btn='fridge'
-					signUp={false}
+				<FontAwesomeButton
+					handleClick={handleSwitch}
+					target={null}
+					iconKind={IconKind.XMark}
+					displayOnlyMobile={true}
+					isButtonSquare={true}
+					iconColor='white'
+					bcColor='black'
+				/>
+				<FridgeForm btn='fridge'
 					userId={user.id}
 					modal={switchModal}
-					setModal={setSwitchModal}
-					setTrigger={setFridgeUpdateTrigger}
-				/>
+					setTrigger={setFridgeUpdateTrigger}/>
 			</StyledSubContent>
 			<StyledMainContent>
 				<FridgeSection

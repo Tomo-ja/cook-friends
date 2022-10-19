@@ -1,6 +1,7 @@
 import React from "react";
 
 import Form from "../components/Form/Form";
+import LoginForm from "../components/Form/login";
 
 import StyledContainer from "../styles/container.styles";
 
@@ -8,7 +9,7 @@ const Login = () => {
 	return (
 		<div>
 			<StyledContainer>
-				<Form btn='Login' signUp={false} />
+				<LoginForm btn={'Login'}/>
 			</StyledContainer>
 		</div>
 	);

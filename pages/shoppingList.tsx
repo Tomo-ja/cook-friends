@@ -14,6 +14,7 @@ import StyledSubContent from "../styles/subContent.styles";
 import appAxios from "../constants/axiosBase";
 import { ItemOnList } from "../helpers/typesLibrary";
 import ContextShopping, { shoppingContext } from "../useContext/useShoppingList";
+import ShoopingForm from "../components/Form/shopping";
 
 
 export default function ShoppingList( props :any) {
@@ -43,13 +44,16 @@ export default function ShoppingList( props :any) {
 		<ContextShopping>
 			<StyledContainer>
 				<StyledSubContent className={switchModal ? "open" : ""}>
-					<Form
-						btn={"shopping"}
-						signUp={false}
-						userId={props.Id.id}
-						modal={switchModal}
-						setModal={setSwitchModal}
+					<FontAwesomeButton
+						handleClick={handleSwitch}
+						target={null}
+						iconKind={IconKind.XMark}
+						displayOnlyMobile={true}
+						isButtonSquare={true}
+						iconColor='white'
+						bcColor='black'
 					/>
+					<ShoopingForm btn={"shopping"} signUp={false} userId={props.Id.id} />
 				</StyledSubContent>
 				<StyledMainContent>
 					<ItemToBuy list={shoppingList} userId={props.Id.id} />
