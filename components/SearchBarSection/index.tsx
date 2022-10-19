@@ -3,10 +3,12 @@ import { useRouter } from "next/router";
 import { spoonacularApiAxios } from "../../constants/axiosBase";
 import SearchBarSection from "./searchBarSection.styled";
 import SearchBar from "./searchBar.styles";
-import SuggestBox from "./suggestBox.styles";
-
-
-const SearchSection = () => {
+import SuggestBox from "./suggestBox.styles"; 
+interface props {
+	list?:(value :any)=>void
+	userid?: string | undefined;
+}
+const SearchSection = ({ list, userid}:props) => {
 
 	const router = useRouter()
 	const inputRef = useRef<HTMLInputElement>(null)
@@ -42,14 +44,23 @@ const SearchSection = () => {
 		}
 	}
 
-	const handleSubmit = (ingredient: string) => {
-		setPrediction([])
-		inputRef.current!.value = ""
+	const handleSubmit = (ingredient: string, id: number) => {
+		setPrediction([]);
+		if (userid) {
+		inputRef.current!.value = ingredient;
+			return list?.({
+				user_id: userid,
+				ingredient_api_id: id,
+				name: ingredient,
+			});
+		}
+		inputRef.current!.value = "";
+
 		router.push({
-			pathname: '/explore',
-			query: {keyword: ingredient}
-		})
-	}
+			pathname: "/explore",
+			query: { keyword: ingredient },
+		});
+	};
 
 return(
 	<SearchBarSection>
@@ -64,7 +75,7 @@ return(
 			{prediction.map(word => (
 				<li 
 					key={word.id}
-					onClick={() => handleSubmit(word.name)}
+					onClick={() => handleSubmit(word.name, word.id)}
 				>{word.name}</li>
 			))}
 			</SuggestBox>
