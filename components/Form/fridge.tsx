@@ -7,6 +7,7 @@ import StyledForm from "./form.styles";
 import appAxios from "../../constants/axiosBase";
 import { spoonacularApiAxios } from "../../constants/axiosBase";
 import SearchBarSection from "../SearchBarSection/index";
+import { AlertInfo } from "../../helpers/typesLibrary";
 
 // TODO: need to be refactored
 
@@ -15,13 +16,15 @@ interface props {
 	userId?: string;
 	modal?: boolean;
 	setTrigger?: Dispatch<SetStateAction<number>>;
+	setAlert: Dispatch<SetStateAction<AlertInfo | null>>;
+
 }
 interface firdge {
 	user_id: string | undefined;
 	ingredient_api_id: number;
 	name: string;
 }
-const FridgeForm = ({ btn, userId, setTrigger }: props) => {
+const FridgeForm = ({ btn, userId, setTrigger, setAlert }: props) => {
 	const router = useRouter();
 	const firstInputRef = useRef<HTMLInputElement>(null!);
 	const secondInputRef = useRef<HTMLInputElement>(null!);
@@ -29,7 +32,7 @@ const FridgeForm = ({ btn, userId, setTrigger }: props) => {
 		[]
 	);
 	const [addFridge, setAddfridge] = useState<firdge>();
-	const connectApi = (e: React.MouseEvent<HTMLElement>) => {
+	const connectApi = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault();
 		const Ref = {
 			...addFridge,
@@ -37,10 +40,15 @@ const FridgeForm = ({ btn, userId, setTrigger }: props) => {
 			amount: firstInputRef.current?.value,
 		};
 
-		appAxios.post("api/fridge/add", Ref).then((res) => {
-			console.log("add", res);
-			setTrigger!((prev) => prev + 1);
-		});
+		try{
+			await appAxios.post("api/fridge/add", Ref).then((res) => {
+				console.log("add", res);
+				setTrigger!((prev) => prev + 1);
+			});
+			setAlert({isError: false, message: 'Successfully Add Item'})
+		} catch {
+			setAlert({isError: true, message: 'Failed Add Item'})
+		}
 	};
 	
 	return (

@@ -8,7 +8,7 @@ import StyledItemInFridge, {classNames} from "./itemInFridge.styles";
 import StyledLink from "../../styles/link.styles";
 
 import { defineExpireDate } from "../../helpers";
-import { Fridge } from "../../helpers/typesLibrary";
+import { AlertInfo, Fridge } from "../../helpers/typesLibrary";
 
 type Props = {
 	setTrigger?: Dispatch<SetStateAction<number>>,
@@ -16,7 +16,9 @@ type Props = {
 	fridge?: Fridge,
 	urlQuery?: ParsedUrlQuery,
 	setMustIncludeIngredients?: Dispatch<SetStateAction<string[]>>,
-	userId?: string
+	userId?: string,
+	setAlert?: Dispatch<SetStateAction<AlertInfo | null>>,
+
 }
 
 const initFilter = (length: number): boolean[] => {
@@ -28,7 +30,7 @@ const initFilter = (length: number): boolean[] => {
 }
 
 
-const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQuery, userId, setTrigger }: Props) => {
+const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQuery, userId, setTrigger, setAlert }: Props) => {
 
 	const router = useRouter()
 
@@ -113,6 +115,7 @@ const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQue
 									unit={item.unit} 
 									name={item.name}
 									setTrigger={setTrigger}
+									setAlert={setAlert}
 								/>
 							</>
 						}

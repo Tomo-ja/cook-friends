@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import Input from "./input"
 
 import StyledModal, {classNames} from "./modal.styles"
 import StyledButton from './button.styles'
-import { Ingredient, User } from "../../helpers/typesLibrary"
+import { AlertInfo, Ingredient, User } from "../../helpers/typesLibrary"
 
 import  appAxios  from '../../constants/axiosBase'
 
@@ -11,10 +11,12 @@ import  appAxios  from '../../constants/axiosBase'
 type Props = {
 	handleModalClose: (isAddList: boolean) => void,
 	reduceItems: Ingredient[],
-	user: User
+	user: User,
+	setAlert: Dispatch<SetStateAction<AlertInfo | null>>,
+
 }
 
-const ReduceFridgeModal = ({ handleModalClose, reduceItems, user }: Props) => {
+const ReduceFridgeModal = ({ handleModalClose, reduceItems, user, setAlert }: Props) => {
 
 	const init: number[] = []
 	reduceItems.forEach(item => {
@@ -34,8 +36,9 @@ const ReduceFridgeModal = ({ handleModalClose, reduceItems, user }: Props) => {
 				})
 			}))
 			handleModalClose(false)
+			setAlert({ isError: false, message: 'Successfully Reduce Items from Fridge'})
 		}catch{
-			console.log('reducing items from fridge fails')
+			setAlert({ isError: true, message: 'Failed Reduce Items from Fridge'})
 		}
 	}
 	

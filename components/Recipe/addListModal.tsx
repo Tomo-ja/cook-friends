@@ -1,21 +1,23 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 import Input from "./input"
 
 import StyledModal, {classNames} from "./modal.styles"
 import StyledButton from './button.styles'
 
-import { Ingredient, User } from "../../helpers/typesLibrary"
+import { AlertInfo, Ingredient, User } from "../../helpers/typesLibrary"
 import  appAxios  from '../../constants/axiosBase'
 
 type Props = {
 	handleModalClose: (isAddList: boolean) => void,
 	addItem: Ingredient,
 	user: User,
-	title: string
+	title: string,
+	setAlert: Dispatch<SetStateAction<AlertInfo | null>>,
+
 }
 
-const AddListModal = ({ handleModalClose, addItem, user, title }: Props) => {
+const AddListModal = ({ handleModalClose, addItem, user, title, setAlert }: Props) => {
 
 	const [amounts, setAmounts] = useState<number[]>([addItem.amount])
 
@@ -35,8 +37,9 @@ const AddListModal = ({ handleModalClose, addItem, user, title }: Props) => {
 				memo: `Use for ${title}`
 			})
 			handleModalClose(true)
+			setAlert({ isError: false, message: 'Successfully Add Item to Shopping List'})
 		}catch{
-			console.log('adding item to shopping list fail')
+			setAlert({ isError: true, message: 'Failed Add Item to Shopping List'})
 		}
 	}
 

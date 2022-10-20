@@ -12,22 +12,30 @@ import StyledMainContent from "../styles/mainContent.styles";
 import StyledSubContent from "../styles/subContent.styles";
 
 import appAxios from "../constants/axiosBase";
-import { ItemOnList } from "../helpers/typesLibrary";
+import { AlertInfo, ItemOnList, User } from "../helpers/typesLibrary";
 import ContextShopping, { shoppingContext } from "../useContext/useShoppingList";
 import ShoopingForm from "../components/Form/shopping";
+import Alert from "../components/Alert";
+
+type Props = {
+	user: User
+}
 
 
-export default function ShoppingList( props :any) {
+export default function ShoppingList( { user }: Props ) {
 
 	const context = useContext(shoppingContext);
 	const [shoppingList, setShoppingList] = useState<ItemOnList[]>([]);
 	const [switchModal, setSwitchModal] = useState<boolean>(false);
+	const [alert, setAlert] = useState<AlertInfo | null>(null)
+
 
 	useEffect(() => {
+		console.log(user)
 		const fetchShoppingList = async () => {
 			await appAxios
 				.post("api/shoppingList/show", {
-					user_id: props.Id.id,
+					user_id: user.id,
 				})
 				.then((res) => {
 					setShoppingList(res.data.shoppingList.list);
@@ -53,10 +61,10 @@ export default function ShoppingList( props :any) {
 						iconColor='white'
 						bcColor='black'
 					/>
-					<ShoopingForm btn={"shopping"} signUp={false} userId={props.Id.id} />
+					<ShoopingForm btn={"shopping"} signUp={false} userId={user.id} setAlert={setAlert} />
 				</StyledSubContent>
 				<StyledMainContent>
-					<ItemToBuy list={shoppingList} userId={props.Id.id} />
+					<ItemToBuy list={shoppingList} userId={user.id} setAlert={setAlert}/>
 				</StyledMainContent>
 				<FontAwesomeButton
 					handleClick={handleSwitch}
@@ -64,16 +72,19 @@ export default function ShoppingList( props :any) {
 					iconKind={IconKind.Plus}
 					displayOnlyMobile={true}
 				/>
+				{alert && 
+					<Alert isError={alert.isError} message={alert.message} setAlert={setAlert} />
+				}
 			</StyledContainer>
 		</ContextShopping>
 	);
 }
 export async function getServerSideProps(ctx?: NextPageContext) {
 	const cookie = parseCookies(ctx);
-	const cookieId = JSON.parse(cookie.user);
+	const cookieData: User = JSON.parse(cookie.user);
 	return {
 		props: {
-			Id: cookieId || null,
+			user: cookieData
 		},
 	};
 }

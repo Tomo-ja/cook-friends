@@ -6,6 +6,7 @@ import StyledButton from "../Button/button.styles";
 
 import appAxios from "../../constants/axiosBase";
 import FontAwesomeButton, { IconKind } from "../FontAwesomeButton";
+import { AlertInfo } from "../../helpers/typesLibrary";
 
 type Props = {
 	name: string,
@@ -15,10 +16,12 @@ type Props = {
 	useAsFilter: boolean,
 	userId?: string,
 	setTrigger?: Dispatch<SetStateAction<number>>,
+	setAlert?: Dispatch<SetStateAction<AlertInfo| null>>,
+
 };
 
 
-const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrigger }: Props) => {
+const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrigger, setAlert }: Props) => {
 
 	const [value, setValue] = useState(amount)
 
@@ -27,7 +30,6 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrig
 		setValue(parseInt(newValue))
 	}
 
-	// need to update 
 	const handleUpdate = async () => {
 		const differFromOriginal = value - amount
 		let url: string
@@ -47,8 +49,9 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrig
 			}).then(()=> {
 				setTrigger!(prev => prev + 1)
 			})
+			setAlert!({ isError: false, message: 'Successfully Update Item Amount'})
 		} catch (error) {
-			console.log('update amount fail', error)
+			setAlert!({ isError: true, message: 'Failed Update Item Amount'})
 		}
 	};
 
@@ -61,8 +64,9 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrig
 			}).then(() => {
 				setTrigger!(prev => prev + 1)
 			})
+			setAlert!({ isError: false, message: 'Successfully Delete Item'})
 		}catch(error){
-			console.log('delete item fail', error)
+			setAlert!({ isError: true, message: 'Failed Delete Item'})
 		}
 	}
 

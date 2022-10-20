@@ -88,3 +88,8 @@ export type RecipeInfo = {
 export type RandomRecipes = {
 	recipes: RecipeInfo[]
 }
+
+export type AlertInfo = {
+	isError: boolean, 
+	message: string
+}

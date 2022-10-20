@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useContext, useEffect } from "react";
 
 import FontAwesomeButton, { IconKind } from "../FontAwesomeButton";
 
 import StyledItemToBuy from "../ItemToBuy/itemToBuy.styles";
 
-import { ItemOnList } from "../../helpers/typesLibrary";
+import { AlertInfo, ItemOnList } from "../../helpers/typesLibrary";
 import appAxios from "../../constants/axiosBase";
 import { shoppingContext } from "../../useContext/useShoppingList";
 
@@ -12,9 +12,10 @@ import { shoppingContext } from "../../useContext/useShoppingList";
 type Props = {
 	list: ItemOnList[];
 	userId: string;
+	setAlert: Dispatch<SetStateAction<AlertInfo| null>>,
 }
 
-const ItemToBuy = ({ list, userId }: Props) => {
+const ItemToBuy = ({ list, userId, setAlert }: Props) => {
 	
 	const context = useContext(shoppingContext);
 	useEffect(() => {
@@ -29,8 +30,10 @@ const ItemToBuy = ({ list, userId }: Props) => {
 			})
 			.then((res) => {
 				context?.updateShoppingList(res.data.shoppingList.list);
-				console.log(res.data);
-			});
+				setAlert({ isError: false, message: 'Successfully Delete Item'})
+			}).catch(() => {
+				setAlert({ isError: true, message: 'Failed Delete Item'})
+			})
 	};
 	const handleFridge = async (e: ItemOnList) => {
 
@@ -41,8 +44,13 @@ const ItemToBuy = ({ list, userId }: Props) => {
 			name: e.name,
 			created_at: e.created_at,
 		};
-		await appAxios.post("api/fridge/add", Ref).then((res) => {
-		});
+		try {
+			await appAxios.post("api/fridge/add", Ref)
+			setAlert({ isError: false, message: 'Successfully Add Item to Fridge'})
+		} catch {
+			setAlert({ isError: true, message: 'Failed Add Item to Fridge'})
+		}
+
 		await appAxios
 			.post("api/shoppingList/delete", {
 				user_id: userId,

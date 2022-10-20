@@ -12,8 +12,9 @@ import StyledSubContent from "../styles/subContent.styles";
 
 import appAxios from "../constants/axiosBase";
 import { stringToDate } from "../helpers";
-import { Fridge, User } from "../helpers/typesLibrary";
+import { Fridge, User, AlertInfo } from "../helpers/typesLibrary";
 import FridgeForm from "../components/Form/fridge";
+import Alert from "../components/Alert";
 
 type Props = {
 	user: User,
@@ -25,6 +26,7 @@ const FridgeList = ({ user }: Props) => {
 
 	const [displayedFridge, setDisplayedFridge] = useState<Fridge>([])
 	const [switchModal, setSwitchModal] = useState<boolean>(false);
+	const [alert, setAlert] = useState<AlertInfo | null>(null)
 
 	const handleSwitch = () => {
 		setSwitchModal(!switchModal);
@@ -69,7 +71,9 @@ const FridgeList = ({ user }: Props) => {
 				<FridgeForm btn='fridge'
 					userId={user.id}
 					modal={switchModal}
-					setTrigger={setFridgeUpdateTrigger}/>
+					setTrigger={setFridgeUpdateTrigger}
+					setAlert={setAlert}
+				/>
 			</StyledSubContent>
 			<StyledMainContent>
 				<FridgeSection
@@ -77,6 +81,7 @@ const FridgeList = ({ user }: Props) => {
 					fridge={displayedFridge}
 					useAsFilter={false}
 					userId={user.id}
+					setAlert={setAlert}
 				/>
 				<FontAwesomeButton
 					handleClick={handleSwitch}
@@ -85,6 +90,9 @@ const FridgeList = ({ user }: Props) => {
 					displayOnlyMobile={true}
 				/>
 			</StyledMainContent>
+			{alert && 
+				<Alert isError={alert.isError} message={alert.message} setAlert={setAlert} />
+			}
 		</StyledContainer>
 	);
 }

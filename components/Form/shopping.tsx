@@ -6,6 +6,7 @@ import StyledForm from "./form.styles";
 import appAxios from "../../constants/axiosBase";
 import { shoppingContext } from "../../useContext/useShoppingList";
 import SearchBarSection from "../SearchBarSection/index";
+import { AlertInfo } from "../../helpers/typesLibrary";
 
 // TODO: need to be refactored
 
@@ -16,6 +17,8 @@ interface props {
 	modal?: boolean;
 	setModal?: (arg: boolean) => void;
 	setTrigger?: Dispatch<SetStateAction<number>>;
+	setAlert: Dispatch<SetStateAction<AlertInfo| null>>,
+
 }
 
 interface ErrMsg {
@@ -31,29 +34,32 @@ interface firdge {
 	name: string;
 }
 
-const ShoopingForm = ({ btn, signUp, userId, setTrigger }: props) => {
+const ShoopingForm = ({ btn, signUp, userId, setTrigger, setAlert }: props) => {
 	const router = useRouter();
 	const firstInputRef = useRef<HTMLInputElement>(null!);
 	const secondInputRef = useRef<HTMLInputElement>(null!);
-	const [prediction, setPrediction] = useState<{ id: number; name: string }[]>(
-		[]
-	);
+
 	const [addFridge, setAddfridge] = useState<firdge>()
 	const contextShoppping = useContext(shoppingContext);
 
-	const connectApi = (e: React.MouseEvent<HTMLElement>) => {
+	const connectApi = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault();
 			const Ref = {
 				...addFridge,
 				amount: firstInputRef.current?.value,
 				memo: secondInputRef.current?.value,
 			};
-			appAxios.post("api/shoppingList/add", Ref).then((res) => {
-				console.log("add", res.data.shoppingList);
+			try{
+				const res = await appAxios.post("api/shoppingList/add", Ref)
 				firstInputRef.current!.value = "";
 				secondInputRef.current!.value = "";
+
 				contextShoppping?.updateShoppingList(res.data.shoppingList.list);
-			});
+
+				setAlert({ isError: false, message: 'Successfully Add Item to Shopping List'})
+			} catch {
+				setAlert({ isError: true, message: 'Failed Add Item to Shopping List'})
+			}
 	};
 
 	return (
