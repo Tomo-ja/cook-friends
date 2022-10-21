@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useContext, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import StyledInput from "../Input/input.styles";
 import StyledButton from "../Button/button.styles";
@@ -31,6 +31,8 @@ const FridgeForm = ({ btn, userId, setTrigger, setAlert }: props) => {
 	const [prediction, setPrediction] = useState<{ id: number; name: string }[]>(
 		[]
 	);
+
+	const [today, setToday]=useState<string>("")
 	const [addFridge, setAddfridge] = useState<firdge>();
 	const connectApi = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault();
@@ -50,7 +52,14 @@ const FridgeForm = ({ btn, userId, setTrigger, setAlert }: props) => {
 			setAlert({isError: true, message: 'Failed Add Item'})
 		}
 	};
-	
+	useEffect(() => {
+		const now = new Date
+		const month = now.getMonth() + 1
+		const year = now.getFullYear();
+		const date = now.getDate()
+		const today = year + "-" + month + "-" + date
+		setToday(today)
+	},[])
 	return (
 		<StyledForm>
 			<>
@@ -61,7 +70,7 @@ const FridgeForm = ({ btn, userId, setTrigger, setAlert }: props) => {
 				</div>
 				<div>
 					<label htmlFor='cPassword'>Date</label>
-					<StyledInput id='cPassword' type='date' ref={secondInputRef} />
+					<StyledInput id='cPassword' type='date' defaultValue={today} ref={secondInputRef} />
 				</div>
 			</>
 			<StyledButton
