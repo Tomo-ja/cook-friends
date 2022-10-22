@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectMongo from "../../../utils/connectMongo";
 import Fridge from "../../../models/fridgeModel";
-import Amount from "../../../components/ItemInFridge/amount";
+import Amount from "../../../components/FridgeSection/amount";
 import { Timestamp } from "mongodb";
 
 /*

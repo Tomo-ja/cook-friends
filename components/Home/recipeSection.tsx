@@ -5,7 +5,6 @@ import StyledRecipesSectionHome from "./recipeSection.styles";
 import StyledRecipeItem from '../RecipesSection/item.styles'
 import StyledImage from "../../styles/image.styles";
 
-
 import { RecipeInfo } from "../../helpers/typesLibrary";
 
 type Props = {
@@ -17,8 +16,6 @@ type Props = {
 const RecipesSectionHome = ({ title, displayRecipes, isFavorite }: Props) => {
 
 	const router = useRouter()
-
-		// TODO: develope navigation when each content clicked
 
 	const handleOnSeeMoreClick = () => {
 		if ( isFavorite ) {

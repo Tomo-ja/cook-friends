@@ -11,7 +11,6 @@ const Recipe = styled(MainContent)`
 
 	position: relative;
 
-
 	h2{
 		margin-bottom: 8px;
 	}

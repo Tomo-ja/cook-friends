@@ -15,8 +15,16 @@ export default async function login(req: NextApiRequest, res: NextApiResponse<an
 		await connectMongo();
 		const user = await User.findOne({ _id: new mongoose.Types.ObjectId(req.body.user_id) })
 		user.favoriterecipe.push(req.body.recipe_id);
+		
 		await user.save()
-		res.json({user})
+		res.json({
+			id: user._id.toString(),
+			username: user.username,
+			email: user.email,
+			password: user.password,
+			favoriterecipe: user.favoriterecipe,
+			historyrecipe: user.historyrecipe,
+		})
 	} catch (error) {
 			res.json({ error });
 	}

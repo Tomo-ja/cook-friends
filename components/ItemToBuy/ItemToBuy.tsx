@@ -1,28 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import IconButton from "../IconButton/iconButton.styles";
-import StyledItemToBuy from "../ItemToBuy/itemToBuy.styles";
-import appAxios from "../../constants/axiosBase";
-import { Timestamp } from "mongodb";
-import { shoppingContext } from "../../useContext/useShoppingList";
-interface list {
-	amount: number;
-	created_at: Timestamp;
-	ingredient_api_id: string;
-	memo: string;
-	name: string;
-	_id: string;
-}
-type itemTobuy = {
-	[x: string]: any;
-	list: list[];
-	userId: string;
-};
+import React, { Dispatch, SetStateAction, useContext, useEffect } from "react";
 
-const ItemToBuy = ({ list, userId}: itemTobuy) => {
-	// console.log(userId);
+import FontAwesomeButton, { IconKind } from "../FontAwesomeButton";
+
+import StyledItemToBuy from "../ItemToBuy/itemToBuy.styles";
+
+import { AlertInfo, ItemOnList } from "../../helpers/typesLibrary";
+import appAxios from "../../constants/axiosBase";
+import { shoppingContext } from "../../useContext/useShoppingList";
+
+
+type Props = {
+	list: ItemOnList[];
+	userId: string;
+	setAlert: Dispatch<SetStateAction<AlertInfo| null>>,
+}
+
+const ItemToBuy = ({ list, userId, setAlert }: Props) => {
 	
 	const context = useContext(shoppingContext);
 	useEffect(() => {
@@ -37,10 +30,12 @@ const ItemToBuy = ({ list, userId}: itemTobuy) => {
 			})
 			.then((res) => {
 				context?.updateShoppingList(res.data.shoppingList.list);
-				console.log(res.data);
-			});
+				setAlert({ isError: false, message: 'Successfully Delete Item'})
+			}).catch(() => {
+				setAlert({ isError: true, message: 'Failed Delete Item'})
+			})
 	};
-	const handlefridge = async (e: list) => {
+	const handleFridge = async (e: ItemOnList) => {
 
 		const Ref = {
 			user_id: userId,
@@ -49,8 +44,13 @@ const ItemToBuy = ({ list, userId}: itemTobuy) => {
 			name: e.name,
 			created_at: e.created_at,
 		};
-		await appAxios.post("api/fridge/add", Ref).then((res) => {
-		});
+		try {
+			await appAxios.post("api/fridge/add", Ref)
+			setAlert({ isError: false, message: 'Successfully Add Item to Fridge'})
+		} catch {
+			setAlert({ isError: true, message: 'Failed Add Item to Fridge'})
+		}
+
 		await appAxios
 			.post("api/shoppingList/delete", {
 				user_id: userId,
@@ -64,7 +64,7 @@ const ItemToBuy = ({ list, userId}: itemTobuy) => {
 	return (
 		<>
 			<div style={{ display: "Grid", gridTemplateColumns: "1fr 1fr" }}>
-				{context?.shoppingList.map((item: list, index: number) => {
+				{context?.shoppingList.map((item: ItemOnList, index: number) => {
 					return (
 						<StyledItemToBuy key={index}>
 							<div className='NameAmount'>
@@ -73,18 +73,16 @@ const ItemToBuy = ({ list, userId}: itemTobuy) => {
 							</div>
 							<p className='txt'>{item.memo}</p>
 							<div className='btnContainer'>
-								<IconButton
-									backgroundColor='gray'
-									onClick={() => handleDelete(item.ingredient_api_id)}
-								>
-									<FontAwesomeIcon icon={faTrash} style={{ color: "#000" }} />
-								</IconButton>
-								<IconButton
-									backgroundColor='gray'
-									onClick={() => handlefridge(item)}
-								>
-									<FontAwesomeIcon icon={faShoppingCart} />
-								</IconButton>
+								<FontAwesomeButton 
+									handleClick={handleDelete}
+									target={item.ingredient_api_id}
+									iconKind={IconKind.Trash}
+								/>
+								<FontAwesomeButton 
+									handleClick={handleFridge}
+									target={item}
+									iconKind={IconKind.Cart}
+								/>
 							</div>
 						</StyledItemToBuy>
 					);

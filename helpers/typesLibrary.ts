@@ -1,3 +1,5 @@
+import { Timestamp } from "mongodb";
+
 export type User = {
 	email: string,
 	favoriterecipe: string[],
@@ -7,6 +9,22 @@ export type User = {
 	id: string
 }
 
+export type Ingredient = {
+	id: number,
+	name: string,
+	amount: number,
+	unit: string
+}
+
+export type ItemOnList = {
+	ingredient_api_id: string;
+	name: string;
+	amount: number;
+	created_at: Timestamp;
+	memo: string;
+	_id: string;
+}
+
 export type Fridge = {
 	ingredient_api_id: string,
 	name: string,
@@ -14,14 +32,8 @@ export type Fridge = {
 	unit: string,
 	stored_at: string
 }[]
-export type CurrentFridge ={
-	ingredient_api_id: string;
-	name: string;
-	amount: number;
-	unit: string;
-	stored_at: string;
-}
-[];
+
+
 export type RecipeSummary = {
 	id: number,
 	title: string,
@@ -43,12 +55,7 @@ export type RecipeSearchParams = {
 	includeIngredients: string
 }
 
-export type Ingredient = {
-	"id": number,
-	"name": string,
-	"amount": number,
-	"unit": string,
-}
+
 
 export type RecipeInstruction = {
 	number: number,
@@ -80,4 +87,9 @@ export type RecipeInfo = {
 
 export type RandomRecipes = {
 	recipes: RecipeInfo[]
+}
+
+export type AlertInfo = {
+	isError: boolean, 
+	message: string
 }

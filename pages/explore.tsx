@@ -1,13 +1,9 @@
 import type { NextPage } from 'next'
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import Head from 'next/head'
-import { getCookie, setCookie } from 'cookies-next';
-
-import parseCookies, { stringToDate } from '../helpers'
-import { User, Fridge, RecipeSearchResult, RecipeSearchParams, RecipeInfo, RecipeSummary } from '../helpers/typesLibrary'
-import appAxios, { spoonacularApiAxios } from '../constants/axiosBase';
+import { setCookie } from 'cookies-next';
 
 import SearchSection from '../components/SearchBarSection/index'
 
@@ -16,6 +12,9 @@ import StyledMainContent from '../styles/mainContent.styles'
 import StyledSubContent from '../styles/subContent.styles'
 import StyledPagination from '../components/Explore/pagination.styles';
 
+import parseCookies, { stringToDate } from '../helpers'
+import { User, Fridge, RecipeSearchResult, RecipeSearchParams, RecipeInfo, RecipeSummary } from '../helpers/typesLibrary'
+import appAxios, { spoonacularApiAxios } from '../constants/axiosBase';
 import { complexSearchData } from '../sampleApiData'
 
 const NUMBER_ITEMS_AT_ONE_FETCH = 3
@@ -28,7 +27,7 @@ type Props = {
   recipeIds: number[] | null
 }
 
-const DynamicFridgeSection = dynamic(() => import('../components/ItemInFridge/index'),
+const DynamicFridgeSection = dynamic(() => import('../components/FridgeSection/index'),
 {ssr: true})
 
 const DynamicRecipeSection = dynamic(() => import('../components/RecipesSection/index'), 

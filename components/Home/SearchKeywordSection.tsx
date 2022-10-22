@@ -1,7 +1,6 @@
 import { useRouter } from "next/router"
 import StyledFilterSection from "./SearchKeywordSection.styles"
 
-
 type Props = {
 	keywords: string[]
 }

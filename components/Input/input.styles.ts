@@ -13,6 +13,10 @@ const Input = styled.input`
   font-size: 17px;
 	box-sizing: border-box;
 
+	&[type=date] {
+		padding: 10px 16px;
+	}
+
 	&:focus {
 		border: 2px solid #ffaa4e;
 		caret-color: #ffaa4e;

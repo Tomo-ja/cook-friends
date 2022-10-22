@@ -1,93 +1,114 @@
+import { GetServerSideProps, InferGetServerSidePropsType, NextPageContext } from "next";
 import { useContext, useEffect, useState } from "react";
-import { Form } from "../components/Form/Form";
-import FridgeSection from "../components/ItemInFridge";
+import * as cookie from 'cookie'
+
+import Form from "../components/Form/Form";
+import FridgeSection from "../components/FridgeSection";
+import FontAwesomeButton, { IconKind } from "../components/FontAwesomeButton";
+
+import StyledContainer from "../styles/container.styles";
+import StyledMainContent from "../styles/mainContent.styles";
+import StyledSubContent from "../styles/subContent.styles";
+
 import appAxios from "../constants/axiosBase";
-import Container from "../styles/container.styles";
-import MainContent from "../styles/mainContent.styles";
-import SubContent from "../styles/subContent.styles";
 import { stringToDate } from "../helpers";
-import { count, log } from "console";
-import { GetServerSideProps } from "next/types";
-import { Fridge, CurrentFridge } from "../helpers/typesLibrary";
-import Amount, { amountContext } from "../useContext/useAmount";
-import ContextAmount from "../useContext/useAmount";
-import nookies, { parseCookies, setCookie, destroyCookie } from "nookies";
-import { NextPageContext } from "next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import StyledSwitch from "../components/switch/siwtch";
+import { Fridge, User, AlertInfo } from "../helpers/typesLibrary";
+import FridgeForm from "../components/Form/fridge";
+import Alert from "../components/Alert";
 
-export default function FridgeList(props: any) {
-	const [fridge, setFridge] = useState<any>([]);
-	const [id, setId] = useState<string>("")
-	const context = useContext(amountContext);
+type Props = {
+	user: User,
+}
+
+const FridgeList = ({ user }: Props) => {
+
+	const [fridgeUpdateTrigger, setFridgeUpdateTrigger] = useState(0)
+
+	const [displayedFridge, setDisplayedFridge] = useState<Fridge>([])
 	const [switchModal, setSwitchModal] = useState<boolean>(false);
+	const [alert, setAlert] = useState<AlertInfo | null>(null)
 
-	// useEffect(() => {
-	// 	setTest(props.fridges);
-	// },[])
-
-	useEffect(() => {
-		const fetch = async () => {
-			await appAxios
-				.post("api/fridge/show", { user_id: props.Id.id })
-				.then((res) => {
-					const tempArr: {
-						ingredient_api_id: number;
-						name: string;
-						amount: number;
-						stored_at: string;
-					}[] = [];
-					Object.values(res.data).forEach((value: any) => {
-						tempArr.push({
-							ingredient_api_id: value.ingredient_api_id,
-							name: value.name,
-							amount: value.amount,
-							stored_at: stringToDate(value.stored_at).toString(),
-						});
-					});
-					setFridge(tempArr);
-				});
-		};
-		fetch();
-		setId(props.Id.id);
-	}, [context?.changedAmountList]);
 	const handleSwitch = () => {
 		setSwitchModal(!switchModal);
 	}
+
+	useEffect(() => {
+		const fetchFridgeData = async () => {
+			const fridge: Fridge = []
+			const fridgeData = await appAxios.post('api/fridge/show', {
+				user_id: user.id
+			})
+			Object.values(fridgeData.data).forEach((value: any) => {
+				fridge.push(
+					{
+						ingredient_api_id: value.ingredient_api_id,
+						name: value.name,
+						amount: value.amount,
+						unit: value.unit,
+						stored_at: stringToDate(value.stored_at).toString()
+					}
+				)
+			})
+			setDisplayedFridge(fridge)
+		}
+
+		fetchFridgeData()
+
+	}, [fridgeUpdateTrigger])
+
 	return (
-		<ContextAmount>
-			<Container>
-				<SubContent className={switchModal ? "open" : ""}>
-					<Form
-						btn='fridge'
-						signUp={false}
-						userId={id}
-						modal={switchModal}
-						setModal={setSwitchModal}
-					/>
-				</SubContent>
-				<MainContent>
-					<FridgeSection
-						fridge={fridge}
-						useAsFilter={false}
-						userId={id}
-					/>
-					<StyledSwitch>
-						<FontAwesomeIcon icon={faPlus} onClick={handleSwitch} />
-					</StyledSwitch>
-				</MainContent>
-			</Container>
-		</ContextAmount>
+		<StyledContainer>
+			<StyledSubContent className={switchModal ? "open" : ""}>
+				<FontAwesomeButton
+					handleClick={handleSwitch}
+					target={null}
+					iconKind={IconKind.XMark}
+					displayOnlyMobile={true}
+					isButtonSquare={true}
+					iconColor='white'
+					bcColor='black'
+				/>
+				<FridgeForm btn='fridge'
+					userId={user.id}
+					modal={switchModal}
+					setTrigger={setFridgeUpdateTrigger}
+					setAlert={setAlert}
+				/>
+			</StyledSubContent>
+			<StyledMainContent>
+				<FridgeSection
+					setTrigger={setFridgeUpdateTrigger}
+					fridge={displayedFridge}
+					useAsFilter={false}
+					userId={user.id}
+					setAlert={setAlert}
+				/>
+				<FontAwesomeButton
+					handleClick={handleSwitch}
+					target={null}
+					iconKind={IconKind.Plus}
+					displayOnlyMobile={true}
+				/>
+			</StyledMainContent>
+			{alert && 
+				<Alert isError={alert.isError} message={alert.message} setAlert={setAlert} />
+			}
+		</StyledContainer>
 	);
 }
-export async function getServerSideProps(ctx?: NextPageContext) {
-	const cookie = parseCookies(ctx);
-	const cookieId = JSON.parse(cookie.user);
-	return {
+
+export default FridgeList
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	const cookieData = cookie.parse(req.headers.cookie!)
+	const user: User = JSON.parse(cookieData.user)
+
+	return { 
 		props: {
-			Id: cookieId || null,
-		},
-	};
+			user,
+		}
+	}
 }
+
+
 

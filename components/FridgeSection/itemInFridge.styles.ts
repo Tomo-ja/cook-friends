@@ -6,10 +6,10 @@ interface IItemInFridge {
 
 const ItemInFridge = styled.div<IItemInFridge>`
 	width: 100%;
-	height: 55px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
 	border: black solid 1px;
 	border-radius: 5px;
 	padding: 8px 16px;
@@ -25,7 +25,7 @@ const ItemInFridge = styled.div<IItemInFridge>`
 	}
 
 	.ItemFridgeLeft{
-
+		flex: 1 1 100px;
 		.FoodName{
 			font-size: 17px;
 		}
@@ -37,54 +37,42 @@ const ItemInFridge = styled.div<IItemInFridge>`
 
 	.ItemFridgeRight{
 		color: #93918F;
-		position: relative;
+		margin-block: 8px;
 
 		:hover{
 			color: #151413;
 			cursor: default;
 		}
 
-		/* .Arrow-Top{
-			border-top: solid 4px #d9d9d9;
-			border-left: solid 4px #d9d9d9;
-			width: 10px;
-			height: 10px;
-			transform: rotate(45deg);
-			position: absolute;
-			right: 10%;
-			top: -9px;
-
-			:hover{
-				cursor: pointer;
-			}
-			:active {
-				border-top: solid 4px #ffaa4e;
-				border-left: solid 4px #ffaa4e;
-			}
-
+		.EditContainer{
+			display: flex;
+			justify-content: space-between;
 		}
-		.Arrow-Bottom{
-			border-bottom: solid 4px #d9d9d9;
-			border-right: solid 4px #d9d9d9;
-			width: 10px;
-			height: 10px;
-			transform: rotate(45deg);
-			position: absolute;
-			right: 10%;
-			bottom: -9px;
 
-			:hover{
-				cursor: pointer;
-			}
-			:active {
-				border-bottom: solid 4px #ffaa4e;
-				border-right: solid 4px #ffaa4e;
-			} */
-		/* } */
 		.Amount{
 			color: inherit;
 			width: 30%;
 		}
+
+		input.Amount{
+			outline: none;
+			padding-right: 8px;
+			text-align: right;
+
+			color: black;
+
+			:hover, :focus{
+				outline: none;
+				border-color: #FFAA4E;
+				border: #FFAA4E 2px solid;
+			}
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+}
 
 	}
 
@@ -121,7 +109,8 @@ export const classNames = {
 	arrowTop: 'Arrow-Top',
 	arrowBottom: 'Arrow-Bottom',
 	amount: 'Amount',
-	selected: 'Selected'
+	selected: 'Selected',
+	editContainer: 'EditContainer'
 }
 
 export default ItemInFridge;

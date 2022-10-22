@@ -19,7 +19,14 @@ export default async function login(req: NextApiRequest, res: NextApiResponse<an
 			user.historyrecipe.shift()
 		}
 		await user.save()
-		res.json({user})
+		res.json({
+			id: user._id.toString(),
+			username: user.username,
+			email: user.email,
+			password: user.password,
+			favoriterecipe: user.favoriterecipe,
+			historyrecipe: user.historyrecipe,
+		})
 	} catch (error) {
 			res.json({ error });
 	}

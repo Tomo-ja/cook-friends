@@ -3,9 +3,11 @@ import { useRouter } from 'next/router';
 import { getCookie, deleteCookie } from 'cookies-next'
 import Link from 'next/link';
 import Image from 'next/image';
-import CustomLink from '../../styles/link.styles';
+
+import StyledLink from '../../styles/link.styles';
 import StyledHeader from "./header.styles";
 import StyledImage from '../../styles/image.styles';
+
 import logo from "../../public/logo.png"
 import { User } from '../../helpers/typesLibrary';
 
@@ -55,19 +57,19 @@ const Header = () => {
 				<>
 					<li>
 						<Link href="/fridge" passHref>
-							<CustomLink animeBorder={true}>Your Fridge</CustomLink>
+							<StyledLink animeBorder={true}>Your Fridge</StyledLink>
 						</Link>
 					</li>
 					<li>
 						<Link href="/shoppingList" passHref>
-							<CustomLink animeBorder={true}>Shopping List</CustomLink>
+							<StyledLink animeBorder={true}>Shopping List</StyledLink>
 						</Link>
 					</li>
 				</>
 				}
 				<li>
 						<Link href="/login" passHref >
-							<CustomLink onClick={logout} animeBorder={true}>{user ? "Log out" : "Log in"}</CustomLink>
+							<StyledLink onClick={logout} animeBorder={true}>{user ? "Log out" : "Log in"}</StyledLink>
 						</Link>
 				</li>
 			</ul>
