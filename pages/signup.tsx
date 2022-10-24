@@ -1,4 +1,3 @@
-import Form from "../components/Form/Form";
 import SignupFrom from "../components/Form/signup";
 
 import Container from "../styles/container.styles";

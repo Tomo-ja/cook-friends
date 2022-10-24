@@ -55,7 +55,6 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrig
 		}
 	};
 
-	// TODO: need to delete from displayed fridge as well
 	const handleDelete = async () => {
 		try{
 			await appAxios.post('api/fridge/delete', {

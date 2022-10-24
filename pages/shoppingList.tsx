@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { NextPageContext } from "next";
 import { parseCookies} from "nookies";
 import { Timestamp } from "mongodb";
-
-import Form from "../components/Form/Form";
 import FontAwesomeButton, { IconKind } from "../components/FontAwesomeButton";
 import ItemToBuy from "../components/ItemToBuy/ItemToBuy";
 
@@ -31,7 +29,6 @@ export default function ShoppingList( { user }: Props ) {
 
 
 	useEffect(() => {
-		console.log(user)
 		const fetchShoppingList = async () => {
 			await appAxios
 				.post("api/shoppingList/show", {

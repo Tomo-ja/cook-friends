@@ -23,12 +23,8 @@ interface list {
 }
 
 export const shoppingContext = createContext<userDataInterface | null>(null);
-// export const useOrderContext = useContext(orderContext)
-
 const ContextShopping = ({ children }: children) => {
-	const [shoppingList, setShoppingList] = useState<list[]>([]);
-	console.log(shoppingList);
-	
+	const [shoppingList, setShoppingList] = useState<list[]>([]);	
 	const updateShoppingList = (item: any) => {
 		setShoppingList(item);
 	};

@@ -60,7 +60,7 @@ const ItemToBuy = ({ list, userId, setAlert }: Props) => {
 				context?.updateShoppingList(value.data.shoppingList.list);
 			});
 	};
-
+	if(!context || context.shoppingList.length < 1)return<h2>shopping List is empty</h2>
 	return (
 		<>
 			<div style={{ display: "Grid", gridTemplateColumns: "1fr 1fr" }}>

@@ -11,9 +11,6 @@ import StyledForm from "./form.styles";
 
 import appAxios from "../../constants/axiosBase";
 
-
-// TODO: need to be refactored
-
 interface props {
 	btn: string;
 }

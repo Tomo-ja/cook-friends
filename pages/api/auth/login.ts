@@ -17,7 +17,6 @@ export default async function login(
 			user.password
 		);
 		if (!isUserMatch) return res.json("worngPassword");
-		// const user3 = await User.findOne({ _id: new ObjectId(user._id) });
 		return res.json({
 			id: user._id.toString(),
 			username: user.username,
@@ -27,7 +26,6 @@ export default async function login(
 			historyrecipe: user.historyrecipe,
 		});
 	} catch (error) {
-		// console.log(error)
 		res.json({ error });
 	}
 }

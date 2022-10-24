@@ -33,7 +33,6 @@ const SearchSection = ({ list, userid}:props) => {
 			});
 	};
 
-	// FIXME: recreate this function to search any keyword or multiple keywords
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
 			if (prediction.length === 0) {
