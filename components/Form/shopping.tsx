@@ -8,7 +8,6 @@ import { shoppingContext } from "../../useContext/useShoppingList";
 import SearchBarSection from "../SearchBarSection/index";
 import { AlertInfo } from "../../helpers/typesLibrary";
 
-// TODO: need to be refactored
 
 interface props {
 	btn: string;

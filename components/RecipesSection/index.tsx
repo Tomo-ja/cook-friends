@@ -79,7 +79,6 @@ const RecipeSection = ({ recipesSearchResult, user, handleClickRecipe }: Props) 
 		})
 	}
 
-	// TODO: replace FontAwesome button
 
 	return (
 		<StyledRecipesSection lessThan3={recipesSearchResult.results.length < 3}>

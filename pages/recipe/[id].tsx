@@ -154,7 +154,6 @@ Recipe.getInitialProps = async ({ req, res, query}): Promise<Props> => {
 		}
 	} else {
 		console.log('coming recipe page without id')
-		// FIXME: later handle another api call without id like data itself
 		if(res){
 			res.statusCode = 404
 			res.end('not found')

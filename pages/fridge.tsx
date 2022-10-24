@@ -2,7 +2,6 @@ import { GetServerSideProps, InferGetServerSidePropsType, NextPageContext } from
 import { useContext, useEffect, useState } from "react";
 import * as cookie from 'cookie'
 
-import Form from "../components/Form/Form";
 import FridgeSection from "../components/FridgeSection";
 import FontAwesomeButton, { IconKind } from "../components/FontAwesomeButton";
 

@@ -20,38 +20,6 @@ export default async function removeFromFridge(
 		await connectMongo();
 		const fridge = await Fridge.findOne({ user_id: req.body.user_id });
 		let usedAmount = parseFloat(req.body.amount);
-		
-		// if (usedAmount === 0) {
-		// 	// console.log(typeof req.body.amount);
-		// 	fridge.stock = fridge.stock.filter(
-		// 		(value: {
-		// 			ingredient_api_id: string;
-		// 			name: string;
-		// 			stored_at: Timestamp;
-		// 			amount: number;
-		// 			_id: string;
-		// 		}) => value.ingredient_api_id !== req.body.ingredient_api_id
-		// 		);
-		// 	await fridge.save();
-		// 	res.json(fridge.stock);
-		// } else {
-		// 	fridge.stock.forEach(
-		// 		(element: {
-		// 			ingredient_api_id: string;
-		// 			name: string;
-		// 			stored_at: Timestamp;
-		// 			amount: number;
-		// 			_id: string;
-		// 		}) => {
-		// 			if (element.ingredient_api_id === req.body.ingredient_api_id) {
-		// 				element.amount = req.body.amount;
-		// 			}
-		// 		}
-		// 		);
-		// 		await fridge.save()
-		// 		// console.log(fridge);
-		// 		res.json(fridge.stock);
-		// 	}
 			
 		for(let i=0; i<fridge.stock.length; i++){
 				if(fridge.stock[i].ingredient_api_id !== req.body.ingredient_api_id) { continue }

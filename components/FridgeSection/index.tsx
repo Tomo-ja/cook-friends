@@ -75,6 +75,8 @@ const FridgeSection = ({ fridge, useAsFilter, setMustIncludeIngredients , urlQue
 			query: {keyword: ingredient}
 		})
 	}
+	if (!fridge || fridge.length < 1)
+		return <h2 style={{"textAlign":"center"}}>fridge is empty</h2>;
 
 	return(
 		<div>

@@ -9,7 +9,6 @@ import { spoonacularApiAxios } from "../../constants/axiosBase";
 import SearchBarSection from "../SearchBarSection/index";
 import { AlertInfo } from "../../helpers/typesLibrary";
 
-// TODO: need to be refactored
 
 interface props {
 	btn: string;
