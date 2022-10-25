@@ -149,7 +149,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 		recipeInfo = response.data as RecipeInfo
 		} catch {
 			isFakeData = {isError: true, message:'Reached Api call Limitation. Displaying Fake Data'}
-			console.log('fake recipe at recipe detail')
 			recipeInfo = recipeDetailsData
 		}
 	} else {

@@ -53,7 +53,6 @@ const SignupFrom = ({ btn}: props) => {
 				email: secondInputRef.current?.value,
 				password: thiredInputRef.current?.value,
 			};
-			console.log(Ref);
 			appAxios.post("/api/auth/register", { data: Ref }).then((res) => {
 				if (res.data === "exsist") {
 					return setErr({
@@ -65,10 +64,8 @@ const SignupFrom = ({ btn}: props) => {
 				} else {
 					appAxios
 						.post("/api/fridge/create", { user_id: res.data._id })
-						.then((res) => console.log(res));
 					appAxios
 						.post("/api/shoppingList/create", { user_id: res.data._id })
-						.then((res) => console.log(res));
 					router.push("/login");
 				}
 			});

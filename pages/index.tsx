@@ -57,7 +57,6 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes, isF
 				)
 				setFavoriteRecipes(allRes)
 			} catch {
-				console.log('fake data at favorite')
 				setFavoriteRecipes([])
 			}
 		}

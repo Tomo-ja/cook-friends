@@ -43,7 +43,7 @@ export default async function addToShoppingList(
 		res.json({ shoppingList })
 
 	} catch(error) {
-		console.log({error})
+		console.error({error})
 		res.json({ error })
 	}
 }

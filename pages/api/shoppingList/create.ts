@@ -20,7 +20,7 @@ export default async function createShoppingList(
 		res.json({ shoppingList })
 
 	} catch(error) {
-		console.log({error})
+		console.error({error})
 		res.json({ error })
 	}
 }

@@ -116,7 +116,6 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
               return newState
             })
           } catch {
-            console.log('fake recipes at favorite')
           }
       }
     }
@@ -134,7 +133,6 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
         const response = await spoonacularApiAxios.get('/recipes/complexSea', {params: searchParams})
         setStateResult(response.data as RecipeSearchResult)
       } catch {
-        console.log('fake recipes at explore when ingredient select')
         const response = complexSearchData
         setStateResult(response.data as RecipeSearchResult)  
       }

@@ -18,7 +18,7 @@ export default async function createFridge(
 		const fridge = await Fridge.create(req.body)
 		res.json({ fridge })
 	} catch(error) {
-		console.log({error})
+		console.error({error})
 		res.json({ error })
 	}
 }

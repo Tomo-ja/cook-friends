@@ -28,7 +28,7 @@ export default async function deleteFromShoppingList(
 		res.json({ shoppingList, removedItem })
 
 	} catch(error) {
-		console.log({error})
+		console.error({error})
 		res.json({ error })
 	}
 }

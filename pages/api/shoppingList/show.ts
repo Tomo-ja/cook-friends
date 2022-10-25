@@ -18,7 +18,7 @@ export default async function showInFridge(
 		res.json({ shoppingList })
 
 	} catch (error) {
-		console.log({ error })
+		console.error({ error })
 		res.json({ error })
 	}
 }

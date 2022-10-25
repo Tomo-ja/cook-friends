@@ -40,7 +40,7 @@ export default async function removeFromFridge(
 				res.json(fridge.summary);
 		
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		res.json({ error });
 	}
 }

@@ -51,7 +51,7 @@ const RecipeSection = ({ recipesSearchResult, user, handleClickRecipe }: Props) 
 				recipe_id: recipeId.toString()
 			})
 			const updatedUser = await response.data
-			setCookie('user', JSON.stringify(updatedUser.user), {
+			setCookie('user', JSON.stringify(updatedUser), {
 				path: '/',
 				maxAge: 3600, 
 				sameSite: true 
