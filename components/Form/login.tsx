@@ -42,7 +42,7 @@ const LoginForm = ({ btn }: props) => {
 			email: firstInputRef.current?.value,
 			password: secondInputRef.current?.value,
 		};
-		appAxios.post("api/auth/login", { data: Ref }).then((res) => {
+		appAxios.post("/api/auth/login", { data: Ref }).then((res) => {
 			if (res.data === "NotExists") {
 				return setErr({
 					password: true,

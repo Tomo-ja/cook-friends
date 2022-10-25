@@ -54,7 +54,7 @@ const SignupFrom = ({ btn}: props) => {
 				password: thiredInputRef.current?.value,
 			};
 			console.log(Ref);
-			appAxios.post("api/auth/register", { data: Ref }).then((res) => {
+			appAxios.post("/api/auth/register", { data: Ref }).then((res) => {
 				if (res.data === "exsist") {
 					return setErr({
 						...err,
@@ -64,10 +64,10 @@ const SignupFrom = ({ btn}: props) => {
 					});
 				} else {
 					appAxios
-						.post("api/fridge/create", { user_id: res.data._id })
+						.post("/api/fridge/create", { user_id: res.data._id })
 						.then((res) => console.log(res));
 					appAxios
-						.post("api/shoppingList/create", { user_id: res.data._id })
+						.post("/api/shoppingList/create", { user_id: res.data._id })
 						.then((res) => console.log(res));
 					router.push("/login");
 				}

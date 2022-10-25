@@ -37,8 +37,6 @@ const HeroSection = ({ randomRecipes }: Props) => {
         }}
 				loop={true}
 				pagination={{ clickable: true }}
-				onSlideChange={() => console.log('slide change')}
-				onSwiper={(swiper) => console.log(swiper)}
 			>
 			{randomRecipes.map(recipe => (
 				<SwiperSlide key={recipe.id}>

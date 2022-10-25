@@ -114,7 +114,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 	let isFakeData: AlertInfo | null = null
 
 	if(user) {
-		const fridgeData = await appAxios.post("api/fridge/show", {
+		const fridgeData = await appAxios.post("/api/fridge/show", {
 			user_id: user.id,
 		})
 		Object.values(fridgeData.data).forEach((value: any) => {
