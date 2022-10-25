@@ -46,7 +46,7 @@ const RecipeSection = ({ recipesSearchResult, user, handleClickRecipe }: Props) 
 
 	const updateDatabase = async (recipeId: number, url: string) => {
 		try {
-			const response = await appAxios.post(`api/recipe/${url}`, {
+			const response = await appAxios.post(`/api/recipe/${url}`, {
 				user_id: user!.id,
 				recipe_id: recipeId.toString()
 			})

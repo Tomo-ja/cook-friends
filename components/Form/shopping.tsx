@@ -49,7 +49,7 @@ const ShoopingForm = ({ btn, signUp, userId, setTrigger, setAlert }: props) => {
 				memo: secondInputRef.current?.value,
 			};
 			try{
-				const res = await appAxios.post("api/shoppingList/add", Ref)
+				const res = await appAxios.post("/api/shoppingList/add", Ref)
 				firstInputRef.current!.value = "";
 				secondInputRef.current!.value = "";
 

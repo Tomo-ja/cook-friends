@@ -24,7 +24,7 @@ const ItemToBuy = ({ list, userId, setAlert }: Props) => {
 
 	const handleDelete = (id: string) => {
 		appAxios
-			.post("api/shoppingList/delete", {
+			.post("/api/shoppingList/delete", {
 				user_id: userId,
 				ingredient_api_id: id,
 			})
@@ -45,14 +45,14 @@ const ItemToBuy = ({ list, userId, setAlert }: Props) => {
 			created_at: e.created_at,
 		};
 		try {
-			await appAxios.post("api/fridge/add", Ref)
+			await appAxios.post("/api/fridge/add", Ref)
 			setAlert({ isError: false, message: 'Successfully Add Item to Fridge'})
 		} catch {
 			setAlert({ isError: true, message: 'Failed Add Item to Fridge'})
 		}
 
 		await appAxios
-			.post("api/shoppingList/delete", {
+			.post("/api/shoppingList/delete", {
 				user_id: userId,
 				ingredient_api_id: e.ingredient_api_id,
 			})

@@ -29,7 +29,7 @@ const ReduceFridgeModal = ({ handleModalClose, reduceItems, user, setAlert }: Pr
 	const handleClickReduce = async () => {
 		try {
 			await Promise.all(reduceItems.map((item, idx) => {
-				appAxios.post('api/fridge/remove', {
+				appAxios.post('/api/fridge/remove', {
 					user_id: user.id,
 					ingredient_api_id: item.id.toString(),
 					amount: amounts[idx],

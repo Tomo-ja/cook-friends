@@ -31,7 +31,7 @@ export default function ShoppingList( { user }: Props ) {
 	useEffect(() => {
 		const fetchShoppingList = async () => {
 			await appAxios
-				.post("api/shoppingList/show", {
+				.post("/api/shoppingList/show", {
 					user_id: user.id,
 				})
 				.then((res) => {

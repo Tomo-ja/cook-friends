@@ -28,7 +28,7 @@ const FeedbackSection = ({ handleReduceModalOpen, user, recipeId, setAlert }: Pr
 		let url: string = isFav ? 'removeFav' : 'addFav'
 		setIsFav(prev => !prev)
 		try{
-			const response = await appAxios.post(`api/recipe/${url}`, {
+			const response = await appAxios.post(`/api/recipe/${url}`, {
 				user_id: user.id,
 				recipe_id: recipeId.toString()
 			})

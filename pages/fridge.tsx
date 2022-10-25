@@ -34,7 +34,7 @@ const FridgeList = ({ user }: Props) => {
 	useEffect(() => {
 		const fetchFridgeData = async () => {
 			const fridge: Fridge = []
-			const fridgeData = await appAxios.post('api/fridge/show', {
+			const fridgeData = await appAxios.post('/api/fridge/show', {
 				user_id: user.id
 			})
 			Object.values(fridgeData.data).forEach((value: any) => {

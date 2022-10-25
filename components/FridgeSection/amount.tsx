@@ -40,7 +40,7 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrig
 		}
 
 		try{
-			await appAxios.post(`api/fridge/${url}`, {
+			await appAxios.post(`/api/fridge/${url}`, {
 				user_id: userId,
 				amount: Math.abs(differFromOriginal),
 				ingredient_api_id: ingredientId,
@@ -57,7 +57,7 @@ const Amount = ({ ingredientId, amount, useAsFilter, userId, unit, name, setTrig
 
 	const handleDelete = async () => {
 		try{
-			await appAxios.post('api/fridge/delete', {
+			await appAxios.post('/api/fridge/delete', {
 				user_id: userId,
 				ingredient_api_id: ingredientId
 			}).then(() => {
