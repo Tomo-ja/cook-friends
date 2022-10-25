@@ -5,11 +5,11 @@ import StyledRecipesSectionHome from "./recipeSection.styles";
 import StyledRecipeItem from '../RecipesSection/item.styles'
 import StyledImage from "../../styles/image.styles";
 
-import { RecipeInfo } from "../../helpers/typesLibrary";
+import { RecipeMinimize } from "../../helpers/typesLibrary";
 
 type Props = {
 	title: string,
-	displayRecipes: RecipeInfo[],
+	displayRecipes: RecipeMinimize[],
 	isFavorite: boolean
 }
 

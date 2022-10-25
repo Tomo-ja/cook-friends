@@ -34,14 +34,8 @@ export type Fridge = {
 }[]
 
 
-export type RecipeSummary = {
-	id: number,
-	title: string,
-	image: string,
-}
-
 export type RecipeSearchResult = {
-	results: RecipeSummary[],
+	results: RecipeMinimize[],
 	offset: number,
 	number: number,
 	totalResults: number
@@ -67,7 +61,7 @@ export type RecipeInfo = {
 	"title": string,
 	"readyInMinutes": number,
 	"servings": number,
-	"image": "https://spoonacular.com/recipeImages/715449-556x370.jpg",
+	"image": string,
 
 	"analyzedInstructions":{
 				"name": "",
@@ -85,8 +79,14 @@ export type RecipeInfo = {
 
 }
 
+export type RecipeMinimize = {
+	id: number,
+	title: string,
+	image: string
+}
+
 export type RandomRecipes = {
-	recipes: RecipeInfo[]
+	recipes: RecipeMinimize[]
 }
 
 export type AlertInfo = {

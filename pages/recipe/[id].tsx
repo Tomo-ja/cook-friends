@@ -1,7 +1,7 @@
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head';
 import Image from 'next/image'
-
+import * as cookie from 'cookie'
 import { useState } from 'react';
 
 import IngredientSection from '../../components/Recipe/ingredientSection';
@@ -15,26 +15,29 @@ import StyledRecipe, {RecipeContainer} from '../../components/Recipe/recipe.styl
 import StyledImage from '../../styles/image.styles'
 import StyledTagSection from '../../components/Recipe/tagSection.styles';
 
-import parseCookies, { stringToDate } from '../../helpers/index'
+import { stringToDate } from '../../helpers/index'
 import { User, RecipeInfo, Fridge, Ingredient, AlertInfo } from '../../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../../constants/axiosBase'
 import Alert from '../../components/Alert';
+
+import { recipeDetailsData } from '../../sampleApiData';
 
 
 type Props = {
 	user: User | null,
 	fridge: Fridge | null,
 	recipeInfo: RecipeInfo | null
+	isFakeData: AlertInfo | null
 }
 
 const emptyIngredient: Ingredient = {id:0, name: '', amount: 0, unit: ""}
 
-const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
+const Recipe: NextPage<Props> = ({user, fridge, recipeInfo, isFakeData }: Props) => {
 
 	const [showAddListModal, setShowAddListModal] = useState(false)
 	const [showReduceFridgeModal, setShowReduceFridgeModal] = useState(false)
 	const [addIngredient, setAddIngredient] = useState<Ingredient>(emptyIngredient)
-	const [alert, setAlert] = useState<AlertInfo | null>(null)
+	const [alert, setAlert] = useState<AlertInfo | null>(isFakeData)
 
 
 	if(recipeInfo === null) { return <></>}
@@ -55,8 +58,6 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 			setShowReduceFridgeModal(false)
 		}
 	}
-
-
 
 	return (
 		<RecipeContainer>
@@ -128,32 +129,30 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 
 export default Recipe
 
-Recipe.getInitialProps = async ({ req, res, query}): Promise<Props> => {
-	const cookieData = parseCookies(req)
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
+	const cookieData = cookie.parse(req.headers.cookie!)
 	const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
 	const fridge: Fridge = []
 	let recipeInfo: RecipeInfo | null = null
+	let isFakeData: AlertInfo | null = null
+
 
 	if(query.id) {
 		const recipeId: number = Number(query.id)
-		try{
-
-			const response = await spoonacularApiAxios.get(`/recipes/${recipeId}/information`, 
+		try {
+			// FIXME: url below should be /recipes/${recipeId}/information
+			const response = await spoonacularApiAxios.get(`/recipes/${recipeId}/info`, 
 			{params: {
 				includeNutrition: false
 			}}
 		)
-
 		recipeInfo = response.data as RecipeInfo
-		}catch(err){
-			console.log(err)
-			if(res){
-				res.statusCode = 404
-				res.end('not found')
-			}
+		} catch {
+			isFakeData = {isError: true, message:'Reached Api call Limitation. Displaying Fake Data'}
+			console.log('fake recipe at recipe detail')
+			recipeInfo = recipeDetailsData
 		}
 	} else {
-		console.log('coming recipe page without id')
 		if(res){
 			res.statusCode = 404
 			res.end('not found')
@@ -177,16 +176,12 @@ Recipe.getInitialProps = async ({ req, res, query}): Promise<Props> => {
     })
 	}
 
-	if(res){
-    if (Object.keys(cookieData).length === 0 && cookieData.constructor === Object) {
-      res.writeHead(301, { Location: '/'})
-      res.end()
-    }
-  }
-
 	return {
-		user,
-		fridge,
-		recipeInfo
+		props: {
+			user,
+			fridge,
+			recipeInfo,
+			isFakeData
+		}
 	}
 }
