@@ -94,22 +94,27 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
           recipeSearchResult.totalResults > (offset + NUMBER_ITEMS_AT_ONE_FETCH) ?
           recipeIds!.slice(offset - 1, offset + NUMBER_ITEMS_AT_ONE_FETCH) :
           recipeIds!.slice(offset - 1, recipeIds!.length)
-        const allRes = await Promise.all(ids.map(async id=> {
-          const res = await spoonacularApiAxios.get(`/recipes/${id}/information`, 
-            {params: {
-              includeNutrition: false
-            }}
-          )
-          return res.data as RecipeInfo
-        }))
-        const results = allRes.map(recipe => ({id: recipe.id, title: recipe.title, image: recipe.image}))
-        setStateResult(prev => {
-          const newState = {...prev}
-          newState.offset = offset
-          newState.results.push(...results)
-          newState.number = allRes.length
-          return newState
-        })
+          try{
+            const allRes = await Promise.all(ids.map(async id=> {
+              // FIXME: url should be /recipes/${id}/information
+              const res = await spoonacularApiAxios.get(`/recipes/${id}/info`, 
+                {params: {
+                  includeNutrition: false
+                }}
+              )
+              return res.data as RecipeInfo
+            }))
+            const results = allRes.map(recipe => ({id: recipe.id, title: recipe.title, image: recipe.image}))
+            setStateResult(prev => {
+              const newState = {...prev}
+              newState.offset = offset
+              newState.results.push(...results)
+              newState.number = allRes.length
+              return newState
+            })
+          } catch {
+            console.log('fake recipes at favorite')
+          }
       }
     }
 

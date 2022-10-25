@@ -1,3 +1,5 @@
+import { RecipeInfo } from "./helpers/typesLibrary"
+
 export const autoCompleteData = {
 	data: {
 
@@ -74,4 +76,90 @@ export const complexSearchData = {
 			},
 		]
 	}
+}
+
+export const recipeDetailsData: RecipeInfo = {
+	"id": 632241,
+	"title": "Alouette Crème De Brie Shrimp Cups",
+	"readyInMinutes": 45,
+	"servings": 30,
+	"image": "https://spoonacular.com/recipeImages/632241-556x370.jpg",
+
+	"analyzedInstructions":[
+			{
+			"name": "",
+			"steps": [
+				{
+					number: 1,
+					step: "Arrange tartlet shells on 2 serving plates. Spoon a scant teaspoon Alouette Crme de Brie in each.In medium bowl, combine shrimp and all remaining ingredients. Toss to coat shrimp.",
+				},
+				{
+					number: 2,
+					step: "Place 1 shrimp over cheese in each shell. Spoon a little orange juice-chive mixture over shrimp.",
+				},
+				{
+					number: 3,
+					step: "Serve immediately.Variation:For a slightly salty flavor, substitute 30 cup-shaped tortilla chips for the phyllo tartlet shells.If using phyllo tartlet shells, these can be served cold or warm (warm for 5 minutes at 350 F).",
+				},
+			],
+		}
+	],
+	
+	"extendedIngredients": [
+		{
+			id: 1006,
+			name: 'brie',
+			amount: 5,
+			unit: 'oz'
+		},
+		{
+			id: 11156,
+			name: 'chives',
+			amount: 1,
+			unit: 'tablespoon'
+		},
+		{
+			id: 1034053,
+			name: "extra virgin olive oil",
+			amount: 2,
+			unit: "tablespoons"
+		},
+		{
+			id: 11215,
+			name: "garlic",
+			amount: 0.125,
+			unit: "tablespoons"
+		},
+		{
+			id: 9206,
+			name: "orange juice",
+			amount: 1,
+			unit: "tablespoon"
+		},
+		{
+			id: 9216,
+			name: "orange peel",
+			amount: 0.5,
+			unit: "teaspoon"
+		},
+		{
+			id: 93817,
+			name: "phyllo shells",
+			amount: 4.2,
+			unit: "oz"
+		},
+		{
+			id: 1032009,
+			name: "red pepper flakes",
+			amount: 0.25,
+			unit: "teaspoon"
+		},
+	],
+	
+	"vegetarian": false,
+	"vegan": false,
+	"veryHealthy": false,
+	"veryPopular": false,
+	"cuisines": [],
+	"dishTypes": ['antipasti', 'starter', 'snack', 'appetizer', 'antipasto', "hor d'oeuvre"],
 }
