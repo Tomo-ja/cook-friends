@@ -130,7 +130,7 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo, isFakeData }: Props)
 export default Recipe
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
-	const cookieData = cookie.parse(req.headers.cookie!)
+	const cookieData = req.headers.cookie ? cookie.parse(req.headers.cookie) : cookie.parse('')
 	const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
 	const fridge: Fridge = []
 	let recipeInfo: RecipeInfo | null = null

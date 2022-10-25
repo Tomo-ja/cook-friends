@@ -105,7 +105,7 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes, isF
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-	const cookieData = cookie.parse(req.headers.cookie!)
+	const cookieData = req.headers.cookie ? cookie.parse(req.headers.cookie) : cookie.parse('')
 	const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
 
 	const expireFoods: string[] = []

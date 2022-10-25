@@ -207,7 +207,7 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
 export default Explore
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
-  const cookieData = cookie.parse(req.headers.cookie!)
+	const cookieData = req.headers.cookie ? cookie.parse(req.headers.cookie) : cookie.parse('')
 	const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
 
   const fridge: Fridge = []
