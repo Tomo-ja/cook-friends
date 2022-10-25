@@ -1,5 +1,6 @@
 ### THANK YOU FOR COMING
-This application has created by [Tomo](https://github.com/Tomo-ja) and [Atsuya](https://github.com/tenmusu007)
+This application has created by [Tomo](https://github.com/Tomo-ja) and [Atsuya](https://github.com/tenmusu007).
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app), Typescript, styled components for design, and mongodb for database.
 
 ## Introduction
