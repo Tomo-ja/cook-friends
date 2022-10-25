@@ -8,10 +8,8 @@ export default async function register(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
-	console.log("working");
 	try {
 		await connectMongo();
-		console.log("connected to Mongo");
 		const hashPsw = await bcrypt
 			.hash(req.body.data.password, 12)
 			.then((hashedPassword: string) => {
@@ -25,7 +23,6 @@ export default async function register(
 		const checkEmail = await User.findOne({ email: req.body.data.email });
 		if (checkEmail) return res.json("exsist");
 		const auth = await User.create(newUser);
-		console.log(auth);
 		
 		res.json(auth);
 	} catch (error) {

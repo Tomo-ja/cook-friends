@@ -33,7 +33,6 @@ const FeedbackSection = ({ handleReduceModalOpen, user, recipeId, setAlert }: Pr
 				recipe_id: recipeId.toString()
 			})
 			const updatedUser = await response.data
-			console.log(updatedUser)
 			setCookie('user', JSON.stringify(updatedUser), {
 				path: '/',
 				maxAge: 3600, 

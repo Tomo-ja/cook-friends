@@ -140,8 +140,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 	if(query.id) {
 		const recipeId: number = Number(query.id)
 		try {
-			// FIXME: url below should be /recipes/${recipeId}/information
-			const response = await spoonacularApiAxios.get(`/recipes/${recipeId}/info`, 
+			const response = await spoonacularApiAxios.get(`/recipes/${recipeId}/information`, 
 			{params: {
 				includeNutrition: false
 			}}
@@ -149,7 +148,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 		recipeInfo = response.data as RecipeInfo
 		} catch {
 			isFakeData = {isError: true, message:'Reached Api call Limitation. Displaying Fake Data'}
-			console.log('fake recipe at recipe detail')
 			recipeInfo = recipeDetailsData
 		}
 	} else {

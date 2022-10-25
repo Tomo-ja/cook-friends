@@ -43,7 +43,6 @@ const FridgeForm = ({ btn, userId, setTrigger, setAlert }: props) => {
 
 		try{
 			await appAxios.post("/api/fridge/add", Ref).then((res) => {
-				console.log("add", res);
 				setTrigger!((prev) => prev + 1);
 			});
 			setAlert({isError: false, message: 'Successfully Add Item'})

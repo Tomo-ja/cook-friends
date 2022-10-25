@@ -46,8 +46,7 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes, isF
 			try {
 				const allRes = await Promise.all(
 					ids.map(async (id) => {
-						// FIXME: url below should be /recipes/${Number(id)}/information
-						const response = await spoonacularApiAxios.get(`/recipes/${Number(id)}/info`,{
+						const response = await spoonacularApiAxios.get(`/recipes/${Number(id)}/information`,{
 								params: {
 									includeNutrition: false,
 								},
@@ -57,7 +56,6 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes, isF
 				)
 				setFavoriteRecipes(allRes)
 			} catch {
-				console.log('fake data at favorite')
 				setFavoriteRecipes([])
 			}
 		}
@@ -127,8 +125,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 	try{
 		const allRes = await Promise.all(
 			randomRecipeTags.map(async (tag) => {
-				// FIXME: url below should be /recipes/random
-				const response = await spoonacularApiAxios.get("/recipes/rando", {
+				const response = await spoonacularApiAxios.get("/recipes/random", {
 					params: {
 						number: 1,
 						tags: tag,

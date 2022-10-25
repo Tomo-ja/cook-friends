@@ -29,7 +29,7 @@ export default async function addToFridge(
 		await fridge.save();
 		res.json(fridge.summary);
 	} catch (error) {
-		console.log({ error });
+		console.error({ error });
 		res.json({ error });
 	}
 }

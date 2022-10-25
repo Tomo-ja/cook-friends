@@ -72,8 +72,7 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
       if (searchParams) {
         searchParams.offset = offset
         try {
-          // FIXME: url below should be /recipes/complexSearch
-          const response = await spoonacularApiAxios.get('/recipes/complexSea', {params: searchParams})
+          const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
           setStateResult(prev => {
             const newState = {...prev}
             newState.offset = offset
@@ -99,8 +98,7 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
           recipeIds!.slice(offset - 1, recipeIds!.length)
           try{
             const allRes = await Promise.all(ids.map(async id=> {
-              // FIXME: url should be /recipes/${id}/information
-              const res = await spoonacularApiAxios.get(`/recipes/${id}/info`, 
+              const res = await spoonacularApiAxios.get(`/recipes/${id}/information`, 
                 {params: {
                   includeNutrition: false
                 }}
@@ -116,7 +114,6 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
               return newState
             })
           } catch {
-            console.log('fake recipes at favorite')
           }
       }
     }
@@ -130,11 +127,9 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
     const fetchSearchResult = async () => {
       searchParams!.includeIngredients = mustIncludeIngredients.join()
       try {
-        // FIXME: url below should be /recipes/complexSearch
-        const response = await spoonacularApiAxios.get('/recipes/complexSea', {params: searchParams})
+        const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: searchParams})
         setStateResult(response.data as RecipeSearchResult)
       } catch {
-        console.log('fake recipes at explore when ingredient select')
         const response = complexSearchData
         setStateResult(response.data as RecipeSearchResult)  
       }
@@ -227,8 +222,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
       includeIngredients: ''
     }
     try {
-      // FIXME: url below should be /recipes/complexSearch
-      const response = await spoonacularApiAxios.get('/recipes/complexSea', {params: params})
+      const response = await spoonacularApiAxios.get('/recipes/complexSearch', {params: params})
       recipeSearchResult = response.data as RecipeSearchResult
     } catch {
       isFakeData = {isError: true, message:'Reached Api call Limitation. Displaying Fake Data'}
@@ -240,8 +234,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
     const ids = recipeIds.slice(0, NUMBER_ITEMS_AT_ONE_FETCH)
     try{
       const allRes = await Promise.all(ids.map(async id => {
-        // FIXME: url below should be /recipes/${id}/information
-        const response = await spoonacularApiAxios.get(`/recipes/${id}/info`, 
+        const response = await spoonacularApiAxios.get(`/recipes/${id}/information`, 
           {params: {
             includeNutrition: false
           }}
