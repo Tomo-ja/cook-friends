@@ -10,10 +10,10 @@ import 'swiper/css/scrollbar';
 import StyledSlideItem, { classNames } from "./heroSection.styles";
 import StyledButton from '../Button/button.styles';
 
-import { RecipeInfo } from "../../helpers/typesLibrary";
+import { RandomRecipe } from "../../helpers/typesLibrary";
 
 type Props = {
-	randomRecipes: RecipeInfo[]
+	randomRecipes: RandomRecipe[]
 }
 
 const HeroSection = ({ randomRecipes }: Props) => {

@@ -1,5 +1,7 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
+import * as cookie from 'cookie'
+
 
 import { useState, useEffect } from "react";
 
@@ -14,26 +16,23 @@ import StyledMainContent from "../styles/mainContent.styles";
 import StyledSubContent from "../styles/subContent.styles";
 import StyledHome from "../components/Home/home.styles";
 
-import { User, RandomRecipes, RecipeInfo } from "../helpers/typesLibrary";
+import { User, RandomRecipes, RecipeInfo, RandomRecipe } from "../helpers/typesLibrary";
 import appAxios, { spoonacularApiAxios } from "../constants/axiosBase";
+
+import { randomRecipeData } from "../sampleApiData";
 
 type Props = {
 	user: User | null;
 	expireFoods: string[];
 	keywords: string[];
-	randomRecipes: RecipeInfo[];
+	randomRecipes: RandomRecipe[];
 };
 
 const randomRecipeTags = ["main course", "side dish", "appetizer"];
 
-const Home: NextPage<Props> = ({
-	user,
-	expireFoods,
-	keywords,
-	randomRecipes,
-}: Props) => {
-	const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeInfo[]>([]);
-	const [recipeHistory, setRecipeHistory] = useState<RecipeInfo[]>([]);
+const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes}: Props) => {
+
+	const [favoriteRecipes, setFavoriteRecipes] = useState<RandomRecipe[]>([]);
 
 	useEffect(() => {
 		if (user === null) {
@@ -57,28 +56,12 @@ const Home: NextPage<Props> = ({
 			return allRes;
 		};
 
-		fetchRecipes(
-			user.historyrecipe.length > 3
-				? [...user.historyrecipe].slice(-3)
-				: user.historyrecipe
-		)
-			.then((recipes) => {
-				setRecipeHistory(recipes);
+		fetchRecipes(user.favoriterecipe.length > 3 ? [...user.favoriterecipe].slice(-3) : user.favoriterecipe)
+			.then((recipes) => { 
+				setFavoriteRecipes(recipes) 
 			})
 			.catch(() => {
-				console.error("recipe history fail");
-			});
-
-		fetchRecipes(
-			user.favoriterecipe.length > 3
-				? [...user.favoriterecipe].slice(-3)
-				: user.favoriterecipe
-		)
-			.then((recipes) => {
-				setFavoriteRecipes(recipes);
-			})
-			.catch(() => {
-				console.error("favorite recipe fail");
+				setFavoriteRecipes([])
 			});
 	}, []);
 
@@ -101,13 +84,6 @@ const Home: NextPage<Props> = ({
 					/>
 				)}
 
-				{recipeHistory.length > 0 && (
-					<RecipesSectionHome
-						title='Recipes You Checked'
-						displayRecipes={recipeHistory}
-						isFavorite={false}
-					/>
-				)}
 			</StyledMainContent>
 			<StyledSubContent>
 				{expireFoods.length > 0 && (
@@ -125,56 +101,54 @@ const Home: NextPage<Props> = ({
 
 export default Home;
 
-Home.getInitialProps = async ({ req, res }): Promise<Props> => {
-	const cookieData = parseCookies(req);
-	const user: User | null = cookieData.user
-		? JSON.parse(cookieData.user)
-		: null;
-	const expireFoods: string[] = [];
-	const keywords = popupKeywords();
-	const randomRecipes: RecipeInfo[] = [];
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	const cookieData = cookie.parse(req.headers.cookie!)
+	const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
 
-	if (user) {
+	const expireFoods: string[] = []
+	const keywords = popupKeywords()
+	const randomRecipes: RandomRecipe[] = []
+
+	if(user) {
 		const fridgeData = await appAxios.post("api/fridge/show", {
 			user_id: user.id,
-		});
+		})
 		Object.values(fridgeData.data).forEach((value: any) => {
 			if (defineExpireDate(value.stored_at) > 5) {
-				expireFoods.push(value.name);
+				expireFoods.push(value.name)
 			}
-		});
+		})
 	}
 
-	const allRes = await Promise.all(
-		randomRecipeTags.map(async (tag) => {
-			const response = await spoonacularApiAxios.get("/recipes/random", {
-				params: {
-					number: 1,
-					tags: tag,
-				},
-			});
-			return response.data as RandomRecipes;
+	try{
+		const allRes = await Promise.all(
+			randomRecipeTags.map(async (tag) => {
+				// FIXME: url below should be /recipes/random
+				const response = await spoonacularApiAxios.get("/recipes/rando", {
+					params: {
+						number: 1,
+						tags: tag,
+					},
+				});
+				return response.data as RandomRecipes;
+			})
+		)
+		allRes.forEach((recipe) => {
+			randomRecipes.push(recipe.recipes[0])
+		});
+	}catch{
+		randomRecipeData.forEach(recipe => {
+			randomRecipes.push(recipe.recipes[0])
 		})
-	);
-
-	allRes.forEach((recipe) => {
-		randomRecipes.push(recipe.recipes[0]);
-	});
-
-	if (res) {
-		if (
-			Object.keys(cookieData).length === 0 &&
-			cookieData.constructor === Object
-		) {
-			res.writeHead(301, { Location: "/" });
-			res.end();
-		}
 	}
 
 	return {
-		user,
-		expireFoods,
-		keywords,
-		randomRecipes,
-	};
-};
+		props: {
+			user,
+			expireFoods,
+			keywords,
+			randomRecipes,
+		}
+	}
+
+}

@@ -67,7 +67,7 @@ export type RecipeInfo = {
 	"title": string,
 	"readyInMinutes": number,
 	"servings": number,
-	"image": "https://spoonacular.com/recipeImages/715449-556x370.jpg",
+	"image": string,
 
 	"analyzedInstructions":{
 				"name": "",
@@ -85,8 +85,14 @@ export type RecipeInfo = {
 
 }
 
+export type RandomRecipe = {
+	id: number,
+	title: string,
+	image: string
+}
+
 export type RandomRecipes = {
-	recipes: RecipeInfo[]
+	recipes: RandomRecipe[]
 }
 
 export type AlertInfo = {
