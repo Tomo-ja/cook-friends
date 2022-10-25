@@ -16,23 +16,26 @@ import StyledMainContent from "../styles/mainContent.styles";
 import StyledSubContent from "../styles/subContent.styles";
 import StyledHome from "../components/Home/home.styles";
 
-import { User, RandomRecipes, RecipeInfo, RecipeMinimize } from "../helpers/typesLibrary";
+import { User, RandomRecipes, RecipeInfo, RecipeMinimize, AlertInfo } from "../helpers/typesLibrary";
 import appAxios, { spoonacularApiAxios } from "../constants/axiosBase";
 
 import { randomRecipeData } from "../sampleApiData";
+import Alert from "../components/Alert";
 
 type Props = {
 	user: User | null;
 	expireFoods: string[];
 	keywords: string[];
 	randomRecipes: RecipeMinimize[];
+	isFakeData: AlertInfo | null
 };
 
 const randomRecipeTags = ["main course", "side dish", "appetizer"];
 
-const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes}: Props) => {
+const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes, isFakeData}: Props) => {
 
 	const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeMinimize[]>([]);
+	const [alert, setAlert] = useState<AlertInfo | null>(isFakeData)
 
 	useEffect(() => {
 		if (user === null) {
@@ -40,31 +43,27 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes}: Pr
 		}
 
 		const fetchRecipes = async (ids: string[]) => {
-			const allRes = await Promise.all(
-				ids.map(async (id) => {
-					const response = await spoonacularApiAxios.get(
-						`/recipes/${Number(id)}/information`,
-						{
-							params: {
-								includeNutrition: false,
-							},
-						}
-					);
-					return response.data as RecipeInfo;
-				})
-			);
-			return allRes;
-		};
+			try {
+				const allRes = await Promise.all(
+					ids.map(async (id) => {
+						// FIXME: url below should be /recipes/${Number(id)}/information
+						const response = await spoonacularApiAxios.get(`/recipes/${Number(id)}/info`,{
+								params: {
+									includeNutrition: false,
+								},
+						})
+						return response.data as RecipeInfo
+					})
+				)
+				setFavoriteRecipes(allRes)
+			} catch {
+				console.log('fake data at favorite')
+				setFavoriteRecipes([])
+			}
+		}
 
 		fetchRecipes(user.favoriterecipe.length > 3 ? [...user.favoriterecipe].slice(-3) : user.favoriterecipe)
-			.then((recipes) => { 
-				setFavoriteRecipes(recipes) 
-			})
-			.catch(() => {
-				console.error('fake recipe at favorite recipes')
-				setFavoriteRecipes([])
-			});
-	}, []);
+	}, [])
 
 	return (
 		<StyledHome>
@@ -96,6 +95,9 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes}: Pr
 				<h3>What Is In Your Mind</h3>
 				<SearchKeywordSection keywords={keywords} />
 			</StyledSubContent>
+			{alert && 
+				<Alert isError={alert.isError} message={alert.message} setAlert={setAlert} />
+			}
 		</StyledHome>
 	);
 };
@@ -109,6 +111,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 	const expireFoods: string[] = []
 	const keywords = popupKeywords()
 	const randomRecipes: RecipeMinimize[] = []
+	let isFakeData: AlertInfo | null = null
 
 	if(user) {
 		const fridgeData = await appAxios.post("api/fridge/show", {
@@ -139,6 +142,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 		});
 	}catch{
 		console.error('fake recipes at random recipes')
+		isFakeData = {isError: true, message:'Reached Api call Limitation. Displaying Fake Data'}
 		randomRecipeData.forEach(recipe => {
 			randomRecipes.push(recipe.recipes[0])
 		})
@@ -150,6 +154,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 			expireFoods,
 			keywords,
 			randomRecipes,
+			isFakeData
 		}
 	}
 

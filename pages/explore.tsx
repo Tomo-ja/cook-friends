@@ -13,9 +13,10 @@ import StyledSubContent from '../styles/subContent.styles'
 import StyledPagination from '../components/Explore/pagination.styles';
 
 import { stringToDate } from '../helpers'
-import { User, Fridge, RecipeSearchResult, RecipeSearchParams, RecipeInfo, RecipeMinimize, } from '../helpers/typesLibrary'
+import { User, Fridge, RecipeSearchResult, RecipeSearchParams, RecipeInfo, RecipeMinimize, AlertInfo, } from '../helpers/typesLibrary'
 import appAxios, { spoonacularApiAxios } from '../constants/axiosBase';
 import { complexSearchData } from '../sampleApiData'
+import Alert from '../components/Alert';
 
 const NUMBER_ITEMS_AT_ONE_FETCH = 3
 
@@ -24,7 +25,8 @@ type Props = {
   fridge: Fridge,
   recipeSearchResult: RecipeSearchResult,
   searchParams: RecipeSearchParams | null,
-  recipeIds: number[] | null
+  recipeIds: number[] | null,
+  isFakeData: AlertInfo | null
 }
 
 const DynamicFridgeSection = dynamic(() => import('../components/FridgeSection/index'),
@@ -35,12 +37,13 @@ const DynamicRecipeSection = dynamic(() => import('../components/RecipesSection/
 
 let isInitialRender = true
 
-const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchParams, recipeIds }: Props) => {
+const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchParams, recipeIds, isFakeData }: Props) => {
   const router = useRouter()
 
   const [stateRecipesResult, setStateResult] = useState(recipeSearchResult)
   const [mustIncludeIngredients, setMustIncludeIngredients] = useState<string[]>([])
   const [page, setPage] = useState(1)
+  const [alert, setAlert] = useState<AlertInfo | null>(isFakeData)
 
   const handlePagination = (nextPage: number) => {
     setPage(prev => prev + nextPage)
@@ -194,6 +197,9 @@ const Explore: NextPage<Props> = ({ user, fridge, recipeSearchResult, searchPara
           urlQuery={router.query}
         />
       </StyledSubContent>
+      {alert && 
+				<Alert isError={alert.isError} message={alert.message} setAlert={setAlert} />
+			}
     </StyledExplore>
 	)
 }
@@ -208,6 +214,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
   let recipeSearchResult: RecipeSearchResult
   let params: RecipeSearchParams | null = null
   let recipeIds: number[] | null = null
+  let isFakeData: AlertInfo | null = null
 
   isInitialRender = true
 
@@ -224,6 +231,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
       const response = await spoonacularApiAxios.get('/recipes/complexSea', {params: params})
       recipeSearchResult = response.data as RecipeSearchResult
     } catch {
+      isFakeData = {isError: true, message:'Reached Api call Limitation. Displaying Fake Data'}
       console.error('fake recipes at explore')
       recipeSearchResult = complexSearchData.data
     }
@@ -247,6 +255,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
         totalResults: recipeIds.length
       }
     } catch {
+      isFakeData = {isError: true, message:'Reached Api call Limitation. Displaying Fake Data'}
       console.error('fake recipes at explore')
       recipeSearchResult = {
         results: [],
@@ -288,7 +297,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
       fridge,
       recipeSearchResult,
       searchParams: params,
-      recipeIds
+      recipeIds,
+      isFakeData
     }
   }
 }

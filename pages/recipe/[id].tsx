@@ -27,16 +27,17 @@ type Props = {
 	user: User | null,
 	fridge: Fridge | null,
 	recipeInfo: RecipeInfo | null
+	isFakeData: AlertInfo | null
 }
 
 const emptyIngredient: Ingredient = {id:0, name: '', amount: 0, unit: ""}
 
-const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
+const Recipe: NextPage<Props> = ({user, fridge, recipeInfo, isFakeData }: Props) => {
 
 	const [showAddListModal, setShowAddListModal] = useState(false)
 	const [showReduceFridgeModal, setShowReduceFridgeModal] = useState(false)
 	const [addIngredient, setAddIngredient] = useState<Ingredient>(emptyIngredient)
-	const [alert, setAlert] = useState<AlertInfo | null>(null)
+	const [alert, setAlert] = useState<AlertInfo | null>(isFakeData)
 
 
 	if(recipeInfo === null) { return <></>}
@@ -57,8 +58,6 @@ const Recipe: NextPage<Props> = ({user, fridge, recipeInfo}: Props) => {
 			setShowReduceFridgeModal(false)
 		}
 	}
-
-
 
 	return (
 		<RecipeContainer>
@@ -135,6 +134,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 	const user: User | null = cookieData.user ? JSON.parse(cookieData.user) : null
 	const fridge: Fridge = []
 	let recipeInfo: RecipeInfo | null = null
+	let isFakeData: AlertInfo | null = null
+
 
 	if(query.id) {
 		const recipeId: number = Number(query.id)
@@ -147,6 +148,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 		)
 		recipeInfo = response.data as RecipeInfo
 		} catch {
+			isFakeData = {isError: true, message:'Reached Api call Limitation. Displaying Fake Data'}
 			console.log('fake recipe at recipe detail')
 			recipeInfo = recipeDetailsData
 		}
@@ -178,7 +180,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 		props: {
 			user,
 			fridge,
-			recipeInfo
+			recipeInfo,
+			isFakeData
 		}
 	}
 }
