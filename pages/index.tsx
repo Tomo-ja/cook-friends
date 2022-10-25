@@ -16,7 +16,7 @@ import StyledMainContent from "../styles/mainContent.styles";
 import StyledSubContent from "../styles/subContent.styles";
 import StyledHome from "../components/Home/home.styles";
 
-import { User, RandomRecipes, RecipeInfo, RandomRecipe } from "../helpers/typesLibrary";
+import { User, RandomRecipes, RecipeInfo, RecipeMinimize } from "../helpers/typesLibrary";
 import appAxios, { spoonacularApiAxios } from "../constants/axiosBase";
 
 import { randomRecipeData } from "../sampleApiData";
@@ -25,14 +25,14 @@ type Props = {
 	user: User | null;
 	expireFoods: string[];
 	keywords: string[];
-	randomRecipes: RandomRecipe[];
+	randomRecipes: RecipeMinimize[];
 };
 
 const randomRecipeTags = ["main course", "side dish", "appetizer"];
 
 const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes}: Props) => {
 
-	const [favoriteRecipes, setFavoriteRecipes] = useState<RandomRecipe[]>([]);
+	const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeMinimize[]>([]);
 
 	useEffect(() => {
 		if (user === null) {
@@ -61,6 +61,7 @@ const Home: NextPage<Props> = ({ user, expireFoods, keywords, randomRecipes}: Pr
 				setFavoriteRecipes(recipes) 
 			})
 			.catch(() => {
+				console.error('fake recipe at favorite recipes')
 				setFavoriteRecipes([])
 			});
 	}, []);
@@ -107,7 +108,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
 	const expireFoods: string[] = []
 	const keywords = popupKeywords()
-	const randomRecipes: RandomRecipe[] = []
+	const randomRecipes: RecipeMinimize[] = []
 
 	if(user) {
 		const fridgeData = await appAxios.post("api/fridge/show", {
@@ -137,6 +138,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 			randomRecipes.push(recipe.recipes[0])
 		});
 	}catch{
+		console.error('fake recipes at random recipes')
 		randomRecipeData.forEach(recipe => {
 			randomRecipes.push(recipe.recipes[0])
 		})

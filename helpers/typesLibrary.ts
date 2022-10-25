@@ -34,14 +34,8 @@ export type Fridge = {
 }[]
 
 
-export type RecipeSummary = {
-	id: number,
-	title: string,
-	image: string,
-}
-
 export type RecipeSearchResult = {
-	results: RecipeSummary[],
+	results: RecipeMinimize[],
 	offset: number,
 	number: number,
 	totalResults: number
@@ -85,14 +79,14 @@ export type RecipeInfo = {
 
 }
 
-export type RandomRecipe = {
+export type RecipeMinimize = {
 	id: number,
 	title: string,
 	image: string
 }
 
 export type RandomRecipes = {
-	recipes: RandomRecipe[]
+	recipes: RecipeMinimize[]
 }
 
 export type AlertInfo = {
